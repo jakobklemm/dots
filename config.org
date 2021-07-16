@@ -180,13 +180,17 @@ Install =no-littering= to handle all temp files.
 * Design
 Anything related to design and looks.
 ** Theme
-Use the =jeykey-dark= theme, which was generated using themer. Also
-highlight the current line & set the point color.
 #+begin_src emacs-lisp
-  (load-theme 'jeykey-dark t)
+  ;;(load-theme 'jeykey-dark t)
   (set-cursor-color "#D069D6")
   (set-face-background 'hl-line "#303440")
   (custom-set-faces '(org-ellipsis ((t (:foreground "#6483b5" :underline nil)))))
+
+  (use-package doom-themes
+    :ensure t
+    :config
+    (load-theme 'doom-Iosvkem t)
+    )
 #+end_src
 ** Font
 Set the default font & functions for changing the font size.
@@ -240,32 +244,8 @@ Set the default font & functions for changing the font size.
 
   (hrs/reset-font-size)
 #+end_src
-** Margins
-Use centered text everywhere, except for excluded buffers.
-#+begin_src emacs-lisp
-  (defcustom perfect-margin-ignore-regexps
-    '("^minibuf" "^[*]" "Minibuf" "[*]" "magit" "mu4e")
-    "List of strings to determine if window is ignored.
-  Each string is used as regular expression to match the window buffer name."
-    :group 'perfect-margin)
-
-  (defcustom perfect-margin-ignore-filters
-    '(window-minibuffer-p)
-    "List of functions to determine if window is ignored.
-  Each function is called with window as its sole arguemnt, returning a non-nil value indicate to ignore the window."
-    :group 'perfect-margin)
-
-  (use-package perfect-margin
-    :disabled t
-    ;;:config
-    ;;(perfect-margin-mode 1)
-    )
-#+end_src
 ** Numbers
 #+begin_src emacs-lisp
-  (setq display-line-numbers 'relative)
-  ;;(global-display-line-numbers-mode)
-  ;;(setq-default display-line-numbers-width 20)
   (use-package nlinum
     :ensure t
     :config
@@ -275,42 +255,27 @@ Use centered text everywhere, except for excluded buffers.
 ** Modeline
 Use feebeline as a /in-minibuffer-modeline/.
 #+begin_src emacs-lisp
+  (setq telephone-line-primary-left-separator 'telephone-line-cubed-left
+        telephone-line-secondary-left-separator 'telephone-line-cubed-hollow-left
+        telephone-line-primary-right-separator 'telephone-line-cubed-right
+        telephone-line-secondary-right-separator 'telephone-line-cubed-hollow-right)
+  (setq telephone-line-height 24
+        telephone-line-evil-use-short-tag t)
+
   (use-package telephone-line
     :ensure t
-    :custom
-    (telephone-line-primary-left-separator 'telephone-line-cubed-left)
-    (telephone-line-secondary-left-separator 'telephone-line-cubed-hollow-left)
-    (telephone-line-primary-right-separator 'telephone-line-cubed-right)
-    (telephone-line-secondary-right-separator 'telephone-line-cubed-hollow-right)
-    (telephone-line-height 24)
-    (telephone-line-evil-use-short-tag t)
     :config
-    (telephone-line-defsegment telephone-line-pdf-segment ()
-                               (if (eq major-mode 'pdf-view-mode)
-                                   (propertize (pdf-view-page-number)
-                                               'face '(:inherit)
-                                               'display '(raise 0.0)
-                                               'mouse-face '(:box 1)
-                                               'local-map (make-mode-line-mouse-map
-                                                           'mouse-1 (lambda ()
-                                                                      (interactive)
-                                                                      (pdf-view-goto-page))))))
-    (setq telephone-line-lhs '((accent . (telephone-line-pdf-segment
-                                          telephone-line-vc-segment
-                                          telephone-line-erc-modified-channels-segment
-                                          telephone-line-process-segment))
-                               (nil . (telephone-line-projectile-segment telephone-line-buffer-segment))))
     (telephone-line-mode t))
 #+end_src
 ** Rainbow
 Install rainbow-delimiters & enable it for programming & org-mode.
 #+begin_src emacs-lisp
-(use-package rainbow-delimiters
-  :ensure t
-  :config
-  (add-hook 'org-mode-hook #'rainbow-delimiters-mode)
-  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
-  )
+  (use-package rainbow-delimiters
+    :ensure t
+    :config
+    (add-hook 'org-mode-hook #'rainbow-delimiters-mode)
+    (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+    )
 #+end_src
 ** Icons
 Install icons using =all-the-icons-install-fonts=
@@ -395,7 +360,6 @@ Partially copied from =SystemCrafters=.
     :init
     (vertico-mode)
 
-    ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
     (setq vertico-cycle t)
     )
 #+end_src    
@@ -457,32 +421,6 @@ Add /margin notes/ in vertico buffers.
     )
 #+end_src
 
-** Actions
-Execute actions in the minibuffer.
-#+begin_src emacs-lisp
-  (use-package embark
-    :ensure t
-
-    :bind
-    (("C-." . embark-act))         ;; pick some comfortable binding
-
-    :config
-    ;; Hide the mode line of the Embark live/completions buffers
-    (add-to-list 'display-buffer-alist
-                 '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
-                   nil
-                   (window-parameters (mode-line-format . none)))))
-
-  ;; Consult users will also want the embark-consult package.
-  (use-package embark-consult
-    :ensure t
-    :after (embark consult)
-    :demand t ; only necessary if you have the hook below
-    ;; if you want to have consult previews as you move around an
-    ;; auto-updating embark collect buffer
-    :hook
-    (embark-collect-mode . consult-preview-at-point-mode))
-#+end_src
 ** Buffers
 Use =bufler= to manage buffers.
 #+begin_src emacs-lisp
@@ -490,15 +428,6 @@ Use =bufler= to manage buffers.
     :ensure t
     :config
     (bufler-mode)
-    )
-#+end_src
-** Keys
-Use =which-key= for =embark= suggestions.
-#+begin_src emacs-lisp
-  (use-package which-key
-    :ensure t
-    :config
-    (which-key-mode t)
     )
 #+end_src
 ** Windows
@@ -668,54 +597,21 @@ Easy helper functions for quickly opening new buffers.
 
      (when (string-equal system-name "kosmos")
        (evil-define-key '(visual normal motion) dvorak-mode-map
-         "t" 'evil-next-line
-         "n" 'evil-previous-line
-         "h" 'evil-backward-char
-         "s" 'evil-forward-char
+         "h" 'evil-next-line
+         "t" 'evil-previous-line
+         "d" 'evil-backward-char
+         "n" 'evil-forward-char
 
-         "H" 'evil-scroll-page-up
-         "S" 'evil-scroll-page-down
-         "T" 'evil-backward-paragraph
-         "N" 'evil-forward-paragraph
+         "s" 'evil-open-below
 
-         "l" 'evil-backward-word-begin
-         "r" 'evil-forward-word-end
-         "g" 'evil-first-non-blank
-         "q" 'evil-end-of-line
-
-         "m" 'evil-insert
-         "z" 'evil-open-below
-         "v" 'evil-delete-char
-         "w" 'kill-line
-
-         "M" 'evil-append
-         "Z" 'evil-open-above
-         "V" 'kill-word
-         "W" 'kill-comment
-
-         "f" 'yank
-         "d" 'undo
-         "b" 'kill-ring-save
-
-         "'" 'mu4e-headers-search-bookmark
-         "." 'find-file
-         )
-       )
-
-     (when (string-equal system-name "hunter")
-       ;; Quick access (selection)
-       (my-leader-def
-         :keymaps 'normal
-         "a" 'agenda/super
-         "e" 'ivy/refile
-         "r" 'ivy/last
-         "t" 'todo/todo
-         "d" 'org-deadline
-         "k" 'org-schedule
-         "h" 'home-file
-         "j" 'projects-file
-         "c" 'org-capture
-         "x" 'bufler-switch-buffer
+         "j" 'evil-backward-word-begin
+         "k" 'evil-forward-word-end
+         "'" 'evil-first-non-blank
+         "c" 'evil-end-of-line
+    
+         "l" 'kill-line
+         "f" 'consult-yank-from-kill-ring
+         "g" 'kill-ring-save
          )
        )
 
@@ -739,13 +635,10 @@ Easy helper functions for quickly opening new buffers.
        "wv" 'evil-window-vsplit
        "wk" 'hrs/split-window-below-and-switch
        "wc" 'hrs/split-window-right-and-switch
-       "wo" 'find-file-other-window
        "wk" 'kill-current-buffer
        "wo" 'ace-window
        "wj" 'kill-buffer-and-window
-       "wg" 'dumb-jump-go-other-window
-       "wh" 'dump-jump-go
-       "wb" 'dumb-jump-back
+       "w'" 'delete-other-windows
        )
 
      ;; Search
@@ -786,7 +679,6 @@ Easy helper functions for quickly opening new buffers.
        "og" 'ivy/refile
        "ob" 'ivy/last
        "ol" 'org-insert-link
-       "oö" 'org-store-link
        "oo" 'org-open-at-point
        "op" 'org-link-open-as-file
        "of" 'org-agenda-file-to-front
