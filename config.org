@@ -528,6 +528,7 @@ Easy helper functions for quickly opening new buffers.
          :config
          (evil-collection-init)
          )
+
        (use-package evil-org
          :ensure t
          :after org
@@ -537,6 +538,7 @@ Easy helper functions for quickly opening new buffers.
          (evil-org-agenda-set-keys)
          )
        )
+
 
      (use-package general
        :ensure t
@@ -556,12 +558,10 @@ Easy helper functions for quickly opening new buffers.
 ** Binds
    Define all binds in a custom mini-mode.
    #+begin_src emacs-lisp
-
      (global-set-key (kbd "C-x j") 'kill-buffer-and-window)
      (global-set-key (kbd "C-x o") 'ace-window)
 
      ;; Partially copied from https://github.com/jbranso/evil-dvorak/blob/master/evil-dvorak.el
-
      (define-minor-mode dvorak-mode
        "Evil dvorak mode allows you to use evil using the dvorak keyboard layout.  Contributions are welcome."
        nil
@@ -587,32 +587,25 @@ Easy helper functions for quickly opening new buffers.
        ;; :prefix my-leader
        :prefix "SPC")
 
-     (evil-define-key 'motion org-agenda-mode-map
-       "h" 'org-agenda-earlier
-       "l" 'org-agenda-later
-       "j" 'org-agenda-next-line
-       "k" 'org-agenda-previous-line
-       "ö" 'org-agenda-goto-today
-       )
-
      (when (string-equal system-name "kosmos")
        (evil-define-key '(visual normal motion) dvorak-mode-map
-         "h" 'evil-next-line
-         "t" 'evil-previous-line
-         "d" 'evil-backward-char
-         "n" 'evil-forward-char
+	 "h" 'evil-next-line
+	 "t" 'evil-previous-line
+	 "d" 'evil-backward-char
+	 "n" 'evil-forward-char
 
-         "s" 'evil-open-below
+	 "s" 'evil-open-below
 
-         "j" 'evil-backward-word-begin
-         "k" 'evil-forward-word-end
-         "'" 'evil-first-non-blank
-         "c" 'evil-end-of-line
-    
-         "l" 'kill-line
-         "f" 'consult-yank-from-kill-ring
-         "g" 'kill-ring-save
-         )
+	 "j" 'evil-backward-word-begin
+	 "k" 'evil-forward-word-end
+	 "'" 'evil-first-non-blank
+	 "c" 'evil-end-of-line
+
+	 "l" 'kill-line
+	 "f" 'consult-yank-from-kill-ring
+	 "g" 'kill-ring-save
+	 )
+
        )
 
      ;; Buffers
@@ -635,10 +628,11 @@ Easy helper functions for quickly opening new buffers.
        "wv" 'evil-window-vsplit
        "wk" 'hrs/split-window-below-and-switch
        "wc" 'hrs/split-window-right-and-switch
-       "wk" 'kill-current-buffer
+       "wj" 'delete-other-windows
        "wo" 'ace-window
-       "wj" 'kill-buffer-and-window
-       "w'" 'delete-other-windows
+       ;; Overlapping binds, no prefix direct
+       "j" 'kill-buffer-and-window
+       "'" 'delete-other-windows
        )
 
      ;; Search
@@ -759,6 +753,9 @@ Global syntax checking.
 	 (global-set-key (kbd "C-x m") 'git-messenger)
 	 )
        )
+
+     (with-eval-after-load 'magit-mode
+       (add-hook 'after-save-hook 'magit-after-save-refresh-status t))
    #+end_src
 ** LSP
 Setup =LSP= & =LSP-UI=, mainly for Elixir, later also for Rust.
@@ -829,7 +826,6 @@ Setup =LSP= & =LSP-UI=, mainly for Elixir, later also for Rust.
 
      (use-package company-box
        :ensure t
-       ;;:custom (company-box-icons-alist 'company-box-icons-all-the-icons)
        :hook (company-mode . company-box-mode)
        )
    #+end_src
@@ -855,10 +851,6 @@ Edit comments like org-source-blocks in org/md.
     (define-key prog-mode-map        (kbd "C-c '") #'separedit)
     (define-key minibuffer-local-map (kbd "C-c '") #'separedit)
     (define-key help-mode-map        (kbd "C-c '") #'separedit)
-
-    ;; Default major-mode for edit buffer
-    ;; can also be other mode e.g. ‘org-mode’.
-    (setq separedit-default-mode 'org-mode)
     )
 #+end_src
 ** Format
@@ -869,21 +861,21 @@ Edit comments like org-source-blocks in org/md.
        :bind ("C-c C-f" . format-all-buffer)
        )
    #+end_src
+** Flycheck
+Inline errors
+#+begin_src emacs-lisp
+  (use-package flycheck
+    :ensure t
+    )
+#+end_src
 ** Rust
 Development settings for rust.
 #+begin_src emacs-lisp
   (use-package rustic
     :ensure t
     :bind (:map rustic-mode-map
-                ("M-j" . lsp-ui-imenu)
-                ("M-?" . lsp-find-references)
                 ("C-c r" . rustic-cargo-run)
-                ("C-c C-r" . flycheck-list-errors)
-                ("C-c C-c l" . flycheck-list-errors)
-                ("C-c C-c a" . lsp-execute-code-action)
-                ("C-c C-c r" . lsp-rename)
-                ("C-c C-c q" . lsp-workspace-restart)
-                ("C-c C-c Q" . lsp-workspace-shutdown)
+                ("C-c C-r" . lsp-rename)
                 ("C-c C-c s" . lsp-rust-analyzer-status))
     :config
     ;; uncomment for less flashiness
@@ -891,7 +883,6 @@ Development settings for rust.
     ;; (setq lsp-enable-symbol-highlighting nil)
     ;; (setq lsp-signature-auto-activate nil)
 
-    ;; comment to disable rustfmt on save
     (setq rustic-format-on-save t)
     )
 
@@ -900,13 +891,6 @@ Development settings for rust.
     :hook (rust-mode . cargo-minor-mode))
 
   (use-package toml-mode
-    :ensure t
-    )
-#+end_src
-** Flycheck
-Inline errors
-#+begin_src emacs-lisp
-  (use-package flycheck
     :ensure t
     )
 #+end_src
@@ -952,7 +936,7 @@ Inline errors
    #+begin_src emacs-lisp
      (setq
       org-directory "~/documents/"
-      org-archive-location "~/documents/archive/2021.org::* From %s"
+      org-archive-location "~/archive/2021.org::* From %s"
       )
 
      (add-hook 'org-mode 'org-toggle-inline-images)
@@ -1047,27 +1031,29 @@ Enable =hunspell= & =flyspell= for all =org-mode= buffers.
        :ensure t
        :config
        (setq org-superstar-headline-bullets-list '("◉" "○" "✸" "✿" "✤" "✜" "◆" "▶")
-	     ;;org-superstar-headline-bullets-list '("Ⅰ" "Ⅱ" "Ⅲ" "Ⅳ" "Ⅴ" "Ⅵ" "Ⅶ" "Ⅷ" "Ⅸ" "Ⅹ")
-	     org-superstar-prettify-item-bullets t
-	     org-superstar-configure-like-org-bullets t
-	     org-hide-leading-stars nil
-	     org-superstar-leading-bullet ?\s
-	     ;; Enable custom bullets for TODO items
-	     org-superstar-special-todo-items t
-	     org-superstar-todo-bullet-alist '(("TODO" "☐ ")
-					       ("NEXT" "✒ ")
-					       ("STATIC" "» ")
-					       ("BLOCKED" "˧ ")
-					       ("DONE" "✔ ")
-					       ("PAL" "✔ ")
-					       )
-	     )
+             ;;org-superstar-headline-bullets-list '("Ⅰ" "Ⅱ" "Ⅲ" "Ⅳ" "Ⅴ" "Ⅵ" "Ⅶ" "Ⅷ" "Ⅸ" "Ⅹ")
+             org-superstar-prettify-item-bullets t
+             org-superstar-configure-like-org-bullets t
+             org-hide-leading-stars nil
+             org-superstar-leading-bullet ?\s
+             ;; Enable custom bullets for TODO items
+             ;; TODO: update todo types
+             org-superstar-special-todo-items t
+             org-superstar-todo-bullet-alist '(("TODO" "☐ ")
+                                               ("NEXT" "✒ ")
+                                               ("STATIC" "» ")
+                                               ("BLOCKED" "˧ ")
+                                               ("DONE" "✔ ")
+                                               ("PAL" "✔ ")
+                                               )
+             )
        (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
        )
 
    #+end_src
 ** Productivity
    General productivity settings & capture templates.
+   TODO: Update paths
    #+begin_src emacs-lisp
      (setq
       org-log-done 'time
@@ -1097,8 +1083,6 @@ Enable =hunspell= & =flyspell= for all =org-mode= buffers.
 ** Files
    Quick jump to common files in =GPS=.
    #+begin_src emacs-lisp
-     (global-set-key [f1] 'agenda/super)
-
      (defun todo/done ()
        (interactive)
        (org-todo 'done))
@@ -1114,15 +1098,14 @@ Enable =hunspell= & =flyspell= for all =org-mode= buffers.
        )
 
      (defun home-file ()
-	 (interactive)
-	 (find-file "~/documents/active.org")
-	 )
+       (interactive)
+       (find-file "~/documents/active.org")
+       )
 
      (defun projects-file ()
-	 (interactive)
-	 (find-file "~/documents/aggregation.org")
-	 )
-
+       (interactive)
+       (find-file "~/documents/aggregation.org")
+       )
    #+end_src
 ** Agenda
    Agenda & superagenda setup + helpers.
@@ -1416,89 +1399,90 @@ Enable =hunspell= & =flyspell= for all =org-mode= buffers.
    #+end_src
 * Communication
 =mu4e= and packages collection.
-  #+begin_src emacs-lisp
+#+begin_src emacs-lisp
 
-    (setq mu4e-maildir (expand-file-name "~/.mail"))
+  (setq mu4e-maildir (expand-file-name "~/.mail"))
 
-    (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
-    (require 'mu4e)
-    (require 'smtpmail)
+  (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
+  (require 'mu4e)
+  (require 'smtpmail)
 
-    (setq mu4e-completing-read-function 'ivy-completing-read)
-    (setq mail-user-agent 'mu4e-user-agent)
+  (setq mu4e-completing-read-function 'ivy-completing-read)
+  (setq mail-user-agent 'mu4e-user-agent)
 
-    (setq user-mail-address "jakob@jeykey.net"
-	  user-full-name  "Jakob Klemm"
+  (setq user-mail-address "jakob@jeykey.net"
+        user-full-name  "Jakob Klemm"
 
-	  mu4e-get-mail-command "mbsync -c ~/.tools/.mbsyncrc -a"
-	  mu4e-update-interval  300
-	  mu4e-index-update-in-background t
-	  mu4e-main-buffer-hide-personal-addresses t
+        mu4e-get-mail-command "mbsync -c ~/.tools/.mbsyncrc -a"
+        mu4e-update-interval  300
+        mu4e-index-update-in-background t
+        mu4e-main-buffer-hide-personal-addresses t
 
-	  send-mail-function 'smtpmail-send-it
-	  message-send-mail-function 'message-smtpmail-send-it
-	  starttls-use-gnutls t
+        send-mail-function 'smtpmail-send-it
+        message-send-mail-function 'message-smtpmail-send-it
+        starttls-use-gnutls t
 
-	  mu4e-sent-messages-behavior 'delete
+        mu4e-sent-messages-behavior 'delete
 
-	  mu4e-view-show-addresses t
+        mu4e-view-show-addresses t
 
-	  message-kill-buffer-on-exit t
+        message-kill-buffer-on-exit t
 
-	  mu4e-attachment-dir  "~/workspace/"
+        mu4e-attachment-dir  "~/workspace/"
 
-	  mu4e-sent-folder "/global/Sent"
-	  mu4e-drafts-folder "/global/Drafts"
-	  mu4e-trash-folder "/global/Trash"
-	  message-signature
-	  (concat
-	   "Jakob Klemm\n"
-	   "https://github.com/jakobklemm"
-	   "https://jeykey.net\n")
-	  mml-secure-openpgp-sign-with-sender t
-	  mml-secure-openpgp-encrypt-to-self t
-	  mml-secure-smime-sign-with-sender "jakob@jeykey.net"
+        mu4e-sent-folder "/global/Sent"
+        mu4e-drafts-folder "/global/Drafts"
+        mu4e-trash-folder "/global/Trash"
+        message-signature
+        (concat
+         "Jakob Klemm\n"
+         "https://github.com/jakobklemm"
+         "https://jeykey.net\n")
+        mml-secure-openpgp-sign-with-sender t
+        mml-secure-openpgp-encrypt-to-self t
+        mml-secure-smime-sign-with-sender "jakob@jeykey.net"
 
-	  mu4e-view-prefer-html t
+        mu4e-view-prefer-html t
 
-	  )
+        )
 
-    (load-file "~/.tools/mail.el")
+  ;; Private script to setup all mail addrs
+  (load-file "~/.tools/mail.el")
 
-    (setq smtpmail-starttls-credentilas my-mu4e-account-alist)
-    (setq smtpmail-default-smtp-server "smtp.gmail.com"
-	  smtpmail-smtp-server "smtp.gmail.com"
-	  smtpmail-smtp-service 587
-	  smtpmail-debug-info t)
+  (setq smtpmail-starttls-credentilas my-mu4e-account-alist)
+  (setq smtpmail-default-smtp-server "smtp.gmail.com"
+        smtpmail-smtp-server "smtp.gmail.com"
+        smtpmail-smtp-service 587
+        smtpmail-debug-info t)
 
-    (use-package mu4e-alert
-      :ensure t
-      :config
-      (mu4e-alert-set-default-style 'libnotify)
-      (add-hook 'after-init-hook #'mu4e-alert-enable-notifications)
-      )
+  (use-package mu4e-alert
+    :ensure t
+    :config
+    (mu4e-alert-set-default-style 'libnotify)
+    (add-hook 'after-init-hook #'mu4e-alert-enable-notifications)
+    )
 
-    (defun my-mu4e-set-account ()
-      "Set the account for composing a message."
-      (let* ((account
-	      (if mu4e-compose-parent-message
-		  (let ((maildir (mu4e-message-field mu4e-compose-parent-message :maildir)))
-		    (string-match "/\\(.*?\\)/" maildir)
-		    (match-string 1 maildir))
-		(completing-read (format "Compose with account: (%s) "
-					 (mapconcat #'(lambda (var) (car var))
-						    my-mu4e-account-alist "/"))
-				 (mapcar #'(lambda (var) (car var)) my-mu4e-account-alist)
-				 nil t nil nil (caar my-mu4e-account-alist))))
-	     (account-vars (cdr (assoc account my-mu4e-account-alist))))
-	(if account-vars
-	    (mapc #'(lambda (var)
-		      (set (car var) (cadr var)))
-		  account-vars)
-	  (error "No email account found"))))
+  (defun my-mu4e-set-account ()
+    "Set the account for composing a message."
+    (let* ((account
+            (if mu4e-compose-parent-message
+                (let ((maildir (mu4e-message-field mu4e-compose-parent-message :maildir)))
+                  (string-match "/\\(.*?\\)/" maildir)
+                  (match-string 1 maildir))
+              (completing-read (format "Compose with account: (%s) "
+                                       (mapconcat #'(lambda (var) (car var))
+                                                  my-mu4e-account-alist "/"))
+                               (mapcar #'(lambda (var) (car var)) my-mu4e-account-alist)
+                               nil t nil nil (caar my-mu4e-account-alist))))
+           (account-vars (cdr (assoc account my-mu4e-account-alist))))
+      (if account-vars
+          (mapc #'(lambda (var)
+                    (set (car var) (cadr var)))
+                account-vars)
+        (error "No email account found"))))
 
-    (add-hook 'mu4e-compose-pre-hook 'my-mu4e-set-account)
-    (add-hook 'mu4e-view-mode-hook 'visual-line-mode)
-    (add-hook 'mu4e-compose-mode-hook 'visual-line-mode)
+  (add-hook 'mu4e-compose-pre-hook 'my-mu4e-set-account)
+  (add-hook 'mu4e-view-mode-hook 'visual-line-mode)
+  (add-hook 'mu4e-compose-mode-hook 'visual-line-mode)
   #+end_src
 
