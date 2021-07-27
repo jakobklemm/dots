@@ -38,6 +38,24 @@ broken.
     :ensure t
     )
 #+end_src
+** Straight
+Some packages require straight but using it normally doesn't work
+since it's a package manager that doesn't reliably install packages.
+Proceed with caution!
+#+begin_src emacs-lisp
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+#+end_src
 ** Defaults
 Some default settings, partially copied from Harry R. Schwartz.
 #+begin_src emacs-lisp
@@ -589,23 +607,31 @@ Easy helper functions for quickly opening new buffers.
 
      (when (string-equal system-name "kosmos")
        (evil-define-key '(visual normal motion) dvorak-mode-map
-	 "h" 'evil-next-line
-	 "t" 'evil-previous-line
-	 "d" 'evil-backward-char
-	 "n" 'evil-forward-char
+         "h" 'evil-next-line
+         "t" 'evil-previous-line
+         "d" 'evil-backward-char
+         "n" 'evil-forward-char
 
-	 "s" 'evil-open-below
+         "s" 'evil-open-below
 
-	 "j" 'evil-backward-word-begin
-	 "k" 'evil-forward-word-end
-	 "'" 'evil-first-non-blank
-	 "c" 'evil-end-of-line
+         "j" 'evil-backward-word-begin
+         "k" 'evil-forward-word-end
+         "'" 'evil-first-non-blank
+         "c" 'evil-end-of-line
 
-	 "l" 'kill-line
-	 "f" 'consult-yank-from-kill-ring
-	 "g" 'kill-ring-save
-	 )
+         "l" 'kill-line
+         "f" 'consult-yank-from-kill-ring
+         "g" 'kill-ring-save
+         )
+       )
 
+     ;; Easy
+     ;; 0
+     (my-leader-def
+       :keymaps 'normal
+       "." 'execute-extended-command
+       "," 'find-file
+       ";" 'bufler-switch-buffer
        )
 
      ;; Buffers
@@ -616,8 +642,6 @@ Easy helper functions for quickly opening new buffers.
        "bk" 'kill-current-buffer
        "bj" 'kill-buffer-and-window
        "bb" 'bufler-switch-buffer
-       "bf" 'find-file
-       "br" 'org-recoll-search
        "bh" 'previous-buffer
        )
 
@@ -639,6 +663,7 @@ Easy helper functions for quickly opening new buffers.
      ;; 3
      (my-leader-def
        :keymaps 'normal
+       "f" 'consult-line
        "ss" 'consult-line
        "sS" 'consult-imenu
        "sr" 'replace-string
@@ -650,9 +675,6 @@ Easy helper functions for quickly opening new buffers.
      (my-leader-def
        :keymaps 'normal
        "qq" 'save-buffers-kill-terminal
-       "qv" 'emacs-version
-       "qi" 'emacs-init-time
-       "qu" 'emacs-uptime
        "qe" 'eshell
        )
 
@@ -695,7 +717,7 @@ Easy helper functions for quickly opening new buffers.
      ;; 7
      (my-leader-def
        :keymaps 'normal
-       "nl" 'org-roam
+       "nl" 'org-roam-buffer-toggle
        "ni" 'org-roam-insert
        "nf" 'org-roam-find-file
        "nc" 'org-roam-capture
@@ -742,16 +764,17 @@ Global syntax checking.
        :config
        (global-set-key (kbd "C-x g") 'magit-status)
        (global-set-key (kbd "C-x p") 'magit-init)
+       (global-set-key (kbd "C-v") 'magit-commit)
        (use-package magit-todos
-	 :ensure t
-	 :config
-	 (magit-todos-mode t)
-	 )
+         :ensure t
+         :config
+         (magit-todos-mode t)
+         )
        (use-package git-messenger
-	 :ensure t
-	 :config
-	 (global-set-key (kbd "C-x m") 'git-messenger)
-	 )
+         :ensure t
+         :config
+         (global-set-key (kbd "C-x m") 'git-messenger)
+         )
        )
 
      (with-eval-after-load 'magit-mode
@@ -876,7 +899,8 @@ Development settings for rust.
     :bind (:map rustic-mode-map
                 ("C-c r" . rustic-cargo-run)
                 ("C-c C-r" . lsp-rename)
-                ("C-c C-c s" . lsp-rust-analyzer-status))
+                ("C-c C-c s" . lsp-rust-analyzer-status)
+                ("M-RET" . comment-indent-new-line))
     :config
     ;; uncomment for less flashiness
     ;; (setq lsp-eldoc-hook nil)
@@ -1196,42 +1220,43 @@ Enable =hunspell= & =flyspell= for all =org-mode= buffers.
 
    #+end_src
 ** Roam
-   Use =org-roam= for the personal knowledge base.
-   #+begin_src emacs-lisp
-     (use-package org-roam
-       :ensure t
-       :commands (org-roam-insert org-roam-find-file org-roam-switch-to-buffer org-roam)
-       :hook
-       (after-init . org-roam-mode)
-       :init
-       (setq
-	org-roam-directory (file-truename "~/workspace/database/org/")
-	org-roam-db-location "~/documents/vaults/org-roam.db"
-	org-roam-db-gc-threshold most-positive-fixnum
-	)
-       :config
-       (setq org-roam-capture-templates
-	     '(("d" "default" plain (function org-roam--capture-get-point)
-		"%?"
-		:file-name "${slug}"
-		:head "#+TITLE: ${title}\n"
-		:immediate-finish t
-		:unnarrowed t)
-		))
-       (use-package org-roam-server
-	 :ensure t
-	 :config
-	 (setq org-roam-server-host "127.0.0.1"
-	     org-roam-server-port 8080
-	     org-roam-server-authenticate nil
-	     org-roam-server-export-inline-images t
-	     org-roam-server-serve-files nil
-	     org-roam-server-served-file-extensions '("pdf" "mp4" "ogv" "jpg" "png")
-	     org-roam-server-network-poll t
-	     org-roam-server-network-arrows nil
-	     org-roam-server-network-label-wrap-length 20))
-       )
-   #+end_src
+Use =org-roam= for the personal knowledge base.
+#+begin_src emacs-lisp
+  (use-package org-roam
+    :ensure t
+    :straight (:type git :host github :repo "org-roam/org-roam-v1")
+    :commands (org-roam-insert org-roam-find-file org-roam-switch-to-buffer org-roam)
+    :hook
+    (after-init . org-roam-mode)
+    :init
+    (setq
+     org-roam-directory (file-truename "~/documents/database/org/")
+     org-roam-db-location "~/documents/org-roam.db"
+     org-roam-db-gc-threshold most-positive-fixnum
+     )
+    :config
+    (setq org-roam-capture-templates
+          '(("d" "default" plain (function org-roam--capture-get-point)
+             "%?"
+             :file-name "${slug}"
+             :head "#+TITLE: ${title}\n"
+             :immediate-finish t
+             :unnarrowed t)
+            ))
+    (use-package org-roam-server
+      :ensure t
+      :config
+      (setq org-roam-server-host "127.0.0.1"
+            org-roam-server-port 8080
+            org-roam-server-authenticate nil
+            org-roam-server-export-inline-images t
+            org-roam-server-serve-files nil
+            org-roam-server-served-file-extensions '("pdf" "mp4" "ogv" "jpg" "png")
+            org-roam-server-network-poll t
+            org-roam-server-network-arrows nil
+            org-roam-server-network-label-wrap-length 20))
+    )
+#+end_src
 ** Repetition
    =org-drill= for spaced repetition.
    #+begin_src emacs-lisp
@@ -1400,7 +1425,6 @@ Enable =hunspell= & =flyspell= for all =org-mode= buffers.
 * Communication
 =mu4e= and packages collection.
 #+begin_src emacs-lisp
-
   (setq mu4e-maildir (expand-file-name "~/.mail"))
 
   (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
@@ -1443,7 +1467,6 @@ Enable =hunspell= & =flyspell= for all =org-mode= buffers.
         mml-secure-smime-sign-with-sender "jakob@jeykey.net"
 
         mu4e-view-prefer-html t
-
         )
 
   ;; Private script to setup all mail addrs
