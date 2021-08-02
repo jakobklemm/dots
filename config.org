@@ -1,6 +1,6 @@
 #+TITLE: Jakob Klemm - Emacs
 #+AUTHOR: Jakob Klemm
-
+ 
 * Setup
 Base settings & setup.
 ** Packages
@@ -613,13 +613,14 @@ Easy helper functions for quickly opening new buffers.
          "n" 'evil-forward-char
 
          "s" 'evil-open-below
-
+         "S" 'evil-open-above
+    
          "j" 'evil-backward-word-begin
          "k" 'evil-forward-word-end
          "'" 'evil-first-non-blank
          "c" 'evil-end-of-line
 
-         "l" 'kill-line
+         "w" 'kill-line
          "f" 'consult-yank-from-kill-ring
          "g" 'kill-ring-save
          )
@@ -1083,27 +1084,35 @@ Enable =hunspell= & =flyspell= for all =org-mode= buffers.
       org-log-done 'time
       org-todo-keywords
       '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
-	(sequence "STATIC(s)" "BLOCKED(b)" "|" "PAL(p)"))
+        (sequence "STATIC(s)" "BLOCKED(b)" "|" "PAL(p)"))
       org-todo-keyword-faces
-	   '(("TODO" . (:foreground "#af1212" :weight bold))
-	     ("NEXT" . (:foreground "#a8fa80" :weight bold))
-	     ("BLOCKED" . (:foreground "#b213c4" :weight bold))
-	     ("PAL" . (:foreground "#30bb03" :weight bold))
-	     ("STATIC" . (:foreground "#eaa222" :weight bold))
-	     ("DONE" . (:foreground "#ffffff" :weight bold))
-	     )
-	   org-capture-templates '(("x" "Inbox TODO" entry (file "~/documents/aggregation.org")
-				    "* TODO %?\n  %i\n  %a")
-				   ("c" "Common" entry (file+headline "~/documents/active.org" "Common")
-				    "* TODO %?\n%U\n   %c" :empty-lines 1)
-				   )
-
-	   org-tag-alist '(("drill" . ?d))
-	   org-refile-targets '(("~/documents/active.org" :maxlevel . 1)
-				("~/documents/completed.org" :maxlevel . 1)
-				)
-	   )
+      '(("TODO" . (:foreground "#af1212" :weight bold))
+        ("NEXT" . (:foreground "#a8fa80" :weight bold))
+        ("BLOCKED" . (:foreground "#b213c4" :weight bold))
+        ("PAL" . (:foreground "#30bb03" :weight bold))
+        ("STATIC" . (:foreground "#eaa222" :weight bold))
+        ("DONE" . (:foreground "#ffffff" :weight bold))
+        )
+      org-refile-targets '(("~/documents/supervisor.org" :maxlevel . 1)
+                           )
+      )
    #+end_src
+** Capture
+#+begin_src emacs-lisp
+  (setq org-capture-templates '(("c" "Inbox" entry (file+headline "~/documents/supervisor.org" "Inbox")
+                                 "* TODO %?\n%U\n"
+                                 )
+                                ("x" "Common" entry (file+headline "~/documents/supervisor.org" "Common")
+                                 "* TODO %?\n%U\n")
+                                )
+        )
+
+  (use-package org-capture
+    :after org
+    :hook
+    (org-capture-mode . evil-insert-state)
+    )
+#+end_src
 ** Files
    Quick jump to common files in =GPS=.
    #+begin_src emacs-lisp
@@ -1111,24 +1120,24 @@ Enable =hunspell= & =flyspell= for all =org-mode= buffers.
        (interactive)
        (org-todo 'done))
 
-     (defun todo/todo  ()
+     (defun jk/active  ()
        (interactive)
        (org-todo "NEXT")
        (org-mark-ring-push)
-       (ivy/refile-to "~/documents/active.org" "Today")
+       (ivy/refile-to "~/documents/supervisor.org" "Active")
        (org-mark-ring-goto)
        ;;(org-priority-up)
        ;;(org-deadline nil (org-read-date nil nil "+1d"))
        )
 
-     (defun home-file ()
+     (defun jk/supervisor-file ()
        (interactive)
-       (find-file "~/documents/active.org")
+       (find-file "~/documents/supervisor.org")
        )
 
-     (defun projects-file ()
+     (defun jk/completed-file ()
        (interactive)
-       (find-file "~/documents/aggregation.org")
+       (find-file "~/documents/completed.org")
        )
    #+end_src
 ** Agenda
@@ -1204,15 +1213,15 @@ Enable =hunspell= & =flyspell= for all =org-mode= buffers.
 		    (org-find-exact-headline-in-buffer headline))))
 	 (org-refile nil nil (list headline file nil pos))))
 
-     (defun ivy/refile ()
-       "Move current headline to bookmarks"
+     (defun jk/common ()
+       "Move"
        (interactive)
        (org-mark-ring-push)
-       (ivy/refile-to "~/documents/active.org" "Today")
+       (ivy/refile-to "~/documents/supervisor.org" "Common")
        (org-mark-ring-goto))
 
-     (defun ivy/last ()
-       "Move current headline to bookmarks"
+     (defun jk/completed ()
+       "Move"
        (interactive)
        (org-mark-ring-push)
        (ivy/refile-to "~/documents/completed.org" "Week")
