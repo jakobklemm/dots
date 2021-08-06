@@ -1,6 +1,6 @@
 #+TITLE: Jakob Klemm - Emacs
 #+AUTHOR: Jakob Klemm
-
+ 
 * Setup
 Base settings & setup.
 ** Packages
@@ -613,13 +613,14 @@ Easy helper functions for quickly opening new buffers.
          "n" 'evil-forward-char
 
          "s" 'evil-open-below
-
+         "S" 'evil-open-above
+    
          "j" 'evil-backward-word-begin
          "k" 'evil-forward-word-end
          "'" 'evil-first-non-blank
          "c" 'evil-end-of-line
 
-         "l" 'kill-line
+         "w" 'kill-line
          "f" 'consult-yank-from-kill-ring
          "g" 'kill-ring-save
          )
@@ -1143,6 +1144,20 @@ Settings tags normally is broken, so counsel is required.
   (use-package counsel
     :ensure t
     )
+** Capture
+#+begin_src emacs-lisp
+  (setq org-capture-templates '(("c" "Inbox" entry (file+headline "~/documents/supervisor.org" "Inbox")
+                                 "* TODO %?\n%U\n"
+                                 )
+                                ("x" "Common" entry (file+headline "~/documents/supervisor.org" "Common")
+                                 "* TODO %?\n%U\n")
+                                )
+        )
+
+  (use-package org-capture
+    :after org
+    :hook
+    (org-capture-mode . evil-insert-state)
 #+end_src
 ** Files
    Quick jump to common files in =GPS=.
@@ -1151,24 +1166,24 @@ Settings tags normally is broken, so counsel is required.
        (interactive)
        (org-todo 'done))
 
-     (defun todo/todo  ()
+     (defun jk/active  ()
        (interactive)
        (org-todo "NEXT")
        (org-mark-ring-push)
-       (ivy/refile-to "~/documents/active.org" "Today")
+       (ivy/refile-to "~/documents/supervisor.org" "Active")
        (org-mark-ring-goto)
        ;;(org-priority-up)
        ;;(org-deadline nil (org-read-date nil nil "+1d"))
        )
 
-     (defun home-file ()
+     (defun jk/supervisor-file ()
        (interactive)
-       (find-file "~/documents/active.org")
+       (find-file "~/documents/supervisor.org")
        )
 
-     (defun projects-file ()
+     (defun jk/completed-file ()
        (interactive)
-       (find-file "~/documents/aggregation.org")
+       (find-file "~/documents/completed.org")
        )
    #+end_src
 ** Agenda
@@ -1245,15 +1260,15 @@ Settings tags normally is broken, so counsel is required.
 		    (org-find-exact-headline-in-buffer headline))))
 	 (org-refile nil nil (list headline file nil pos))))
 
-     (defun ivy/refile ()
-       "Move current headline to bookmarks"
+     (defun jk/common ()
+       "Move"
        (interactive)
        (org-mark-ring-push)
-       (ivy/refile-to "~/documents/active.org" "Today")
+       (ivy/refile-to "~/documents/supervisor.org" "Common")
        (org-mark-ring-goto))
 
-     (defun ivy/last ()
-       "Move current headline to bookmarks"
+     (defun jk/completed ()
+       "Move"
        (interactive)
        (org-mark-ring-push)
        (ivy/refile-to "~/documents/completed.org" "Week")
