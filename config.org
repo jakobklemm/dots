@@ -605,7 +605,7 @@ Easy helper functions for quickly opening new buffers.
        ;; :prefix my-leader
        :prefix "SPC")
 
-     (when (string-equal system-name "kosmos")
+     (when (string-equal system-name "hunter")
        (evil-define-key '(visual normal motion) dvorak-mode-map
          "h" 'evil-next-line
          "t" 'evil-previous-line
@@ -625,6 +625,38 @@ Easy helper functions for quickly opening new buffers.
          "g" 'kill-ring-save
          )
        )
+
+     (define-minor-mode evil-calendar-mode
+       "Minor-mode for evil calendar integration.
+     Active when in Emacs' `calendar-mode'."
+       :keymap (make-sparse-keymap))
+
+     (add-hook 'calendar-mode-hook 'evil-calendar-mode)
+
+     (evil-define-key 'motion evil-calendar-mode-map
+       ;; Forward/Backward
+       "h" 'org-agenda-next-line
+       "t" 'org-agenda-previous-line
+       "d" 'org-agenda-backward-block
+       "n" 'org-agenda-forward-block
+
+       "l" 'calendar-forward-day
+       ")" 'calendar-forward-week
+       "}" 'calendar-forward-month
+       "]]" 'calendar-forward-year
+       "h" 'calendar-backward-day
+       "(" 'calendar-backward-week
+       "{" 'calendar-backward-month
+       "[[" 'calendar-backward-year
+       ;; Beginning/End
+       "b" 'calendar-beginning-of-week
+       "B" 'calendar-beginning-of-month
+       "^" 'calendar-beginning-of-year
+       "e" 'calendar-end-of-week
+       "E" 'calendar-end-of-month
+       "$" 'calendar-end-of-year)
+
+     ;; General leader binds
 
      ;; Easy
      ;; 0
@@ -683,14 +715,12 @@ Easy helper functions for quickly opening new buffers.
      ;; 5
      (my-leader-def
        :keymaps 'normal
-       "oi" 'org-cycle
        "oa" 'org-agenda
        "oc" 'org-capture
        "od" 'org-deadline
        "os" 'org-schedule
        "ot" 'org-todo
-       "oz" 'org-set-tags-command
-       "oe" 'org-set-effort
+       "oe" 'counsel-org-tag
        "ox" 'todo/done
        "or" 'org-refile
        "og" 'ivy/refile
@@ -700,7 +730,6 @@ Easy helper functions for quickly opening new buffers.
        "op" 'org-link-open-as-file
        "of" 'org-agenda-file-to-front
        "ow" 'org-export-dispatch
-       "oh" 'hoth-total
        "oy" 'org-archive-subtree
        )
 
@@ -1093,10 +1122,28 @@ Enable =hunspell= & =flyspell= for all =org-mode= buffers.
         ("STATIC" . (:foreground "#eaa222" :weight bold))
         ("DONE" . (:foreground "#ffffff" :weight bold))
         )
+      org-capture-templates '(("x" "Inbox TODO" entry (file "~/documents/aggregation.org")
+                               "* TODO %?\n  %i\n  %a")
+                              ("c" "Common" entry (file+headline "~/documents/active.org" "Common")
+                               "* TODO %?\n%U\n   %c" :empty-lines 1)
+                              )
+
+      org-tag-alist '(("home" . ?h)
+                      ("actaeon" . ?a)
+                      ("orion" . ?o)
+                      ("schule" . ?s)
+                      )
       org-refile-targets '(("~/documents/supervisor.org" :maxlevel . 1)
+                           ("~/documents/completed.org" :maxlevel . 1)
                            )
       )
    #+end_src
+** Tags
+Settings tags normally is broken, so counsel is required.
+#+begin_src emacs-lisp
+  (use-package counsel
+    :ensure t
+    )
 ** Capture
 #+begin_src emacs-lisp
   (setq org-capture-templates '(("c" "Inbox" entry (file+headline "~/documents/supervisor.org" "Inbox")
@@ -1111,7 +1158,6 @@ Enable =hunspell= & =flyspell= for all =org-mode= buffers.
     :after org
     :hook
     (org-capture-mode . evil-insert-state)
-    )
 #+end_src
 ** Files
    Quick jump to common files in =GPS=.
@@ -1151,56 +1197,57 @@ Enable =hunspell= & =flyspell= for all =org-mode= buffers.
    #+begin_src emacs-lisp
      (use-package org-super-agenda
        :ensure t
-       :init
-       (setq org-agenda-custom-commands
-	     '(("d" "Super Agenda - Day"
-		((agenda "" ((org-agenda-span 'day)
-			     (org-super-agenda-groups
-			      '((:name "Today"
-				       :time-grid t
-				       :date today
-				       :scheduled today
-				 :order 1)))))
-		 (alltodo "" ((org-agenda-overriding-header "Next")
-			      (org-agenda-files '("~/documents/active.org"))
-			      (org-super-agenda-groups
-			       '((:name ""
-					:todo "NEXT"
-					:order 1)
-				 (:discard (:anything))
-				 ))))
-		 (alltodo "" ((org-agenda-overriding-header "Projects")
-			      (org-agenda-files '("~/documents/active.org"))
-			      (org-super-agenda-groups
-			       '((:name ""
-					:todo ("TODO" "STATIC" "BLOCKED")
-					:order 2)
-				 (:discard (:anything))
-				 )
-				 )))
-		 (alltodo "" ((org-agenda-overriding-header "Other")
-			      (org-super-agenda-groups
-			       '((:name ""
-					:file-path "aggregation"
-					:order 5)
-				 (:discard (:anything t)))
-				 )))
-		 )
-		)
-	       )
-	     )
-       :config
-       (org-super-agenda-mode 1)
+       :config (org-super-agenda-mode)
        )
 
-     (setq
-      org-agenda-start-on-weekday nil
-      org-agenda-start-day "0d"
-      org-agenda-skip-scheduled-if-done t
-      org-agenda-skip-deadline-if-done t
-      org-agenda-include-deadlines t
-      org-agenda-current-time-string "← now"
-      )
+     (setq org-agenda-span 5
+           org-agenda-start-on-weekday nil
+           org-agenda-skip-scheduled-if-done t
+           org-agenda-skip-deadline-if-done t
+           org-agenda-include-deadlines t
+           org-agenda-current-time-string "← now"
+           )
+
+
+     (setq org-agenda-custom-commands
+           '(("p" "Personal agenda"
+              ((agenda "" ((org-agenda-span 'week)
+                           (org-super-agenda-groups
+                            '((:name "Today"
+                                     :time-grid t
+                                     :date today
+                                     :todo "TODAY"
+                                     :scheduled today
+                                     :order 1)))))
+               (alltodo "" ((org-agenda-overriding-header "Tasks")
+                            (org-super-agenda-groups
+                             '(;; Each group has an implicit boolean OR operator between its selectors.
+                               (:name "Today"
+                                      :scheduled today
+                                      :face (:background "black"))
+                               (:name "Passed deadline"
+                                      :and (:deadline past :todo ("TODO" "WAITING" "HOLD" "NEXT"))
+                                      :face (:background "#7f1b19"))
+                               (:name "Work important"
+                                      :and (:priority>= "B" :category "Work" :todo ("TODO" "NEXT")))
+                               (:name "Work other"
+                                      :and (:category "Work" :todo ("TODO" "NEXT")))
+                               (:name "Important"
+                                      :priority "A")
+                               (:priority<= "B"
+                                            ;; Show this section after "Today" and "Important", because
+                                            ;; their order is unspecified, defaulting to 0. Sections
+                                            ;; are displayed lowest-number-first.
+                                            :order 1)
+                               (:name "Papers"
+                                      :file-path "org/roam/notes")
+                               (:name "Waiting"
+                                      :todo "WAITING"
+                                      :order 9)
+                               (:name "On hold"
+                                      :todo "HOLD"
+                                      :order 10)))))))))
+     (add-hook 'org-agenda-mode-hook 'org-super-agenda-mode)
    #+end_src
 ** Refile
    Use quick refile helpers for current =GPS= implementation.
