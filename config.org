@@ -510,267 +510,204 @@ Easy helper functions for quickly opening new buffers.
 (global-set-key (kbd "C-x 3") 'hrs/split-window-right-and-switch)
 #+end_src
 ** Evil
-   Setup =evil= and all extra packages. Most binds are stored in the
-   next section.
-   #+begin_src emacs-lisp
+#+begin_src emacs-lisp
+  (use-package evil
+    :config (evil-mode 1)
+    :diminish (undo-tree-mode)
+    :init
+    (setq evil-want-keybinding nil)
+    )
 
-     (use-package evil
-       :ensure t
-       :init
-       (setq evil-move-beyond-eol t)
-       (setq evil-want-keybinding nil)
-       ;; (setq evil-want-integration t) ;; required by evil-collection
-       ;; (setq evil-search-module 'evil-search)
-       (setq evil-ex-complete-emacs-commands nil)
-       (setq evil-vsplit-window-right t) ;; like vim's 'splitright'
-       (setq evil-split-window-below t) ;; like vim's 'splitbelow'
-       ;; (setq evil-shift-round nil)
-       ;; (setq evil-want-C-u-scroll t)
-       :config
-       (evil-mode)
+  (use-package evil-goggles
+    :ensure t
+    :config
+    (evil-goggles-mode)
+    )
 
-       (use-package evil-commentary
-         :ensure t
-         :bind (:map evil-normal-state-map
-                     ("gc" . evil-commentary)))
+  ;; Settings
+  (setq evil-move-cursor-back nil
+        evil-move-beyond-eol t
+        evil-ex-complete-emacs-commands nil
+        evil-vsplit-window-right t
+        evil-split-window-below t
+        )
 
-       (use-package evil-leader
-         :ensure t
-         :config
-         (global-evil-leader-mode)
-         (evil-leader/set-leader "<SPC>")
-         )
+  (use-package evil-collection
+    :ensure t
+    :config
+    (evil-collection-init)
+    )
 
-       (use-package evil-collection
-         :ensure t
-         :config
-         (evil-collection-init)
-         )
+  (use-package evil-org
+    :ensure t
+    :after org
+    :hook (org-mode . (lambda () evil-org-mode))
+    :config
+    (require 'evil-org-agenda)
+    (evil-org-agenda-set-keys)
+    )
 
-       (use-package evil-org
-         :ensure t
-         :after org
-         :hook (org-mode . (lambda () evil-org-mode))
-         :config
-         (require 'evil-org-agenda)
-         (evil-org-agenda-set-keys)
-         )
-       )
+  (use-package evil-surround
+    :ensure t
+    :config
+    (global-evil-surround-mode 1)
+    )
+#+END_SRC
+** Keybinds
+Navigation and normal modes.
+#+begin_src emacs-lisp
+  (use-package general
+    :ensure t
+    :config
+    (general-define-key
+     :states '(motion visual normal)
+     "h" 'evil-next-line
+     "H" 'evil-forward-paragraph
 
+     "t" 'evil-previous-line
+     "T" 'evil-backward-paragraph
 
-     (use-package general
-       :ensure t
-       )
+     "d" 'evil-backward-char
+     "D" 'evil-first-non-blank
 
-     (setq evil-emacs-state-modes nil)
-     (setq evil-insert-state-modes nil)
-     (setq evil-motion-state-modes nil)
+     "n" 'evil-forward-char
+     "N" 'evil-last-non-blank
 
-     (setq evil-normal-state-modes
-           (append evil-emacs-state-modes
-                   evil-insert-state-modes
-                   evil-normal-state-modes
-                   evil-motion-state-modes)
-           )
-   #+end_src
-** Binds
-   Define all binds in a custom mini-mode.
-   #+begin_src emacs-lisp
-     (global-set-key (kbd "C-x j") 'kill-buffer-and-window)
-     (global-set-key (kbd "C-x o") 'ace-window)
+     "s" 'evil-open-below
+     "S" 'evil-open-above
 
-     ;; Partially copied from https://github.com/jbranso/evil-dvorak/blob/master/evil-dvorak.el
-     (define-minor-mode dvorak-mode
-       "Evil dvorak mode allows you to use evil using the dvorak keyboard layout.  Contributions are welcome."
-       nil
-       :global t
-       :lighter " ED"
-       :keymap (make-sparse-keymap))
+     "w" 'kill-line
 
-     (defun turn-on-dvorak-mode ()
-       "Enable evil-dvorak-mode in the current buffer."
-       (dvorak-mode 1))
+     "j" 'evil-backward-word-begin
+     "J" 'evil-backward-section-begin
 
-     (defun turn-off-dvorak-mode ()
-       "Disable evil-dvorak-mode in this buffer."
-       (dvorak-mode -1))
+     "k" 'evil-forward-word-end
+     "K" 'evil-forward-section-end
 
-     (define-globalized-minor-mode global-dvorak-mode
-       dvorak-mode turn-on-dvorak-mode
-       "Global dvorak mode.")
+     "'" 'evil-first-non-blank
+     "c" 'evil-end-of-line
+     )
+    )
+#+end_src
+Leader keys and actions.
+#+begin_src emacs-lisp
+  (general-create-definer my-leader-def
+    ;; :prefix my-leader
+    :prefix "SPC")
 
-     (global-dvorak-mode 1)
+  ;; Easy
+  ;; 0
+  (my-leader-def
+   :keymaps 'normal
+   "." 'execute-extended-command
+   "," 'find-file
+   ";" 'bufler-switch-buffer
+   )
 
-     (general-create-definer my-leader-def
-       ;; :prefix my-leader
-       :prefix "SPC")
+  ;; Buffers
+  ;; 1
+  (my-leader-def
+   :keymaps 'normal
+   "bs" 'save-buffer
+   "bk" 'kill-current-buffer
+   "bj" 'kill-buffer-and-window
+   "bb" 'bufler-switch-buffer
+   "bh" 'previous-buffer
+   )
 
-     (when (string-equal system-name "hunter")
-       (evil-define-key '(visual normal motion) dvorak-mode-map
-         "h" 'evil-next-line
-         "t" 'evil-previous-line
-         "d" 'evil-backward-char
-         "n" 'evil-forward-char
+  ;; Windows & Navigation
+  ;; 2
+  (my-leader-def
+   :keymaps 'normal
+   "wv" 'evil-window-vsplit
+   "wk" 'hrs/split-window-below-and-switch
+   "wc" 'hrs/split-window-right-and-switch
+   "wj" 'delete-other-windows
+   "wo" 'ace-window
+   ;; Overlapping binds, no prefix direct
+   "j" 'kill-buffer-and-window
+   "'" 'delete-other-windows
+   )
 
-         "s" 'evil-open-below
-         "S" 'evil-open-above
-    
-         "j" 'evil-backward-word-begin
-         "k" 'evil-forward-word-end
-         "'" 'evil-first-non-blank
-         "c" 'evil-end-of-line
+  ;; Search
+  ;; 3
+  (my-leader-def
+   :keymaps 'normal
+   "f" 'consult-line
+   "ss" 'consult-line
+   "sS" 'consult-imenu
+   "sr" 'replace-string
+   "sg" 'consult-ripgrep
+   )
 
-         "w" 'kill-line
-         "f" 'consult-yank-from-kill-ring
-         "g" 'kill-ring-save
-         )
-       )
+  ;; Admin
+  ;; 4
+  (my-leader-def
+   :keymaps 'normal
+   "qq" 'save-buffers-kill-terminal
+   "qe" 'eshell
+   )
 
-     (define-minor-mode evil-calendar-mode
-       "Minor-mode for evil calendar integration.
-     Active when in Emacs' `calendar-mode'."
-       :keymap (make-sparse-keymap))
+  ;; Org-mode
+  ;; 5
+  (my-leader-def
+   :keymaps 'normal
+   "oa" 'org-agenda
+   "oc" 'org-capture
+   "od" 'org-deadline
+   "os" 'org-schedule
+   "ot" 'org-todo
+   "oe" 'counsel-org-tag
+   "ox" 'todo/done
+   "or" 'org-refile
+   "og" 'ivy/refile
+   "ob" 'ivy/last
+   "ol" 'org-insert-link
+   "oo" 'org-open-at-point
+   "op" 'org-link-open-as-file
+   "of" 'org-agenda-file-to-front
+   "ow" 'org-export-dispatch
+   "oy" 'org-archive-subtree
+   )
 
-     (add-hook 'calendar-mode-hook 'evil-calendar-mode)
+  ;; Magit & VCS
+  ;; 6
+  (my-leader-def
+   :keymaps 'normal
+   "gg" 'magit-status
+   "gi" 'magit-init
+   "gm" 'git-messenger:popup-message
+   "gp" 'magit-pull
+   )
 
-     (evil-define-key 'motion evil-calendar-mode-map
-       ;; Forward/Backward
-       "h" 'org-agenda-next-line
-       "t" 'org-agenda-previous-line
-       "d" 'org-agenda-backward-block
-       "n" 'org-agenda-forward-block
+  ;; Org-roam + Content (drill)
+  ;; 7
+  (my-leader-def
+   :keymaps 'normal
+   "nl" 'org-roam-buffer-toggle
+   "ni" 'org-roam-insert
+   "nf" 'org-roam-find-file
+   "nc" 'org-roam-capture
+   "nr" 'org-roam-random-note
+   "ns" 'org-roam-server-mode
+   "nd" 'org-drill
+   )
 
-       "l" 'calendar-forward-day
-       ")" 'calendar-forward-week
-       "}" 'calendar-forward-month
-       "]]" 'calendar-forward-year
-       "h" 'calendar-backward-day
-       "(" 'calendar-backward-week
-       "{" 'calendar-backward-month
-       "[[" 'calendar-backward-year
-       ;; Beginning/End
-       "b" 'calendar-beginning-of-week
-       "B" 'calendar-beginning-of-month
-       "^" 'calendar-beginning-of-year
-       "e" 'calendar-end-of-week
-       "E" 'calendar-end-of-month
-       "$" 'calendar-end-of-year)
-
-     ;; General leader binds
-
-     ;; Easy
-     ;; 0
-     (my-leader-def
-       :keymaps 'normal
-       "." 'execute-extended-command
-       "," 'find-file
-       ";" 'bufler-switch-buffer
-       )
-
-     ;; Buffers
-     ;; 1
-     (my-leader-def
-       :keymaps 'normal
-       "bs" 'save-buffer
-       "bk" 'kill-current-buffer
-       "bj" 'kill-buffer-and-window
-       "bb" 'bufler-switch-buffer
-       "bh" 'previous-buffer
-       )
-
-     ;; Windows & Navigation
-     ;; 2
-     (my-leader-def
-       :keymaps 'normal
-       "wv" 'evil-window-vsplit
-       "wk" 'hrs/split-window-below-and-switch
-       "wc" 'hrs/split-window-right-and-switch
-       "wj" 'delete-other-windows
-       "wo" 'ace-window
-       ;; Overlapping binds, no prefix direct
-       "j" 'kill-buffer-and-window
-       "'" 'delete-other-windows
-       )
-
-     ;; Search
-     ;; 3
-     (my-leader-def
-       :keymaps 'normal
-       "f" 'consult-line
-       "ss" 'consult-line
-       "sS" 'consult-imenu
-       "sr" 'replace-string
-       "sg" 'consult-ripgrep
-       )
-
-     ;; Admin
-     ;; 4
-     (my-leader-def
-       :keymaps 'normal
-       "qq" 'save-buffers-kill-terminal
-       "qe" 'eshell
-       )
-
-     ;; Org-mode
-     ;; 5
-     (my-leader-def
-       :keymaps 'normal
-       "oa" 'org-agenda
-       "oc" 'org-capture
-       "od" 'org-deadline
-       "os" 'org-schedule
-       "ot" 'org-todo
-       "oe" 'counsel-org-tag
-       "ox" 'todo/done
-       "or" 'org-refile
-       "og" 'ivy/refile
-       "ob" 'ivy/last
-       "ol" 'org-insert-link
-       "oo" 'org-open-at-point
-       "op" 'org-link-open-as-file
-       "of" 'org-agenda-file-to-front
-       "ow" 'org-export-dispatch
-       "oy" 'org-archive-subtree
-       )
-
-     ;; Magit & VCS
-     ;; 6
-     (my-leader-def
-       :keymaps 'normal
-       "gg" 'magit-status
-       "gi" 'magit-init
-       "gm" 'git-messenger:popup-message
-       "gp" 'magit-pull
-       )
-
-     ;; Org-roam + Content (drill)
-     ;; 7
-     (my-leader-def
-       :keymaps 'normal
-       "nl" 'org-roam-buffer-toggle
-       "ni" 'org-roam-insert
-       "nf" 'org-roam-find-file
-       "nc" 'org-roam-capture
-       "nr" 'org-roam-random-note
-       "ns" 'org-roam-server-mode
-       "nd" 'org-drill
-       )
-
-     ;; Email / Com
-     ;; 8
-     (my-leader-def
-       :keymaps 'normal
-       "mo" 'mu4e
-       "mc" 'mu4e-compose-new
-       "mm" 'message-send-and-exit
-       "ma" 'mail-add-attachment
-       "ms" 'mml-secure-message-sign-pgp
-       "me" 'mml-secure-message-encrypt-pgp
-       "mj" 'mu4e~headers-jump-to-maildir
-       "ml" 'mu4e~view-browse-url-from-binding
-       "mf" 'mu4e~view-save-attach-from-binding
-       )
-   #+end_src
+  ;; Email / Com
+  ;; 8
+  (my-leader-def
+   :keymaps 'normal
+   "mo" 'mu4e
+   "mc" 'mu4e-compose-new
+   "mm" 'message-send-and-exit
+   "ma" 'mail-add-attachment
+   "ms" 'mml-secure-message-sign-pgp
+   "me" 'mml-secure-message-encrypt-pgp
+   "mj" 'mu4e~headers-jump-to-maildir
+   "ml" 'mu4e~view-browse-url-from-binding
+   "mf" 'mu4e~view-save-attach-from-binding
+   )
+#+end_src
 * Programming
 General settings & packages for programming, including all programming
 major-modes.
@@ -782,6 +719,7 @@ Global syntax checking.
     :config
     (global-flycheck-mode)
     )
+
   (use-package flycheck-rust
     :ensure t
     :config (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
@@ -983,6 +921,7 @@ Development settings for rust.
        (font-lock-variable-name-face ((t (:foreground "violet"))))
        )
    #+end_src
+
 * Writing
 =org-mode= config for writing & productivity.
 ** Base
@@ -998,32 +937,24 @@ Development settings for rust.
      (setq-default org-display-inline-images t)
      (setq-default org-startup-with-inline-images t)
 
-     (setq org-file-apps
-           '((auto-mode . emacs)
-             (directory . emacs)
-             ("\\.mm\\'" . default)
-             ("\\.x?html?\\'" . default)
-             ("\\.pdf\\'" . default))
-           ;;("\\.pdf\\'" . emacs))
-           )
      (setq org-ellipsis " ▼ "
-           org-adapt-indentation nil
-           org-fontify-quote-and-verse-blocks t
-           org-startup-folded t
-           org-priority-highest ?A
-           org-priority-lowest ?C
-           org-priority-faces
-           '((?A . 'all-the-icons-red)
-             (?B . 'all-the-icons-orange)
-             (?C . 'all-the-icons-yellow))
-           org-src-tab-acts-natively t
-           org-hide-emphasis-markers t
-           org-src-window-setup 'current-window
-           org-return-follows-link t
-           org-confirm-babel-evaluate nil
-           org-use-speed-commands t
-           org-catch-invisible-edits 'show
-           )
+	   org-adapt-indentation nil
+	   org-fontify-quote-and-verse-blocks t
+	   org-startup-folded t
+	   org-priority-highest ?A
+	   org-priority-lowest ?C
+	   org-priority-faces
+	   '((?A . 'all-the-icons-red)
+	     (?B . 'all-the-icons-orange)
+	     (?C . 'all-the-icons-yellow))
+	   org-src-tab-acts-natively t
+	   org-hide-emphasis-markers t
+	   org-src-window-setup 'current-window
+	   org-return-follows-link t
+	   org-confirm-babel-evaluate nil
+	   org-use-speed-commands t
+	   org-catch-invisible-edits 'show
+	   )
      (add-hook 'org-mode-hook 'org-indent-mode)
 
      (use-package org-tempo)
@@ -1122,12 +1053,6 @@ Enable =hunspell= & =flyspell= for all =org-mode= buffers.
         ("STATIC" . (:foreground "#eaa222" :weight bold))
         ("DONE" . (:foreground "#ffffff" :weight bold))
         )
-      org-capture-templates '(("x" "Inbox TODO" entry (file "~/documents/aggregation.org")
-                               "* TODO %?\n  %i\n  %a")
-                              ("c" "Common" entry (file+headline "~/documents/active.org" "Common")
-                               "* TODO %?\n%U\n   %c" :empty-lines 1)
-                              )
-
       org-tag-alist '(("home" . ?h)
                       ("actaeon" . ?a)
                       ("orion" . ?o)
@@ -1138,26 +1063,29 @@ Enable =hunspell= & =flyspell= for all =org-mode= buffers.
                            )
       )
    #+end_src
+   
 ** Tags
 Settings tags normally is broken, so counsel is required.
 #+begin_src emacs-lisp
   (use-package counsel
     :ensure t
     )
+#+end_src
 ** Capture
 #+begin_src emacs-lisp
-  (setq org-capture-templates '(("c" "Inbox" entry (file+headline "~/documents/supervisor.org" "Inbox")
-                                 "* TODO %?\n%U\n"
-                                 )
-                                ("x" "Common" entry (file+headline "~/documents/supervisor.org" "Common")
-                                 "* TODO %?\n%U\n")
-                                )
-        )
-
-  (use-package org-capture
+  ;; (setq org-capture-templates '(("c" "Inbox" entry (file+headline "~/documents/supervisor.org" "Inbox")
+  ;;                                "* TODO %?\n%U\n"
+  ;;                                )
+  ;;                               ("x" "Common" entry (file+headline "~/documents/supervisor.org" "Common")
+  ;;                                "* TODO %?\n%U\n")
+  ;;                               )
+  ;;       )
+  (use-package
+    org-capture
     :after org
     :hook
     (org-capture-mode . evil-insert-state)
+    )
 #+end_src
 ** Files
    Quick jump to common files in =GPS=.
@@ -1477,7 +1405,8 @@ Use =org-roam= for the personal knowledge base.
 		)
 	       )
        )
-   #+end_src
+   #+end_src   
+
 * Communication
 =mu4e= and packages collection.
 #+begin_src emacs-lisp
