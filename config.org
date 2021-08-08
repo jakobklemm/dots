@@ -708,6 +708,11 @@ Leader keys and actions.
    "mf" 'mu4e~view-save-attach-from-binding
    )
 #+end_src
+Non evil binds
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-x j") 'kill-buffer-and-window)
+(global-set-key (kbd "C-x o") 'ace-window)
+#+end_src
 * Programming
 General settings & packages for programming, including all programming
 major-modes.
