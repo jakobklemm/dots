@@ -542,9 +542,6 @@ Easy helper functions for quickly opening new buffers.
     :ensure t
     :after org
     :hook (org-mode . (lambda () evil-org-mode))
-    :config
-    (require 'evil-org-agenda)
-    (evil-org-agenda-set-keys)
     )
 
   (use-package evil-surround
@@ -554,6 +551,7 @@ Easy helper functions for quickly opening new buffers.
     )
 #+END_SRC
 ** Keybinds
+*** Base
 Navigation and normal modes.
 #+begin_src emacs-lisp
   (use-package general
@@ -589,6 +587,7 @@ Navigation and normal modes.
      )
     )
 #+end_src
+*** Actions
 Leader keys and actions.
 #+begin_src emacs-lisp
   (general-create-definer my-leader-def
@@ -708,10 +707,38 @@ Leader keys and actions.
    "mf" 'mu4e~view-save-attach-from-binding
    )
 #+end_src
+*** Non Evil
 Non evil binds
 #+begin_src emacs-lisp
 (global-set-key (kbd "C-x j") 'kill-buffer-and-window)
 (global-set-key (kbd "C-x o") 'ace-window)
+#+end_src
+*** Agenda++
+Org-Agenda
+#+begin_src emacs-lisp
+  (general-def org-agenda-keymap
+    "h" 'org-agenda-next-line
+    "t" 'org-agenda-previous-line
+    "d" 'org-agenda-earlier
+    "n" 'org-agenda-later
+    "H" 'jk/todo-later
+    "T" 'jk/todo-earlier
+    "s" 'org-agenda-schedule
+    )
+
+  (defun jk/todo-later  ()
+    (interactive)
+    (org-agenda-date-later 1)
+    (org-agenda-redo)
+    (org-agenda-next-item)
+    )
+
+  (defun jk/todo-earlier  ()
+    (interactive)
+    (org-agenda-date-later -1)
+    (org-agenda-redo)
+    (org-agenda-previous-item)
+    )
 #+end_src
 * Programming
 General settings & packages for programming, including all programming
@@ -1068,7 +1095,7 @@ Enable =hunspell= & =flyspell= for all =org-mode= buffers.
                            )
       )
    #+end_src
-   
+
 ** Tags
 Settings tags normally is broken, so counsel is required.
 #+begin_src emacs-lisp
@@ -1498,4 +1525,5 @@ Use =org-roam= for the personal knowledge base.
   (add-hook 'mu4e-view-mode-hook 'visual-line-mode)
   (add-hook 'mu4e-compose-mode-hook 'visual-line-mode)
   #+end_src
+
 
