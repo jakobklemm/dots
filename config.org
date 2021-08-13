@@ -551,7 +551,7 @@ Easy helper functions for quickly opening new buffers.
     )
 #+END_SRC
 ** Keybinds
-*** Base
+*** Motion
 Navigation and normal modes.
 #+begin_src emacs-lisp
   (use-package general
@@ -587,24 +587,28 @@ Navigation and normal modes.
      )
     )
 #+end_src
-*** Actions
-Leader keys and actions.
+*** Leader
 #+begin_src emacs-lisp
   (general-create-definer my-leader-def
     ;; :prefix my-leader
     :prefix "SPC")
-
-  ;; Easy
-  ;; 0
-  (my-leader-def
+#+end_src
+*** Easy
+#+begin_src emacs-lisp
+(my-leader-def
    :keymaps 'normal
    "." 'execute-extended-command
    "," 'find-file
    ";" 'bufler-switch-buffer
+   "a" 'org-agenda
+   "c" 'org-capture
+   "d" 'org-schedule
+   "t" 'org-todo
+   "x" 'todo/done
    )
-
-  ;; Buffers
-  ;; 1
+#+end_src
+*** Buffers
+#+begin_src emacs-lisp
   (my-leader-def
    :keymaps 'normal
    "bs" 'save-buffer
@@ -613,75 +617,65 @@ Leader keys and actions.
    "bb" 'bufler-switch-buffer
    "bh" 'previous-buffer
    )
-
-  ;; Windows & Navigation
-  ;; 2
-  (my-leader-def
+#+end_src
+*** Windows
+#+begin_src emacs-lisp
+(my-leader-def
    :keymaps 'normal
    "wv" 'evil-window-vsplit
    "wk" 'hrs/split-window-below-and-switch
    "wc" 'hrs/split-window-right-and-switch
    "wj" 'delete-other-windows
    "wo" 'ace-window
-   ;; Overlapping binds, no prefix direct
-   "j" 'kill-buffer-and-window
-   "'" 'delete-other-windows
    )
-
-  ;; Search
-  ;; 3
+#+end_src
+*** Search
+#+begin_src emacs-lisp
   (my-leader-def
-   :keymaps 'normal
-   "f" 'consult-line
-   "ss" 'consult-line
-   "sS" 'consult-imenu
-   "sr" 'replace-string
-   "sg" 'consult-ripgrep
-   )
-
-  ;; Admin
-  ;; 4
-  (my-leader-def
+    :keymaps 'normal
+    "ss" 'consult-line
+    "f" 'conlsult-line
+    "sS" 'consult-imenu
+    "sr" 'replace-string
+    "sg" 'consult-ripgrep
+    )
+#+end_src
+*** Emacs
+#+begin_src emacs-lisp
+(my-leader-def
    :keymaps 'normal
    "qq" 'save-buffers-kill-terminal
+   "qs" 'kill-emacs
    "qe" 'eshell
    )
-
-  ;; Org-mode
-  ;; 5
-  (my-leader-def
+#+end_src
+*** org-mode
+#+begin_src emacs-lisp
+(my-leader-def
    :keymaps 'normal
-   "oa" 'org-agenda
-   "oc" 'org-capture
-   "od" 'org-deadline
-   "os" 'org-schedule
-   "ot" 'org-todo
-   "oe" 'counsel-org-tag
-   "ox" 'todo/done
+   "ot" 'counsel-org-tag
    "or" 'org-refile
-   "og" 'ivy/refile
-   "ob" 'ivy/last
    "ol" 'org-insert-link
    "oo" 'org-open-at-point
    "op" 'org-link-open-as-file
    "of" 'org-agenda-file-to-front
-   "ow" 'org-export-dispatch
-   "oy" 'org-archive-subtree
+   "oe" 'org-export-dispatch
+   "oa" 'org-archive-subtree
    )
-
-  ;; Magit & VCS
-  ;; 6
+#+end_src
+*** Magit
+#+begin_src emacs-lisp
   (my-leader-def
-   :keymaps 'normal
-   "gg" 'magit-status
-   "gi" 'magit-init
-   "gm" 'git-messenger:popup-message
-   "gp" 'magit-pull
-   )
-
-  ;; Org-roam + Content (drill)
-  ;; 7
-  (my-leader-def
+    :keymaps 'normal
+    "gg" 'magit-status
+    "gi" 'magit-init
+    "gm" 'git-messenger:popup-message
+    "gp" 'magit-pull
+    )
+#+end_src
+*** Content
+#+begin_src emacs-lisp
+(my-leader-def
    :keymaps 'normal
    "nl" 'org-roam-buffer-toggle
    "ni" 'org-roam-insert
@@ -692,20 +686,21 @@ Leader keys and actions.
    "nd" 'org-drill
    )
 
-  ;; Email / Com
-  ;; 8
+#+end_src
+*** Email
+#+begin_src emacs-lisp
   (my-leader-def
-   :keymaps 'normal
-   "mo" 'mu4e
-   "mc" 'mu4e-compose-new
-   "mm" 'message-send-and-exit
-   "ma" 'mail-add-attachment
-   "ms" 'mml-secure-message-sign-pgp
-   "me" 'mml-secure-message-encrypt-pgp
-   "mj" 'mu4e~headers-jump-to-maildir
-   "ml" 'mu4e~view-browse-url-from-binding
-   "mf" 'mu4e~view-save-attach-from-binding
-   )
+    :keymaps 'normal
+    "mo" 'mu4e
+    "mc" 'mu4e-compose-new
+    "mm" 'message-send-and-exit
+    "ma" 'mail-add-attachment
+    "ms" 'mml-secure-message-sign-pgp
+    "me" 'mml-secure-message-encrypt-pgp
+    "mj" 'mu4e~headers-jump-to-maildir
+    "ml" 'mu4e~view-browse-url-from-binding
+    "mf" 'mu4e~view-save-attach-from-binding
+    )
 #+end_src
 *** Non Evil
 Non evil binds
@@ -1076,13 +1071,13 @@ Enable =hunspell= & =flyspell= for all =org-mode= buffers.
       org-log-done 'time
       org-todo-keywords
       '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
-        (sequence "STATIC(s)" "BLOCKED(b)" "|" "PAL(p)"))
+        (sequence "PROCESS(p)" "BLOCKED(b)" "|" "PAL(a)"))
       org-todo-keyword-faces
       '(("TODO" . (:foreground "#af1212" :weight bold))
         ("NEXT" . (:foreground "#a8fa80" :weight bold))
         ("BLOCKED" . (:foreground "#b213c4" :weight bold))
         ("PAL" . (:foreground "#30bb03" :weight bold))
-        ("STATIC" . (:foreground "#eaa222" :weight bold))
+        ("PROCESS" . (:foreground "#eaa222" :weight bold))
         ("DONE" . (:foreground "#ffffff" :weight bold))
         )
       org-tag-alist '(("home" . ?h)
@@ -1105,13 +1100,12 @@ Settings tags normally is broken, so counsel is required.
 #+end_src
 ** Capture
 #+begin_src emacs-lisp
-  ;; (setq org-capture-templates '(("c" "Inbox" entry (file+headline "~/documents/supervisor.org" "Inbox")
-  ;;                                "* TODO %?\n%U\n"
-  ;;                                )
-  ;;                               ("x" "Common" entry (file+headline "~/documents/supervisor.org" "Common")
-  ;;                                "* TODO %?\n%U\n")
-  ;;                               )
-  ;;       )
+  (setq org-capture-templates '(("c" "Inbox" entry (file+headline "~/documents/supervisor.org" "Inbox")
+                                 "* TODO %?\nCAPTURED: %U\n"
+                                 )
+                                )
+        )
+
   (use-package
     org-capture
     :after org
@@ -1213,27 +1207,28 @@ Settings tags normally is broken, so counsel is required.
    Use quick refile helpers for current =GPS= implementation.
    #+begin_src emacs-lisp
      ;; https://emacs.stackexchange.com/questions/8045/org-refile-to-a-known-fixed-location
-     (defun ivy/refile-to (file headline)
+     (defun jk/refile-to (file headline)
        "Move current headline to specified location"
        (let ((pos (save-excursion
-		    (find-file file)
-		    (org-find-exact-headline-in-buffer headline))))
-	 (org-refile nil nil (list headline file nil pos))))
+                    (find-file file)
+                    (org-find-exact-headline-in-buffer headline))))
+         (org-refile nil nil (list headline file nil pos))))
 
-     (defun jk/common ()
-       "Move"
+     (defun jk/activate  ()
        (interactive)
+       (org-todo "TODO")
+       (org-schedule nil (org-read-date nil nil "+1d"))
        (org-mark-ring-push)
-       (ivy/refile-to "~/documents/supervisor.org" "Common")
-       (org-mark-ring-goto))
+       (jk/refile-to "~/documents/supervisor.org" "Active")
+       (org-mark-ring-goto)
+       )
 
      (defun jk/completed ()
-       "Move"
+       "Move to completed.org"
        (interactive)
        (org-mark-ring-push)
        (ivy/refile-to "~/documents/completed.org" "Week")
        (org-mark-ring-goto))
-
    #+end_src
 ** Roam
 Use =org-roam= for the personal knowledge base.
