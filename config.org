@@ -940,7 +940,7 @@ Development settings for rust.
    General settings & config.
    #+begin_src emacs-lisp
      (use-package org
-       :ensure t
+       :straight t
        )
 
      (setq
@@ -1077,7 +1077,13 @@ Enable =hunspell= & =flyspell= for all =org-mode= buffers.
                       )
       )
 
-     (require 'eps)
+     (use-package org-super-agenda
+       :straight t
+       :config
+       (org-super-agenda-mode)
+       )
+
+       (require 'eps)
    #+end_src
 
 ** Tags
@@ -1087,33 +1093,6 @@ Settings tags normally is broken, so counsel is required.
     :straight t
     )
 #+end_src
-** Files
-   Quick jump to common files in =GPS=.
-   #+begin_src emacs-lisp
-     (defun todo/done ()
-       (interactive)
-       (org-todo 'done))
-
-     (defun jk/active  ()
-       (interactive)
-       (org-todo "NEXT")
-       (org-mark-ring-push)
-       (ivy/refile-to "~/documents/supervisor.org" "Active")
-       (org-mark-ring-goto)
-       ;;(org-priority-up)
-       ;;(org-deadline nil (org-read-date nil nil "+1d"))
-       )
-
-     (defun jk/supervisor-file ()
-       (interactive)
-       (find-file "~/documents/supervisor.org")
-       )
-
-     (defun jk/completed-file ()
-       (interactive)
-       (find-file "~/documents/completed.org")
-       )
-   #+end_src
 ** Repetition
    =org-drill= for spaced repetition.
    #+begin_src emacs-lisp
