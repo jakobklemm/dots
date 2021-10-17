@@ -19,13 +19,13 @@ auto-save-list tramp
 /eshell/lastdir
 
 # elpa packages
-/elpa/
+elpa/
 
 # reftex files
 *.rel
 
 # AUCTeX auto folder
-/auto/
+auto/
 
 # cask packages
 .cask/

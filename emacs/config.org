@@ -468,21 +468,6 @@ Use =ace-windows= for quickly switching between multiple windows.
 	  )
     )
 #+end_src
-** Miniframe
-Instead of a complete posframe use =mini-frame= to display the
-minibuffer in the center of the screen.
-#+begin_src emacs-lisp
-  (use-package mini-frame
-    :straight t
-    :config
-    (custom-set-variables
-     '(mini-frame-show-parameters
-       '((top . 0.4)
-         (width . 0.5)
-         (left . 0.5))))
-    (mini-frame-mode t)
-    )
-#+end_src
 ** Scrolling
    Use =good-scroll= to move more easily through files.
    #+begin_src emacs-lisp

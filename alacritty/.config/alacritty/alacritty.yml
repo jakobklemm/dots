@@ -1,0 +1,73 @@
+env:
+  TERM: xterm-256color
+
+window:
+  padding:
+    x: 6
+    y: 6
+  dynamic_padding: false
+  title: Alacritty
+
+  class:
+    instance: Alacritty
+    general: Alacritty
+
+scrolling:
+  history: 5000
+
+draw_bold_text_with_bright_colors: true
+
+schemes:
+  themer-dark: &dark
+    primary:
+      background: '#23272a'
+      foreground: '#9f9595'
+
+    cursor:
+      text: '#23272a'
+      cursor: '#8253a2'
+
+    selection:
+      text: '#23272a'
+      background: '#6072c7'
+
+    normal:
+      black: '#4c4c4e'
+      red: '#d54330'
+      green: '#5fb462'
+      yellow: '#cbd95e'
+      blue: '#6072c7'
+      magenta: '#8a2e2e'
+      cyan: '#42a2a9'
+      white: '#9f9595'
+
+    bright:
+      black: '#615e60'
+      red: '#CE5748'
+      green: '#70B170'
+      yellow: '#C6CF6D'
+      blue: '#717DC1'
+      magenta: '#924646'
+      cyan: '#59A3A9'
+      white: '#b4a7a7'
+
+    dim:
+      black: '#38393c'
+      red: '#B13D2F'
+      green: '#539857'
+      yellow: '#A9B554'
+      blue: '#5463A8'
+      magenta: '#752D2D'
+      cyan: '#3C8990'
+      white: '#8b8283'
+  
+background_opacity: 0.9
+
+shell:
+  program: /bin/fish
+  args:
+    - -l
+
+font:
+  normal:
+    family: JetBrains Mono

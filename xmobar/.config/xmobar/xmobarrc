@@ -1,0 +1,50 @@
+-- Xmobar (http://projects.haskell.org/xmobar/)
+-- This is the default xmobar configuration for DTOS.
+-- This config is packaged in the DTOS repo as dtos-xmobar
+-- Dependencies: otf-font-awesome ttf-mononoki ttf-ubuntu-font-family trayer
+-- Also depends on scripts from dtos-local-bin from the dtos-core-repo.
+
+Config { font = "xft:JetBrains Mono:weight=bold:pixelsize=11:antialias=true:hinting=true"
+       , additionalFonts = [
+           "xft:UbuntuMono Nerd Font:pixelsize=20:antialias=true:hinting=true"
+           , "xft:JetBrainsMono Nerd Font:size=21"
+           , "xft:UbuntuMono Nerd Font:size=17"
+           , "xft:Font Awesome 5 Free Solid:pixelsize=12"
+           , "xft:Font Awesome 5 Brands:pixelsize=12"
+           ]
+       , bgColor      = "#23272A"
+       , fgColor      = "#947F7F"
+       , position     = TopSize L 100 24
+       , lowerOnStart = True
+       , hideOnStart  = False
+       , allDesktops  = True
+       , persistent   = True
+       , iconRoot     = ".xmonad/xpm/"  -- default: "."
+       , commands = [
+           Run Com ".local/bin/getlayout" [] "layout" 60
+           , Run Com ".local/bin/pacupdates" [] "pacupdate" 36000
+           , Run Cpu ["-L","5","-H","50"] 20
+           , Run Network "wlo1" ["--template", "Net: <tx>kB|<rx>kB", "-L","1000","-H","5000"] 10
+           , Run Uptime ["-t", "<days>d <hours>h"] 36000
+           , Run Date "%b %d %Y - %H:%M" "date" 60
+           , Run Com ".local/bin/volume" [] "volume" 600
+           , Run Com ".local/bin/brightness" [] "brightness" 600
+           , Run Battery [
+	       "-t", "<acstatus>: <left>% - <timeleft>",
+	       "--",
+	       "-O", "AC"
+	       ] 10
+	   , Run UnsafeStdinReader
+           ]
+       , sepChar = "%"
+       , alignSep = "}{"
+       , template = " <icon=haskell_20.xpm/> <fc=#666666></fc> %UnsafeStdinReader% }{\
+                    \<fn=2><fc=#282c34,#23272A:0></fc></fn><fc=#C34737,#282c34:0>%layout%</fc>\
+                    \<fn=2><fc=#23272A,#282c34:0></fc></fn><fc=#BB8181,#23272A:0>Updates: %pacupdate% </fc>\
+                    \<fn=2><fc=#282c34,#23272A:0></fc></fn><fc=#CBD95E,#282c34:0>%cpu% </fc>\
+                    \<fn=2><fc=#23272A,#282c34:0></fc></fn><fc=#7ECD81,#23272A:0>%wlo1% </fc>\
+                    \<fn=2><fc=#282c34,#23272a:0></fc></fn><fc=#54B0A5,#282c34:0>V: %volume% | B: %brightness% </fc>\
+                    \<fn=2><fc=#23272a,#282c34:0></fc></fn><fc=#6C7BC6,#23272A:0>Uptime: %uptime% </fc>\
+                    \<fn=2><fc=#282c34,#23272a:0></fc></fn><fc=#6A3DBD,#282c34:0>%battery% </fc>\
+                    \<fn=2><fc=#23272a,#282c34:0></fc></fn><fc=#9D486F,#23272A:0>%date% </fc>"
+       }
