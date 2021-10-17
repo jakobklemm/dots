@@ -39,7 +39,7 @@ Config { font = "xft:JetBrains Mono:weight=bold:pixelsize=11:antialias=true:hint
        , sepChar = "%"
        , alignSep = "}{"
        , template = " <icon=haskell_20.xpm/> <fc=#666666></fc> %UnsafeStdinReader% }{\
-                    \<fn=2><fc=#282c34,#23272A:0></fc></fn><fc=#C34737,#282c34:0>%layout%</fc>\
+                    \<fn=2><fc=#282c34,#23272A:0></fc></fn><fc=#C34737,#282c34:0>%layout% </fc>\
                     \<fn=2><fc=#23272A,#282c34:0></fc></fn><fc=#BB8181,#23272A:0>Updates: %pacupdate% </fc>\
                     \<fn=2><fc=#282c34,#23272A:0></fc></fn><fc=#CBD95E,#282c34:0>%cpu% </fc>\
                     \<fn=2><fc=#23272A,#282c34:0></fc></fn><fc=#7ECD81,#23272A:0>%wlo1% </fc>\
