@@ -4,28 +4,66 @@
 ;; Projects index
 (setq jk/projects '("Common" "Actaeon" "Orion" "Schule"))
 
-(define-key org-agenda-mode-map (kbd "j") 'org-agenda-next-item)
-(define-key org-agenda-mode-map (kbd "k") 'org-agenda-previous-item)
+(with-eval-after-load "org"
+  ;; navigation
+  (define-key org-agenda-mode-map (kbd "h") 'org-agenda-next-item)
+  (define-key org-agenda-mode-map (kbd "t") 'org-agenda-previous-item)
 
-(define-key org-agenda-mode-map (kbd "h") 'org-agenda-next-item)
-(define-key org-agenda-mode-map (kbd "t") 'org-agenda-previous-item)
+  (define-key org-agenda-mode-map (kbd "H") 'org-agenda-next-line)
+  (define-key org-agenda-mode-map (kbd "T") 'org-agenda-previous-line)
 
-(define-key org-agenda-mode-map (kbd "H") 'jk/todo-earlier)
-(define-key org-agenda-mode-map (kbd "T") 'jk/todo-later)
+  ;; actions
+  (define-key org-agenda-mode-map (kbd "d") 'org-agenda-earlier)
+  (define-key org-agenda-mode-map (kbd "n") 'org-agenda-later)
 
-(define-key org-agenda-mode-map (kbd "<return>") 'jk/agenda-complete)
-(define-key org-agenda-mode-map (kbd "x") 'jk/agenda-done)
-(define-key org-agenda-mode-map (kbd "s") 'jk/agenda-sort)
-(define-key org-agenda-mode-map (kbd "a") 'jk/agenda-activate)
+  (define-key org-agenda-mode-map (kbd "D") 'org-agenda-backward-block)
+  (define-key org-agenda-mode-map (kbd "N") 'org-agenda-forward-block)
 
-(defun jk/todo-later  ()
+  ;; querty
+
+  (define-key org-agenda-mode-map (kbd "j") 'org-agenda-next-item)
+  (define-key org-agenda-mode-map (kbd "k") 'org-agenda-previous-item)
+
+  (define-key org-agenda-mode-map (kbd "J") 'jk/agenda-todo-earlier)
+  (define-key org-agenda-mode-map (kbd "K") 'jk/agenda-todo-later)
+
+  (define-key org-agenda-mode-map (kbd "<return>") 'jk/agenda-complete)
+  (define-key org-agenda-mode-map (kbd "x") 'jk/agenda-done)
+  (define-key org-agenda-mode-map (kbd "s") 'jk/agenda-sort)
+  (define-key org-agenda-mode-map (kbd "a") 'jk/agenda-activate)
+  (define-key org-agenda-mode-map (kbd "e") 'org-schedule)
+
+  (my-leader-def
+    :keymaps 'normal
+    "<return>" 'jk/buffer-complete
+    "x" 'jk/done
+    "s" 'jk/buffer-sort
+    "a" 'jk/buffer-activate
+    "e" 'jk/buffer-event
+    "y" 'jk/super-agenda
+    )
+  )
+
+(defun jk/set-layout ()
+  (interactive)
+  (when (string-equal (string-trim (shell-command-to-string "getlayout")) "ch")
+    (message "is ch")
+    )
+  )
+
+(defun jk/super-agenda (&optional arg)
+  (interactive "P")
+  (org-agenda arg "p")
+  )
+
+(defun jk/agenda-todo-later  ()
   (interactive)
   (org-agenda-date-later 1)
   (org-agenda-redo-all)
   (org-agenda-next-item)
   )
 
-(defun jk/todo-earlier  ()
+(defun jk/agenda-todo-earlier  ()
   (interactive)
   (org-agenda-date-later -1)
   (org-agenda-redo-all)
@@ -92,7 +130,7 @@
                       )
  )
 
-(defun jk/set-done ()
+(defun jk/done ()
   (interactive)
   (org-todo "DONE")
   )

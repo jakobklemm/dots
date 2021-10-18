@@ -204,6 +204,14 @@ Install =no-littering= to handle all temp files.
   :straight t
   )
 #+end_src
+** Reload
+Sometimes org requires to be reloaded at startup (for unknown
+reasons).
+#+begin_src emacs-lisp
+  (with-eval-after-load "org"
+    (org-reload)
+    )
+#+end_src
 * Design
 Anything related to design and looks.
 ** Theme
@@ -223,7 +231,7 @@ Anything related to design and looks.
 Set the default font & functions for changing the font size.
 #+begin_src emacs-lisp
   (setq hrs/default-fixed-font "Fira Code")
-  (setq hrs/default-fixed-font-size 90)
+  (setq hrs/default-fixed-font-size 100)
   (setq hrs/current-fixed-font-size hrs/default-fixed-font-size)
   (set-face-attribute 'default nil
                       :family hrs/default-fixed-font
