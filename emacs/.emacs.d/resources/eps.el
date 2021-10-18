@@ -19,8 +19,10 @@
   (define-key org-agenda-mode-map (kbd "D") 'org-agenda-backward-block)
   (define-key org-agenda-mode-map (kbd "N") 'org-agenda-forward-block)
 
-  ;; querty
+  ;; more
+  (define-key org-agenda-mode-map (kbd "o") 'org-agenda-follow-mode)
 
+  ;; querty
   (define-key org-agenda-mode-map (kbd "j") 'org-agenda-next-item)
   (define-key org-agenda-mode-map (kbd "k") 'org-agenda-previous-item)
 
@@ -32,16 +34,6 @@
   (define-key org-agenda-mode-map (kbd "s") 'jk/agenda-sort)
   (define-key org-agenda-mode-map (kbd "a") 'jk/agenda-activate)
   (define-key org-agenda-mode-map (kbd "e") 'org-schedule)
-
-  (my-leader-def
-    :keymaps 'normal
-    "<return>" 'jk/buffer-complete
-    "x" 'jk/done
-    "s" 'jk/buffer-sort
-    "a" 'jk/buffer-activate
-    "e" 'jk/buffer-event
-    "y" 'jk/super-agenda
-    )
   )
 
 (defun jk/set-layout ()
@@ -108,7 +100,7 @@
                           :tag "EVENTS"
                           :order 1
                           ))
-                       (:discard (:anything t))
+                       (:discard (:tag "ACTIVE"))
                        )))
           (alltodo "" ((org-agenda-overriding-header "Stack")
 	               (org-super-agenda-groups

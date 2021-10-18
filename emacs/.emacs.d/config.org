@@ -204,14 +204,6 @@ Install =no-littering= to handle all temp files.
   :straight t
   )
 #+end_src
-** Reload
-Sometimes org requires to be reloaded at startup (for unknown
-reasons).
-#+begin_src emacs-lisp
-  (with-eval-after-load "org"
-    (org-reload)
-    )
-#+end_src
 * Design
 Anything related to design and looks.
 ** Theme
@@ -598,17 +590,19 @@ Navigation and normal modes.
 #+end_src
 *** Easy
 #+begin_src emacs-lisp
-(my-leader-def
-   :keymaps 'normal
-   "." 'execute-extended-command
-   "," 'find-file
-   ";" 'bufler-switch-buffer
-   "a" 'org-agenda
-   "c" 'org-capture
-   "d" 'org-schedule
-   "t" 'org-todo
-   "x" 'todo/done
-   )
+  (my-leader-def
+     :keymaps 'normal
+     "." 'execute-extended-command
+     "," 'find-file
+     ";" 'bufler-switch-buffer
+     "c" 'org-capture
+     "d" 'org-schedule
+     "t" 'org-todo
+     "y" 'jk/super-agenda
+     "s" 'jk/buffer-sort
+     "e" 'org-schedule
+     "a" 'jk/buffer-activate
+     )
 #+end_src
 *** Buffers
 #+begin_src emacs-lisp
@@ -623,24 +617,23 @@ Navigation and normal modes.
 #+end_src
 *** Windows
 #+begin_src emacs-lisp
-(my-leader-def
-   :keymaps 'normal
-   "wv" 'evil-window-vsplit
-   "wk" 'hrs/split-window-below-and-switch
-   "wc" 'hrs/split-window-right-and-switch
-   "wj" 'delete-other-windows
-   "wo" 'ace-window
-   )
+  (my-leader-def
+     :keymaps 'normal
+     "wv" 'evil-window-vsplit
+     "wk" 'hrs/split-window-below-and-switch
+     "wc" 'hrs/split-window-right-and-switch
+     "wj" 'delete-other-windows
+     "wo" 'ace-window
+     )
 #+end_src
 *** Search
 #+begin_src emacs-lisp
   (my-leader-def
     :keymaps 'normal
-    "ss" 'consult-line
     "f" 'consult-line
-    "sS" 'consult-imenu
-    "sr" 'replace-string
-    "sg" 'consult-ripgrep
+    ;;"sS" 'consult-imenu
+    ;;"sr" 'replace-string
+    ;;"sg" 'consult-ripgrep
     )
 #+end_src
 *** Emacs
@@ -933,9 +926,8 @@ Development settings for rust.
    General settings & config.
    #+begin_src emacs-lisp
      (use-package org
-       :straight t
        )
-
+     
      (setq
       org-directory "~/documents/"
       org-archive-location "~/archive/2021.org::* From %s"
