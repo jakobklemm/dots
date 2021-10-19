@@ -177,19 +177,19 @@ Some default settings, partially copied from Harry R. Schwartz.
 Some common libraries as general dependencies. 
 #+begin_src emacs-lisp
 (use-package async
-  :straight t
+  :ensure t
   )
 (use-package aio
-  :straight t
+  :ensure t
   )
 (use-package cl-lib
-  :straight t
+  :ensure t
   )
 (use-package s
-  :straight t
+  :ensure t
   )
 (use-package dash
-  :straight t
+  :ensure t
   )
 #+end_src
 ** Extras
@@ -203,7 +203,7 @@ custom-theme-load-path.
 Install =no-littering= to handle all temp files.
 #+begin_src emacs-lisp
 (use-package no-littering
-  :straight t
+  :ensure t
   )
 #+end_src
 * Design
@@ -216,7 +216,7 @@ Anything related to design and looks.
   (custom-set-faces '(org-ellipsis ((t (:foreground "#6483b5" :underline nil)))))
 
   (use-package doom-themes
-    :straight t
+    :ensure t
     :config
     (load-theme 'doom-Iosvkem t)
     )
@@ -276,7 +276,7 @@ Set the default font & functions for changing the font size.
 ** Numbers
 #+begin_src emacs-lisp
   (use-package nlinum
-    :straight t
+    :ensure t
     :config
     (global-nlinum-mode)
     )
@@ -292,7 +292,7 @@ Use feebeline as a /in-minibuffer-modeline/.
         telephone-line-evil-use-short-tag t)
 
   (use-package telephone-line
-    :straight t
+    :ensure t
     :config
     (telephone-line-mode t))
 #+end_src
@@ -300,7 +300,7 @@ Use feebeline as a /in-minibuffer-modeline/.
 Install rainbow-delimiters & enable it for programming & org-mode.
 #+begin_src emacs-lisp
   (use-package rainbow-delimiters
-    :straight t
+    :ensure t
     :config
     (add-hook 'org-mode-hook #'rainbow-delimiters-mode)
     (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
@@ -310,7 +310,7 @@ Install rainbow-delimiters & enable it for programming & org-mode.
 Install icons using =all-the-icons-install-fonts=
 #+begin_src emacs-lisp
 (use-package all-the-icons
-  :straight t
+  :ensure t
   )
 #+end_src
 ** Symbols
@@ -377,7 +377,7 @@ Partially copied from =SystemCrafters=.
       (backward-kill-word arg)))
 
   (use-package vertico
-    :straight t
+    :ensure t
     :custom-face
     (vertico-current ((t (:background "#3a3f5a"))))
     :bind (:map vertico-map
@@ -396,7 +396,7 @@ Partially copied from =SystemCrafters=.
 Corf & Orderless for improved completion in region.
 #+begin_src emacs-lisp
   (use-package corfu
-    :straight t
+    :ensure t
     :bind (:map corfu-map
                 ("C-j" . corfu-next)
                 ("C-k" . corfu-previous)
@@ -407,7 +407,7 @@ Corf & Orderless for improved completion in region.
     (corfu-global-mode))
 
   (use-package orderless
-    :straight t
+    :ensure t
     :init
     (setq completion-styles '(orderless)
           completion-category-defaults nil
@@ -428,7 +428,7 @@ Save commands between restarts.
 Use consult for improved search.
 #+begin_src emacs-lisp
   (use-package consult
-    :straight t
+    :ensure t
     :bind (("C-s" . consult-line)
            ("M-s" . consult-imenu)
            :map minibuffer-local-map
@@ -442,7 +442,7 @@ Add /margin notes/ in vertico buffers.
 #+begin_src emacs-lisp
   (use-package marginalia
     :after vertico
-    :straight t
+    :ensure t
     :custom
     (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
     :init
@@ -454,7 +454,7 @@ Add /margin notes/ in vertico buffers.
 Use =bufler= to manage buffers.
 #+begin_src emacs-lisp
   (use-package bufler
-    :straight t
+    :ensure t
     :config
     (bufler-mode)
     )
@@ -463,7 +463,7 @@ Use =bufler= to manage buffers.
 Use =ace-windows= for quickly switching between multiple windows.
 #+begin_src emacs-lisp
   (use-package ace-window
-    :straight t
+    :ensure t
     :init
     (setq aw-scope 'frame ; limit to single frame
 	  aw-keys '(?a ?o ?e ?u ?i ?d ?h ?t ?n)
@@ -476,7 +476,7 @@ Use =ace-windows= for quickly switching between multiple windows.
      (setq scroll-margin 8)
 
      (use-package good-scroll
-       :straight t
+       :ensure t
        :config
        (good-scroll-mode 1)
        )
@@ -508,7 +508,7 @@ Easy helper functions for quickly opening new buffers.
 ** Evil
 #+begin_src emacs-lisp
   (use-package evil
-    :straight t
+    :ensure t
     :config (evil-mode 1)
     :diminish (undo-tree-mode)
     :init
@@ -516,7 +516,7 @@ Easy helper functions for quickly opening new buffers.
     )
 
   (use-package evil-goggles
-    :straight t
+    :ensure t
     :config
     (evil-goggles-mode)
     )
@@ -530,19 +530,19 @@ Easy helper functions for quickly opening new buffers.
         )
 
   (use-package evil-collection
-    :straight t
+    :ensure t
     :config
     (evil-collection-init)
     )
 
   (use-package evil-org
-    :straight t
+    :ensure t
     :after org
     :hook (org-mode . (lambda () evil-org-mode))
     )
 
   (use-package evil-surround
-    :straight t
+    :ensure t
     :config
     (global-evil-surround-mode 1)
     )
@@ -552,7 +552,7 @@ Easy helper functions for quickly opening new buffers.
 Navigation and normal modes.
 #+begin_src emacs-lisp
   (use-package general
-    :straight t
+    :ensure t
     :config
     (general-define-key
      :states '(motion visual normal)
@@ -713,31 +713,31 @@ major-modes.
 Global syntax checking.
 #+begin_src emacs-lisp
   (use-package flycheck
-    :straight t
+    :ensure t
     :config
     (global-flycheck-mode)
     )
 
   (use-package flycheck-rust
-    :straight t
+    :ensure t
     :config (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 #+end_src
 ** Magit
    Use =magit= with some additional packages.
    #+begin_src emacs-lisp
      (use-package magit
-       :straight t
+       :ensure t
        :config
        (global-set-key (kbd "C-x g") 'magit-status)
        (global-set-key (kbd "C-x p") 'magit-init)
        (global-set-key (kbd "C-v") 'magit-commit)
        (use-package magit-todos
-         :straight t
+         :ensure t
          :config
          (magit-todos-mode t)
          )
        (use-package git-messenger
-         :straight t
+         :ensure t
          :config
          (global-set-key (kbd "C-x m") 'git-messenger)
          )
@@ -760,7 +760,7 @@ Setup =LSP= & =LSP-UI=, mainly for Elixir, later also for Rust.
         )
 
   (use-package lsp-mode
-    :straight t
+    :ensure t
     :commands lsp
     :init
     (setq lsp-headerline-breadcrumb-enable nil)
@@ -774,7 +774,7 @@ Setup =LSP= & =LSP-UI=, mainly for Elixir, later also for Rust.
     )
 
   (use-package lsp-ui
-    :straight t
+    :ensure t
     :commands lsp-ui-mode
     :config
     (lsp-ui-doc-enable t)
@@ -791,7 +791,7 @@ Setup =LSP= & =LSP-UI=, mainly for Elixir, later also for Rust.
    Automatically insert following parens.
    #+begin_src emacs-lisp
      (use-package smartparens
-       :straight t
+       :ensure t
        :hook
        (after-init . smartparens-global-mode)
        :config
@@ -807,14 +807,14 @@ Setup =LSP= & =LSP-UI=, mainly for Elixir, later also for Rust.
    Used not just for programming, but easier to configure here.
    #+begin_src emacs-lisp
      (use-package company
-       :straight t
+       :ensure t
        :config
        (setq company-idle-delay 0.3)
        (add-hook 'after-init-hook 'global-company-mode)
        )
 
      (use-package company-box
-       :straight t
+       :ensure t
        :hook (company-mode . company-box-mode)
        )
    #+end_src
@@ -822,10 +822,10 @@ Setup =LSP= & =LSP-UI=, mainly for Elixir, later also for Rust.
    Use yasnippets and the snippets for that.
    #+begin_src emacs-lisp
      (use-package yasnippet
-       :straight t
+       :ensure t
        :config
        (use-package yasnippet-snippets
-         :straight t
+         :ensure t
          )
        (yas-global-mode 1)
        (setq yas-indent-line 'auto)
@@ -835,7 +835,7 @@ Setup =LSP= & =LSP-UI=, mainly for Elixir, later also for Rust.
 Edit comments like org-source-blocks in org/md.
 #+begin_src emacs-lisp
   (use-package separedit
-    :straight t
+    :ensure t
     :config
     (define-key prog-mode-map        (kbd "C-c '") #'separedit)
     (define-key minibuffer-local-map (kbd "C-c '") #'separedit)
@@ -846,7 +846,7 @@ Edit comments like org-source-blocks in org/md.
    Use =format-all= to language specific formatting.
    #+begin_src emacs-lisp
      (use-package format-all
-       :straight t
+       :ensure t
        :bind ("C-c C-f" . format-all-buffer)
        )
    #+end_src
@@ -854,14 +854,14 @@ Edit comments like org-source-blocks in org/md.
 Inline errors
 #+begin_src emacs-lisp
   (use-package flycheck
-    :straight t
+    :ensure t
     )
 #+end_src
 ** Rust
 Development settings for rust.
 #+begin_src emacs-lisp
   (use-package rustic
-    :straight t
+    :ensure t
     :bind (:map rustic-mode-map
                 ("C-c r" . rustic-cargo-run)
                 ("C-c C-r" . lsp-rename)
@@ -877,18 +877,18 @@ Development settings for rust.
     )
 
   (use-package cargo
-    :straight t
+    :ensure t
     :hook (rust-mode . cargo-minor-mode))
 
   (use-package toml-mode
-    :straight t
+    :ensure t
     )
 #+end_src
 ** Modes
    Collection of programming major modes.
    #+begin_src emacs-lisp
      (use-package web-mode
-       :straight t
+       :ensure t
        :config
        (add-hook 'web-mode-hook
                  (lambda ()
@@ -898,22 +898,22 @@ Development settings for rust.
        )
 
      (use-package elixir-mode
-       :straight t
+       :ensure t
        )
 
      (use-package markdown-mode
-       :straight t
+       :ensure t
        )
 
      (use-package systemd
-       :straight t
+       :ensure t
        :mode
        ("\\.service\\'" "\\.timer\\'" "\\.target\\'" "\\.mount\\'"
         "\\.automount\\'" "\\.slice\\'" "\\.socket\\'" "\\.path\\'"
         "\\.netdev\\'" "\\.network\\'" "\\.link\\'"))
 
      (use-package yaml-mode
-       :straight t
+       :ensure t
        :mode ("\\.yaml\\'" "\\.yml\\'")
        :custom-face
        (font-lock-variable-name-face ((t (:foreground "violet"))))
@@ -987,7 +987,7 @@ Development settings for rust.
    Use =org-appear= for nicer symbols in text.
    #+begin_src emacs-lisp
      (use-package org-appear
-       :straight t
+       :ensure t
        :hook (org-mode . org-appear-mode)
        :init (setq org-hide-emphasis-markers t
 		   org-appear-autoemphasis t
@@ -1014,7 +1014,7 @@ Enable =hunspell= & =flyspell= for all =org-mode= buffers.
    Use better stars for headings and for TODOs.
    #+begin_src emacs-lisp
      (use-package org-superstar
-       :straight t
+       :ensure t
        :config
        (setq org-superstar-headline-bullets-list '("◉" "○" "✸" "✿" "✤" "✜" "◆" "▶")
              ;;org-superstar-headline-bullets-list '("Ⅰ" "Ⅱ" "Ⅲ" "Ⅳ" "Ⅴ" "Ⅵ" "Ⅶ" "Ⅷ" "Ⅸ" "Ⅹ")
@@ -1062,7 +1062,7 @@ Enable =hunspell= & =flyspell= for all =org-mode= buffers.
       )
 
      (use-package org-super-agenda
-       :straight t
+       :ensure t
        :config
        (org-super-agenda-mode)
        )
@@ -1074,14 +1074,14 @@ Enable =hunspell= & =flyspell= for all =org-mode= buffers.
 Settings tags normally is broken, so counsel is required.
 #+begin_src emacs-lisp
   (use-package counsel
-    :straight t
+    :ensure t
     )
 #+end_src
 ** Repetition
    =org-drill= for spaced repetition.
    #+begin_src emacs-lisp
      (use-package org-drill
-       :straight t
+       :ensure t
        :config
        (setq org-drill-use-visible-cloze-face-p t)
        (setq org-drill-hide-item-headings-p t)
@@ -1103,7 +1103,7 @@ Settings tags normally is broken, so counsel is required.
                  (setq TeX-master t)))
 
      (use-package org-fragtog
-       :straight t
+       :ensure t
        :config
        (add-hook 'org-mode-hook 'org-fragtog-mode)
        (setq org-latex-preview-ltxpng-directory "~/.ltxpng/")
@@ -1115,27 +1115,27 @@ Settings tags normally is broken, so counsel is required.
      (eval-after-load "org" '(require 'ox-odt nil t))
 
      (use-package htmlize
-       :straight t)
+       :ensure t)
 
      (use-package ox-pandoc
-       :straight t
+       :ensure t
        )
 
      (use-package ox-hugo
-       :straight t
+       :ensure t
        :config
        (setq org-hugo-auto-set-lastmod t)
        )
 
      (use-package plantuml-mode
-       :straight t
+       :ensure t
        :config
        (setq org-plantuml-jar-path (expand-file-name "~/.tools/plantuml.jar"))
        (add-to-list 'org-src-lang-modes '("plantuml" . plantuml))
        )
 
      (use-package ox-reveal
-       :straight t
+       :ensure t
        :custom ((org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")
                 (org-reveal-mathjax t)
                 (org-reveal-ignore-speaker-notes nil)
@@ -1144,15 +1144,15 @@ Settings tags normally is broken, so counsel is required.
    Babel & org-source-blocks.
    #+begin_src emacs-lisp
      (use-package ob-elixir
-       :straight t
+       :ensure t
        )
 
      (use-package ob-rust
-       :straight t
+       :ensure t
        )
 
      (use-package ob-go
-       :straight t
+       :ensure t
        )
 
      (org-babel-do-load-languages
@@ -1245,11 +1245,26 @@ Settings tags normally is broken, so counsel is required.
 ** Roam
 #+begin_src emacs-lisp
   (use-package org-roam
-    :straight t
+    :ensure t
     :config
     (setq org-roam-directory "~/documents/braindump/")
     (org-roam-db-autosync-mode)
-   )
+    (setq org-roam-v2-ack t)
+    )
+
+  (use-package org-roam-ui
+    :straight
+    (:host github :repo "org-roam/org-roam-ui" :branch "main" :files ("*.el" "out"))
+    :after org-roam
+    ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+    ;;         a hookable mode anymore, you're advised to pick something yourself
+    ;;         if you don't care about startup time, use
+    ;;  :hook (after-init . org-roam-ui-mode)
+    :config
+    (setq org-roam-ui-sync-theme t
+          org-roam-ui-follow t
+          org-roam-ui-update-on-save t
+          org-roam-ui-open-on-start t))
 #+end_src
 * Communication
 =mu4e= and packages collection.
@@ -1308,7 +1323,7 @@ Settings tags normally is broken, so counsel is required.
         smtpmail-debug-info t)
 
   (use-package mu4e-alert
-    :straight t
+    :ensure t
     :config
     (mu4e-alert-set-default-style 'libnotify)
     (add-hook 'after-init-hook #'mu4e-alert-enable-notifications)
