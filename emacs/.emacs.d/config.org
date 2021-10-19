@@ -23,8 +23,8 @@ broken.
   (unless package-archive-contents    ;; Refresh the packages descriptions
     (package-refresh-contents))
   (setq package-load-list '(all))     ;; List of packages to load
-  (unless (package-installed-p 'org)  ;; Make sure the Org package is
-    (package-install 'org)) 
+  ;;(unless (package-installed-p 'org)  ;; Make sure the Org package is
+  ;;  (package-install 'org)) 
 
   ;; Org clocking issues
   (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
@@ -46,6 +46,8 @@ broken.
   (use-package quelpa-use-package
     :ensure t
     )
+
+(org-reload)
 #+end_src
 ** Straight
 Some packages require straight but using it normally doesn't work
@@ -925,9 +927,6 @@ Development settings for rust.
 ** Base
    General settings & config.
    #+begin_src emacs-lisp
-     (use-package org
-       )
-     
      (setq
       org-directory "~/documents/"
       org-archive-location "~/archive/2021.org::* From %s"
@@ -1243,7 +1242,15 @@ Settings tags normally is broken, so counsel is required.
 	       )
        )
    #+end_src   
-
+** Roam
+#+begin_src emacs-lisp
+  (use-package org-roam
+    :straight t
+    :config
+    (setq org-roam-directory "~/documents/braindump/")
+    (org-roam-db-autosync-mode)
+   )
+#+end_src
 * Communication
 =mu4e= and packages collection.
 #+begin_src emacs-lisp

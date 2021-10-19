@@ -77,43 +77,49 @@
       org-agenda-start-with-log-mode t
       )
 
-(setq org-agenda-custom-commands
-      '(("p" "Super Agena"
-         (
-          (alltodo "" ((org-agenda-overriding-header "Personal Agenda")
-                       (org-super-agenda-groups
-                        '((:name "Today"
-                                 :tag "ACTIVE"
-                                 :order 1)
-                          (:name "Projects"
-                                 :tag "PROJECTS"
-                                 :order 2
-                                 )
-                          (:discard (:tag ("INBOX" "EVENTS")))
-                          ))))
-          (agenda "" ((org-agenda-span 'week)
-                      (org-agenda-overriding-header "Events")
-                      (org-super-agenda-groups
-                       '((
-                          :name ""
-                          :time-grid t
-                          :tag "EVENTS"
-                          :order 1
-                          ))
-                       (:discard (:tag "ACTIVE"))
-                       )))
-          (alltodo "" ((org-agenda-overriding-header "Stack")
-	               (org-super-agenda-groups
-                        '((:name "Inbox"
-                                 :tag "INBOX"
-                                 )
-                          (:discard (:anything t))
-                          ))))
-          ))
-        )
-      )
-
 (add-hook 'org-agenda-mode-hook 'org-super-agenda-mode)
+
+;; (setq org-agenda-custom-commands
+;;       '(("p" "Super Agena"
+;;          (
+;;           (alltodo "" ((org-agenda-overriding-header "Personal Agenda")
+;;                        (org-super-agenda-groups
+;;                         '((:name "Today"
+;;                                  :tag "ACTIVE"
+;;                                  :order 1)
+;;                           (:name "Projects"
+;;                                  :tag "PROJECTS"
+;;                                  :order 2
+;;                                  )
+;;                           (:discard (:tag ("INBOX" "EVENTS")))
+;;                           ))))
+;;           (agenda "" ((org-agenda-span 'week)
+;;                       (org-agenda-overriding-header "Events")
+;;                       (org-super-agenda-groups
+;;                        '((
+;;                           :name ""
+;;                           :time-grid t
+;;                           :tag "EVENTS"
+;;                           :order 1
+;;                           ))
+;;                        (:discard (:tag "ACTIVE"))
+;;                        )))
+;;           (alltodo "" ((org-agenda-overriding-header "Stack")
+;; 	               (org-super-agenda-groups
+;;                         '((:name "Inbox"
+;;                                  :tag "INBOX"
+;;                                  )
+;;                           (:discard (:anything t))
+;;                           ))))
+;;           ))
+;;         )
+;;       )
+
+(let ((org-super-agenda-groups
+       '((:name "Projects"
+                :children t)
+         (:discard (:anything t)))))
+  (org-todo-list))
 
 ;; Refile
 (setq
