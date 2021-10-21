@@ -1,0 +1,5 @@
+#!/bin/bash
+
+b="$(xbacklight -get)"
+echo "${b}%" | xargs echo -n
+
