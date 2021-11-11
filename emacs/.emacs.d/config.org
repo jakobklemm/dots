@@ -883,6 +883,10 @@ Development settings for rust.
   (use-package toml-mode
     :ensure t
     )
+
+  (use-package origami
+    :ensure t
+    )
 #+end_src
 ** Modes
    Collection of programming major modes.
@@ -1246,11 +1250,12 @@ Settings tags normally is broken, so counsel is required.
 #+begin_src emacs-lisp
   (use-package org-roam
     :ensure t
-    :config
+    )
+
     (setq org-roam-directory "~/documents/braindump/")
     (org-roam-db-autosync-mode)
     (setq org-roam-v2-ack t)
-    )
+
 
   (use-package org-roam-ui
     :straight
@@ -1265,6 +1270,63 @@ Settings tags normally is broken, so counsel is required.
           org-roam-ui-follow t
           org-roam-ui-update-on-save t
           org-roam-ui-open-on-start t))
+#+end_src
+** Templates
+#+begin_src emacs-lisp
+  (add-to-list 'org-latex-classes
+               '("structured"
+                 "\\documentclass[a4paper,11pt,titlepage,twoside]{memoir}
+  \\usepackage[utf8]{inputenc}
+  \\usepackage[]{babel}
+  \\usepackage[T1]{fontenc}
+  \\usepackage{fixltx2e}
+  \\usepackage{graphicx}
+  \\usepackage{longtable}
+  \\usepackage{float}
+  \\usepackage{wrapfig}
+  \\usepackage{rotating}
+  \\usepackage[normalem]{ulem}
+  \\usepackage{amsmath}
+  \\usepackage{textcomp}
+  \\usepackage{marvosym}
+  \\usepackage{wasysym}
+  \\usepackage{amssymb}
+  \\usepackage{hyperref}
+  \\usepackage{mathpazo}
+  \\usepackage{color}
+  \\usepackage{enumerate}
+  \\definecolor{bg}{rgb}{0.95,0.95,0.95}
+  \\tolerance=1000
+        [NO-DEFAULT-PACKAGES]
+        [PACKAGES]
+        [EXTRA]
+  \\linespread{1.1}
+  \\hypersetup{pdfborder=0 0 0}"
+                 ("\\chapter{%s}" . "\\chapter*{%s}")
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+
+#+end_src
+Custom title:
+#+begin_src emacs-lisp
+  (setq org-latex-title-command (concat
+                                 "\\thispagestyle{empty} \n"
+                                 "\\begin{titlepage} \n"
+                                 "\\raggedleft \n" 
+                                 "\\rule{1pt}{\\textheight} \n"
+                                 "\\hspace{0.05\\textwidth} \n"
+                                 "\\parbox[b]{0.75\\textwidth}{ \n"
+                                 "{\\Huge\\bfseries %t }\\\\[2\\baselineskip] \n"
+                                 "{\\Large\\textsc{ %a }} \n" 
+                                 "\\vspace{0.5\\textheight} \n"
+                                 "} \n"
+                                 "\\end{titlepage} \n"
+                                 "\\newpage \n"
+        )
+      )
 #+end_src
 * Communication
 =mu4e= and packages collection.
