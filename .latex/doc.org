@@ -1,4 +1,3 @@
-#+AUTHOR: Jakob Klemm
 #+EMAIL: kontakt@jeykey.net
 #+LATEX_CLASS: structured
 #+LANGUAGE: DE

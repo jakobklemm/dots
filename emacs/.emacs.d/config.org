@@ -1113,6 +1113,45 @@ Settings tags normally is broken, so counsel is required.
        (setq org-latex-preview-ltxpng-directory "~/.ltxpng/")
        )
    #+end_src
+** BibTex
+#+begin_src emacs-lisp
+  (add-hook 'bibtex-mode-hook 'flyspell-mode)
+#+end_src
+Locations
+#+begin_src emacs-lisp
+  (setq bib-files-directory (directory-files "~/.tools/" t
+                                             "^[A-Z|a-z].+.bib$")
+        )
+
+  (setq org-ref-default-bibliography '("~/.tools/references.bib")
+        )
+#+end_src
+UI
+#+begin_src emacs-lisp
+  (use-package helm
+    :ensure t
+    )
+
+  (use-package helm-bibtex
+    :ensure t
+    :config
+    (require 'helm-config)
+    (setq bibtex-completion-bibliography bib-files-directory
+          bibtex-completion-library-path pdf-files-directory
+          bibtex-completion-pdf-field "File"
+          bibtex-completion-notes-path org-directory))
+#+end_src
+Org
+#+begin_src emacs-lisp
+  (use-package org-ref
+    :ensure t
+    :config
+    (setq org-ref-completion-library 'org-ref-helm-cite
+          org-ref-get-pdf-filename-function 'org-ref-get-pdf-filename-helm-bibtex
+          org-ref-default-bibliography bib-files-directory
+          org-ref-notes-directory org-directory
+          org-ref-notes-function 'orb-edit-notes))
+#+end_src
 ** Export
    All export targets in =ox=.
    #+begin_src emacs-lisp
@@ -1173,10 +1212,13 @@ Settings tags normally is broken, so counsel is required.
       (add-to-list 'org-latex-packages-alist '("" "minted"))
       (setq org-latex-listings 'minted)
 
+      (require 'org)
+
+      ;; (setq org-latex-pdf-process '("texi2dvi -p -b -V %f"))
+      ;; (setq org-latex-to-pdf-process '("xelatex %f && bibtex %f && xelatex %f && xelatex %f"))
+      ;; (setq org-latex-to-pdf-process (list "latexmk -pdf -bibtex %f"))
       (setq org-latex-pdf-process
-            '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-              "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-              "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+            '("latexmk -pdflatex='pdflatex -interaction nonstopmode' -pdf -bibtex -f %f"))
 
       (setq org-src-fontify-natively t)
 

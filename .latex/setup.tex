@@ -1,8 +1,6 @@
 % Base packages
 % https://github.com/GeneKao/orgmode-latex-templates
 
-\documentclass[a4paper,11pt]{memoir}
-
 \usepackage{amsmath,amssymb,amsfonts,mathrsfs}
 \usepackage[amsmath,thmmarks]{ntheorem}
 \usepackage{graphicx}
@@ -110,15 +108,19 @@
 \renewcommand{\cftdot}{}
 
 % Set section and TOC numbering depth to subsection
-\setsecnumdepth{subsection}
-\settocdepth{subsection}
+\setsecnumdepth{subsubsection}
+\settocdepth{section}
 
 \fancyhead[L]{}
 \pagestyle{fancy}
 
 \fancyhead{}
 \fancyhead[L]{\@title}
-\fancyhead[R]{\@author}
+\fancyhead[R]{\leftmark}
 \fancyfoot{}
 \fancyfoot[C]{\thepage}
 
+% Bibtex
+
+\usepackage{cite}
+\bibliographystyle{plain}
