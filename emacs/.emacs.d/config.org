@@ -1317,7 +1317,7 @@ Org
 #+begin_src emacs-lisp
   (add-to-list 'org-latex-classes
                '("structured"
-                 "\\documentclass[a4paper,11pt,titlepage,twoside]{memoir}
+                 "\\documentclass[a4paper,11pt,titlepage,oneside]{memoir}
   \\usepackage[utf8]{inputenc}
   \\usepackage[]{babel}
   \\usepackage[T1]{fontenc}
@@ -1357,18 +1357,21 @@ Custom title:
   (setq org-latex-title-command (concat
                                  "\\thispagestyle{empty} \n"
                                  "\\begin{titlepage} \n"
-                                 "\\raggedleft \n" 
+                                 "\\raggedleft \n"
                                  "\\rule{1pt}{\\textheight} \n"
                                  "\\hspace{0.05\\textwidth} \n"
                                  "\\parbox[b]{0.75\\textwidth}{ \n"
                                  "{\\Huge\\bfseries %t }\\\\[2\\baselineskip] \n"
-                                 "{\\Large\\textsc{ %a }} \n" 
-                                 "\\vspace{0.5\\textheight} \n"
+                                 "{\\Large\\textsc{ %a }} \\\\ \n"
+                                 "{\\small\\textsc{Kanti Baden, G4a}} \\\\[4\\baselineskip] \\\\ \n"
+                                 "{\\normalsize\\textsc{Simon Hallström, Michael Schneider}}\\\\[4\\baselineskip] \n"
+                                 "{\\small\\textsc{\\today}}"
+                                 "\\vspace{0.3\\textheight} \n"
                                  "} \n"
                                  "\\end{titlepage} \n"
                                  "\\newpage \n"
+                                 )
         )
-      )
 #+end_src
 * Communication
 =mu4e= and packages collection.
