@@ -81,6 +81,7 @@
 	      (right-fringe . 4)))
      (ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
 	   (ivy-posframe-border-width 2)
+     (ivy-wrap t)
      )
     :custom-face
     (ivy-posframe ((t (:background "#212026" :foreground "#83C6F0"))))

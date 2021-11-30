@@ -105,32 +105,3 @@
   :defer 2
   )
 
-(use-package rustic
-  :defer 2
-  :bind (:map rustic-mode-map
-              ("C-c r" . rustic-cargo-run)
-              ("C-c C-r" . lsp-rename)
-              ("C-c C-c s" . lsp-rust-analyzer-status)
-              )
-  :custom
-  ((rustic-format-on-save t))
-  )
-
-(use-package cargo
-  :defer 2
-  :hook (rust-mode . cargo-minor-mode)
-  )
-
-(use-package toml-mode
-  :defer 2
-  )
-
-;; Improve tramp performance
-(setq vc-ignore-dir-regexp
-      (format "\\(%s\\)\\|\\(%s\\)"
-              vc-ignore-dir-regexp
-              tramp-file-name-regexp))
-
-(use-package markdown-mode
-  :defer t
-  )

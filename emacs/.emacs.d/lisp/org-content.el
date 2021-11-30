@@ -19,7 +19,6 @@
   )
 
 (use-package org-roam-ui
-  :disabled t
   :defer t
   :after org-roam
   :custom

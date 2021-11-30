@@ -18,6 +18,7 @@
 (load-file (concat user-emacs-directory "lisp/programming.el"))
 (load-file (concat user-emacs-directory "lisp/binds.el"))
 (load-file (concat user-emacs-directory "lisp/com.el"))
+(load-file (concat user-emacs-directory "lisp/modes.el"))
 (setq custom-file (concat user-emacs-directory "custom.el"))
 (load custom-file 'noerror)
 

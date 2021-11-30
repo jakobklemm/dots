@@ -6,29 +6,7 @@
   (text-mode . flyspell-mode)
   (org-mode . flyspell-mode)
   :custom
-  ((org-log-done 'time)
-   (org-todo-keywords
-    '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
-      (sequence "PROCESS(p)" "BLOCKED(b)" "|" "PAL(a)")))
-   (org-todo-keyword-faces
-    '(("TODO" . (:foreground "#af1212" :weight bold))
-      ("NEXT" . (:foreground "#a8fa80" :weight bold))
-      ("BLOCKED" . (:foreground "#b213c4" :weight bold))
-      ("PAL" . (:foreground "#30bb03" :weight bold))
-      ("PROCESS" . (:foreground "#eaa222" :weight bold))
-      ("DONE" . (:foreground "#ffffff" :weight bold))
-      ))
-   (org-tag-alist '(("home" . ?h)
-                    ("actaeon" . ?a)
-                    ("orion" . ?o)
-                    ("schule" . ?s)
-                    ))
-   (org-agenda-deadline-faces
-	  '((1.001 . error)
-	    (1.0 . org-warning)
-	    (0.5 . org-upcoming-deadline)
-	    (0.0 . org-upcoming-distant-deadline)))
-   (org-directory "~/documents/")
+  ((org-directory "~/documents/")
    (org-archive-location "~/archive/2021.org::* From %s")
    (org-agenda-files '("~/supervisor/supervisor.org"))
    (org-image-actual-width '(600))
@@ -90,12 +68,7 @@
    (org-hide-leading-stars nil)
    (org-superstar-leading-bullet ?\s)
    (org-superstar-special-todo-items t)
-   (org-superstar-todo-bullet-alist '(("TODO" "☐ ")
-                                      ("NEXT" "✒ ")
-                                      ("STATIC" "» ")
-                                      ("BLOCKED" "˧ ")
-                                      ("DONE" "✔ ")
-                                      ("PAL" "✔ ")))))
+   ))
 
 (use-package org-fragtog
   :defer t

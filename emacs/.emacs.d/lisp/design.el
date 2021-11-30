@@ -130,16 +130,12 @@
 (add-hook 'org-mode-hook 'prettify-symbols-mode)
 (global-prettify-symbols-mode 1)
 
-;; Distraction free writing experience
-(use-package writeroom-mode
+(use-package olivetti
   :defer t
-  :hook ((org-mode . writeroom-mode))
   :custom
-  (
-   (writeroom-width 90)
-   (writeroom-mode-line t)
-   )
-  )
+  ((olivetti-style 'fancy))
+  :hook
+  ((org-mode . olivetti-mode)))
 
 ;; Colors
 ;; http://xahlee.info/emacs/emacs/emacs_CSS_colors.html
