@@ -72,3 +72,7 @@ config.tex
 config.el
 etc/
 var/
+
+places
+history
+desktop
