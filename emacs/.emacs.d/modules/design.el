@@ -6,7 +6,6 @@
 (set-face-background 'hl-line "#303440")
 (custom-set-faces '(org-ellipsis ((t (:foreground "#6483b5" :underline nil)))))
 
-;; Font & Resize
 ;; https://github.com/hrs/dotfiles
 (setq hrs/default-fixed-font "Fira Code")
 (setq hrs/default-fixed-font-size 110)
@@ -22,9 +21,9 @@
 (defun hrs/set-font-size ()
   "Change default, fixed-pitch, and variable-pitch font sizes to match respective variables."
   (set-face-attribute 'default nil
-		      :height hrs/current-fixed-font-size)
+		                  :height hrs/current-fixed-font-size)
   (set-face-attribute 'fixed-pitch nil
-		      :height hrs/current-fixed-font-size)
+		                  :height hrs/current-fixed-font-size)
   )
 
 (defun hrs/reset-font-size ()
@@ -65,30 +64,11 @@
   (unicode-fonts-setup)
   )
 
-;; Icons
 (use-package all-the-icons
   :defer t
   :if (window-system))
 
-(use-package telephone-line
-  :defer t
-  :hook (after-init . telephone-line-mode)
-  :custom
-  (
-   (telephone-line-primary-left-separator 'telephone-line-gradient)
-   (telephone-line-secondary-left-separator 'telephone-line-nil)
-   (telephone-line-primary-right-separator 'telephone-line-gradient)
-   (telephone-line-secondary-right-separator 'telephone-line-nil)
-   (telephone-line-height 22)
-   (telephone-line-evil-use-short-tag t)
-   )
-  :custom-face
-  (mode-line ((t (:box nil))))
-  :config
-  (setq header-line-format mode-line-format)
-  (setq etq-default mode-line-format nil)
-  )
-
+;; TODO ?
 (use-package beacon
   :defer t
   :custom
@@ -124,7 +104,7 @@
                                        ("#+LATEX_HEADER:" . "⇾")
                                        ("#+latex_header:" . "⇾")
                                        ("#+LATEX_CLASS:" . "⇥")
-                                       ("#+latexx_class:" . "⇥")
+                                       ("#+latex_class:" . "⇥")
                                        ("#+ATTR_LATEX:" . "🄛")
                                        ("#+attr_latex:" . "🄛")
                                        ("#+LATEX:" . "ℓ")
@@ -146,30 +126,54 @@
                                        ("#+LANGUAGE:" . "L")
                                        ("#+language:" . "L")
                                        ))
-
 (setq prettify-symbols-unprettify-at-point 'right-edge)
 (add-hook 'org-mode-hook 'prettify-symbols-mode)
 (global-prettify-symbols-mode 1)
 
+;; Distraction free writing experience
 (use-package writeroom-mode
   :defer t
   :hook ((org-mode . writeroom-mode))
   :custom
   (
-   (writeroom-width 95)
+   (writeroom-width 90)
    )
   )
 
-;; Line numbers
+;; Colors
+;; http://xahlee.info/emacs/emacs/emacs_CSS_colors.html
+(defun xah-syntax-color-hex ()
+  "Syntax color text of the form 「#ff1100」 and 「#abc」 in current buffer.
+URL `http://xahlee.info/emacs/emacs/emacs_CSS_colors.html'
+Version 2017-03-12"
+  (interactive)
+  (font-lock-add-keywords
+   nil
+   '(("#[[:xdigit:]]\\{3\\}"
+      (0 (put-text-property
+          (match-beginning 0)
+          (match-end 0)
+          'face (list :background
+                      (let* (
+                             (ms (match-string-no-properties 0))
+                             (r (substring ms 1 2))
+                             (g (substring ms 2 3))
+                             (b (substring ms 3 4)))
+                        (concat "#" r r g g b b))))))
+     ("#[[:xdigit:]]\\{6\\}"
+      (0 (put-text-property
+          (match-beginning 0)
+          (match-end 0)
+          'face (list :background (match-string-no-properties 0)))))))
+  (font-lock-flush))
 
-(setq display-line-numbers 'relative)
+(add-hook 'prog-mode-hook 'xah-syntax-color-hex)
 
-;; Enable line numbers for some modes
-(dolist (mode '(text-mode-hook
-                prog-mode-hook
-                conf-mode-hook))
-  (add-hook mode (lambda () (display-line-numbers-mode 1))))
+;; Modeline & NANO
+(require 'nano-modeline)
+(nano-modeline-mode t)
 
-;; Override some modes which derive from the above
-(dolist (mode '(org-mode-hook))
-  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+(set-fringe-mode '(20 . 20))
+
+(set-face-attribute 'mode-line nil
+                :box '(:line-width 20 :color "gray20"))

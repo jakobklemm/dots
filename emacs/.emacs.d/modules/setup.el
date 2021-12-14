@@ -84,9 +84,6 @@
 ;; Disable startup screen
 (setq inhibit-startup-screen t)
 
-;; Adaptive cursor width
-(setq x-stretch-cursor t)
-
 ;; Don't confirm killing processes when emacs closes.
 (setq confirm-kill-processes nil)
 
@@ -113,3 +110,22 @@
 (tooltip-mode -1)           ; Disable tooltips
 (set-fringe-mode 10)
 (menu-bar-mode -1)            ; Disable the menu bar
+
+;; No message in scratch buffer
+(setq initial-scratch-message nil)
+
+;; No empty line indicators
+(setq indicate-empty-lines nil)
+
+;; Fill column at 80
+(setq fill-column 80)
+
+;; No confirmation for visiting non-existent files
+(setq confirm-nonexistent-file-or-buffer nil)
+
+;; Buffer encoding
+(prefer-coding-system       'utf-8)
+(set-default-coding-systems 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(set-language-environment   'utf-8)

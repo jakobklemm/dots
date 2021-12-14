@@ -61,11 +61,12 @@
     :defer t
     )
   (yas-global-mode 1)
-  (setq yas-indent-line 'auto)
+  :custom
+  ((yas-indent-line 'auto))
   )
 
 (use-package format-all
-  :defer t
+  :defer 2
   :bind ("C-c C-f" . format-all-buffer)
   )
 
@@ -90,4 +91,36 @@
 
 (with-eval-after-load 'magit-mode
   (add-hook 'after-save-hook 'magit-after-save-refresh-status t)
+  )
+
+;; Edit comments in dedicated buffers
+(use-package separedit
+  :defer t
+  :config
+  (define-key prog-mode-map        (kbd "C-c '") #'separedit)
+  (define-key minibuffer-local-map (kbd "C-c '") #'separedit)
+  (define-key help-mode-map        (kbd "C-c '") #'separedit)
+  )
+
+(use-package flycheck
+  :defer 2
+  )
+
+(use-package rustic
+  :defer 2
+  :bind (:map rustic-mode-map
+              ("C-c r" . rustic-cargo-run)
+              ("C-c C-r" . lsp-rename)
+              ("C-c C-c s" . lsp-rust-analyzer-status)
+              ("M-RET" . comment-indent-new-line))
+  :custom
+  ((rustic-format-on-save t))
+  )
+
+(use-package cargo
+  :defer 2
+  :hook (rust-mode . cargo-minor-mode))
+
+(use-package toml-mode
+  :defer 2
   )
