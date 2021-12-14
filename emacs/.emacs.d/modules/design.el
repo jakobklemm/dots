@@ -173,7 +173,5 @@ Version 2017-03-12"
 (require 'nano-modeline)
 (nano-modeline-mode t)
 
-(set-fringe-mode '(20 . 20))
+(set-fringe-mode '(5 . 0))
 
-(set-face-attribute 'mode-line nil
-                :box '(:line-width 20 :color "gray20"))

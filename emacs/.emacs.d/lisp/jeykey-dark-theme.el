@@ -228,8 +228,4 @@
 (provide-theme 'jeykey-dark)
 (provide 'jeykey-dark)
 
-;; Local Variables:
-;; no-byte-compile: t
-;; End:
-
 ;;; jeykey-dark-theme.el ends here

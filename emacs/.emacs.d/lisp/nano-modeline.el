@@ -237,7 +237,7 @@ Modeline is composed as:
          
          (available-width (- (window-total-width) 
                              (length prefix) (length left) (length right)
-                             (/ (window-right-divider-width) char-width)))
+                             (/ (window-right-divider-width) char-width) 1))
      (available-width (max 1 available-width)))
     (concat prefix
             left
