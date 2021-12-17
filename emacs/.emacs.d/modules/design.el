@@ -1,6 +1,7 @@
-(load-file "~/.emacs.d/lisp/jeykey-dark-theme.el")
-
-(load-theme 'jeykey-dark t)
+(use-package kaolin-themes
+  :config
+  (load-theme 'kaolin-galaxy t)
+  )
 
 (set-cursor-color "#4ae3a1")
 (set-face-background 'hl-line "#303440")
@@ -169,9 +170,33 @@ Version 2017-03-12"
 
 (add-hook 'prog-mode-hook 'xah-syntax-color-hex)
 
-;; Modeline & NANO
+(set-fringe-mode '(5 . 0))
+(set-face-attribute 'fringe nil :background "#212026" :foreground "#e6e6e8")
+
+;; Modeline setup (most color config comes from customize-face)
 (require 'nano-modeline)
 (nano-modeline-mode t)
 
-(set-fringe-mode '(5 . 0))
+(setq bg0 "#212026")
+(setq bg1 "#292735")
+(setq accent0 "#4EB8CA")
+(setq accent1 "#C74A4D")
+(setq accent2 "#4FBB8A")
+(setq fg0 "#EEE6D3")
+(setq fg1 "#9d81ba")
 
+(set-face-attribute 'nano-modeline-active nil :background bg1 :foreground fg0 :box nil)
+(set-face-attribute 'nano-modeline-active-name nil :background bg0 :foreground accent2 :box nil)
+(set-face-attribute 'nano-modeline-active-primary nil :foreground fg0 :background bg1 :box nil)
+(set-face-attribute 'nano-modeline-active-secondary nil :foreground accent0 :background bg1 :box nil)
+(set-face-attribute 'nano-modeline-active-status-** nil :foreground accent1 :background bg1 :box nil)
+(set-face-attribute 'nano-modeline-active-status-RO nil :foreground fg0 :background bg1 :box nil)
+(set-face-attribute 'nano-modeline-active-status-RW nil :foreground fg0 :background bg1 :box nil)
+
+(set-face-attribute 'nano-modeline-inactive nil :background bg0 :foreground fg1 :box nil)
+(set-face-attribute 'nano-modeline-inactive-name nil :background bg0 :foreground fg0 :box nil)
+(set-face-attribute 'nano-modeline-inactive-primary nil :foreground fg1 :background bg0 :box nil)
+(set-face-attribute 'nano-modeline-inactive-secondary nil :foreground fg0 :background bg0 :box nil)
+(set-face-attribute 'nano-modeline-inactive-status-** nil :foreground accent1 :background bg0 :box nil)
+(set-face-attribute 'nano-modeline-inactive-status-RO nil :foreground fg1 :background bg0 :box nil)
+(set-face-attribute 'nano-modeline-inactive-status-RW nil :foreground fg1 :background bg0 :box nil)

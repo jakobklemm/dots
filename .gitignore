@@ -76,3 +76,5 @@ var/
 places
 history
 desktop
+emacs.desktop
+desktop/
