@@ -1,4 +1,5 @@
 ;; Navigation
+
 (use-package counsel
   :defer t
   :diminish ivy-mode counsel-mode
@@ -27,68 +28,58 @@
     (ivy-on-del-error-function nil)
     (swiper-action-recenter t)
     (counsel-grep-base-command "ag -S --noheading --nocolor --nofilename --numbers '%s' %s")
+    (enable-recursive-minibuffers t)
+	  (search-default-mode #'char-fold-to-regexp)
+	  (ivy-posframe-height-alist '((swiper . 20)
+				                         (t      . 15)))
     )
-
-(use-package swiper
-  :defer t
-  )
 
 (use-package ivy
   :defer t
   :config
+  (use-package ivy-rich
+    :defer t
+    :after ivy
+    :custom (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
+    )
+  (use-package amx
+    :defer t
+    :after ivy
+    :custom
+    ((amx-backend 'auto)
+     (amx-save-file "~/.emacs.d/etc/amx-items")
+     (amx-history-length 50)
+     (amx-show-key-bindings nil))
+    )
+  (use-package all-the-icons-ivy-rich
+    :defer t
+    :after ivy
+    )
+  (use-package swiper
+    :defer t
+    )
+  (use-package ivy-posframe
+    :defer t
+    :after ivy
+    :custom
+    ((ivy-posframe-parameters
+	    '((left-fringe . 4)
+	      (right-fringe . 4)))
+     (ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
+	   (ivy-posframe-border-width 2)
+     )
+    :custom-face
+    (ivy-posframe ((t (:background "#212026" :foreground "#83C6F0"))))
+    (ivy-posframe-border ((t (:background "#7F7F7F"))))
+    (ivy-posframe-cursor ((t (:background "#7F7F7F"))))
+    :hook
+    (ivy-mode . ivy-posframe-mode)
+    )
+  (define-key ivy-minibuffer-map (kbd "C-j") 'ivy-immediate-done)
+  (define-key ivy-minibuffer-map (kbd "C-l") 'ivy-backward-delete-char)
   (ivy-mode 1)
-  )
-
-(setq enable-recursive-minibuffers t
-	    search-default-mode #'char-fold-to-regexp
-	    ivy-posframe-height-alist '((swiper . 20)
-				                          (t      . 15)))
-
-(use-package amx
-  :defer t
-  :after ivy
-  :custom
-  ((amx-backend 'auto)
-   (amx-save-file "~/.emacs.d/etc/amx-items")
-   (amx-history-length 50)
-   (amx-show-key-bindings nil))
-  :config (amx-mode 1))
-
-(use-package all-the-icons-ivy-rich
-  :defer t
-  :after ivy
-  :config
+  (ivy-rich-mode 1)
+  (amx-mode 1)
   (all-the-icons-ivy-rich-mode 1)
-  )
-
-(use-package ivy-rich
-  :defer t
-  :after ivy
-  :custom (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
-  :config
-  (ivy-rich-mode 1))
-
-  ;; Enhance fuzzy matching
-(use-package flx
-  :defer t
-  :after ivy
-  )
-
-(use-package ivy-posframe
-  :defer t
-  :after ivy
-  :init
-  (setq ivy-posframe-parameters
-	      '((left-fringe . 4)
-	        (right-fringe . 4)))
-  (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center))
-		    ivy-posframe-border-width 4)
-  :config
   (ivy-posframe-mode 1)
-  :custom-face
-  (ivy-posframe-border ((t (:background "#242732"))))
-  (ivy-posframe-cursor ((t (:background "#95a3b0"))))
-  :hook
-  (ivy-mode . ivy-posframe-mode)
   )
-

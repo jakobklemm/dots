@@ -24,8 +24,14 @@
 ;; Moving between files, buffers and frames
 (load-file (concat user-emacs-directory "modules/navigation.el"))
 
+;; org-mode & writing
+(load-file (concat user-emacs-directory "modules/org.el"))
+
 ;; Git, Programming & Modes
 (load-file (concat user-emacs-directory "modules/programming.el"))
+
+;; Keybinds, evil stuff
+(load-file (concat user-emacs-directory "modules/keys.el"))
 
 ;; Any custom stuff
 (setq custom-file (concat user-emacs-directory "custom.el"))

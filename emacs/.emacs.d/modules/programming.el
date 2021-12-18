@@ -112,7 +112,7 @@
               ("C-c r" . rustic-cargo-run)
               ("C-c C-r" . lsp-rename)
               ("C-c C-c s" . lsp-rust-analyzer-status)
-              ("M-RET" . comment-indent-new-line))
+              )
   :custom
   ((rustic-format-on-save t))
   )
