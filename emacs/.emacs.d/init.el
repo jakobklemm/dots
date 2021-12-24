@@ -31,7 +31,7 @@
 (load-file (concat user-emacs-directory "modules/programming.el"))
 
 ;; Keybinds, evil stuff
-(load-file (concat user-emacs-directory "modules/keys.el"))
+(load-file (concat user-emacs-directory "modules/evil.el"))
 
 ;; Any custom stuff
 (setq custom-file (concat user-emacs-directory "custom.el"))

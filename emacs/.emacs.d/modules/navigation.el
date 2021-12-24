@@ -1,5 +1,11 @@
 ;; Navigation
 
+(use-package ibuffer
+  :defer t
+  :bind (("C-x C-b" . ibuffer))
+  :init
+  (add-hook 'ibuffer-mode-hook #'hl-line-mode))
+
 (use-package counsel
   :defer t
   :diminish ivy-mode counsel-mode
@@ -36,11 +42,19 @@
 
 (use-package ivy
   :defer t
+  :bind (
+         ("C-s" . swiper)
+         ("M-x" . counsel-M-x)
+         ("C-x C-f" . counsel-find-file)
+         ("M-y" . counsel-yank-pop)
+         ("C-x b" . ivy-switch-buffer)
+         ("C-c l" . counsel-git-log)
+         )
   :config
   (use-package ivy-rich
     :defer t
     :after ivy
-    :custom (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
+    :custom ((setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
     )
   (use-package amx
     :defer t
@@ -82,4 +96,12 @@
   (amx-mode 1)
   (all-the-icons-ivy-rich-mode 1)
   (ivy-posframe-mode 1)
+  )
+
+(use-package ace-window
+  :defer t
+  :init
+  (setq aw-scope 'frame ; limit to single frame
+	  aw-keys '(?a ?o ?e ?u ?i ?d ?h ?t ?n)
+	  )
   )

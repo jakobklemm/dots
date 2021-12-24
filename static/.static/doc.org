@@ -2,3 +2,5 @@
 #+LATEX_CLASS: structured
 #+LANGUAGE: DE
 #+LATEX_HEADER: \input{~/.dots/.latex/setup.tex}
+#+LATEX: \setlength{\parindent}{0pt}
+#+LATEX: \setlength{\parskip}{\baselineskip}

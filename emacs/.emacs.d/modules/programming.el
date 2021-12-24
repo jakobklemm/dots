@@ -3,43 +3,36 @@
 
 (setq-default indent-tabs-mode nil)
 
-(add-to-list 'exec-path "~/.tools/elixir-ls")
+(use-package company)
 
 (use-package lsp-mode
   :defer t
   :commands lsp
-  :custom
-  (
-   (lsp-ui-doc-max-height 52)
-   (lsp-ui-doc-max-width 64)
-   (lsp-ui-doc-position 'at-point)
-   (lsp-ui-doc-position 'bottom)
-   (lsp-ui-doc-show-with-mouse t)
-   (lsp-ui-doc-show-with-cursor t)
-   (lsp-headerline-breadcrumb-enable nil)
-   (lsp-signature-auto-activate nil)
-   (lsp-idle-delay 0.6)
-   (lsp-rust-analyzer-server-display-inlay-hints t)
-   (lsp-rust-analyzer-inlay-hints-mode t)
-   )
-  :hook
-  (elixir-mode . lsp)
-  (rustic-mode . lsp)
-  )
+  :hook ((typescript-mode js2-mode web-mode) . lsp)
+  :bind (:map lsp-mode-map
+         ("TAB" . completion-at-point))
+  :custom (lsp-headerline-breadcrumb-enable nil))
 
 (use-package lsp-ui
   :defer t
-  :commands lsp-ui-mode
-  :custom
-  ((lsp-ui-doc-max-height 128)
-   (lsp-ui-doc-max-width 64)
-   (lsp-ui-doc-position 'top)
-   (lsp-ui-doc-show-with-mouse t)
-   (lsp-ui-doc-show-with-cursor t)
-   )
+  :hook (lsp-mode . lsp-ui-mode)
   :config
-  (lsp-ui-doc-enable t)
-  (lsp-ui-mode)
+  (setq lsp-ui-sideline-enable t)
+  (setq lsp-ui-sideline-show-hover nil)
+  (setq lsp-ui-doc-position 'bottom)
+  (lsp-ui-doc-show))
+
+
+;; Let's run 8 checks at once instead.
+(setq flymake-max-parallel-syntax-checks 8)
+
+;; I don't want no steekin' limits.
+(setq flymake-max-parallel-syntax-checks nil)
+
+(use-package flymake
+  :defer t
+  :config
+  (flymake-mode t)
   )
 
 (use-package smartparens
@@ -124,3 +117,12 @@
 (use-package toml-mode
   :defer 2
   )
+
+;; Improve tramp performance
+(setq vc-ignore-dir-regexp
+      (format "\\(%s\\)\\|\\(%s\\)"
+              vc-ignore-dir-regexp
+              tramp-file-name-regexp))
+
+(use-package markdown-mode
+  :defer t)

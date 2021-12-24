@@ -1,0 +1,3 @@
+#+EMAIL: kontakt@jeykey.net
+#+LANGUAGE: DE
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="~/.dots/static/.static/notebook.css"/>
