@@ -233,7 +233,8 @@ Modeline is composed as:
                             'display `(raise ,space-down))
                 (propertize primary 'face (if active 'nano-modeline-active-primary
                                             'nano-modeline-inactive-primary))))
-         (right (concat secondary " "))
+         ;; ADDED: Indicator to see if modalka is active. (0 = Off, 1 = On) 
+         (right (concat  (mode-getter) " - " secondary " "))
          
          (available-width (- (window-total-width) 
                              (length prefix) (length left) (length right)
@@ -247,6 +248,15 @@ Modeline is composed as:
             (propertize right 'face (if active 'nano-modeline-active-secondary
                                       'nano-modeline-inactive-secondary)))))
 
+(defun mode-getter ()
+  ;; TODO: Multiline if, move out of modeline?
+  (if modalka-mode
+      (setq cursor-type 'box) (setq cursor-type 'bar)
+      )
+  (if modalka-mode
+      "1" "0"
+     )
+  )
 
 ;; ---------------------------------------------------------------------
 (defun nano-modeline-ein-notebook-mode ()

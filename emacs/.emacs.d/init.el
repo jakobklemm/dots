@@ -31,7 +31,7 @@
 (load-file (concat user-emacs-directory "lisp/programming.el"))
 
 ;; Keybinds, evil stuff
-(load-file (concat user-emacs-directory "lisp/evil.el"))
+(load-file (concat user-emacs-directory "lisp/binds.el"))
 
 ;; Any custom stuff
 (setq custom-file (concat user-emacs-directory "custom.el"))
