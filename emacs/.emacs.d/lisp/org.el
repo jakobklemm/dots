@@ -70,6 +70,8 @@
    (org-superstar-special-todo-items t)
    ))
 
+(setq-default org-startup-with-latex-preview t)
+
 (use-package org-fragtog
   :defer t
   :hook (org-mode . org-fragtog-mode)
@@ -82,3 +84,5 @@
 (load-file (concat user-emacs-directory "lisp/org-export.el"))
 (load-file (concat user-emacs-directory "lisp/org-active.el"))
 (load-file (concat user-emacs-directory "lisp/org-sync.el"))
+(load-file (concat user-emacs-directory "lisp/org-babel.el"))
+(load-file (concat user-emacs-directory "lisp/org-site.el"))

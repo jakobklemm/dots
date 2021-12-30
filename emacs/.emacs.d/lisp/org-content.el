@@ -1,5 +1,3 @@
-;; Content: org-roam, static site (blog), etc.
-
 (use-package org-roam
   :defer t
   :init
@@ -27,3 +25,4 @@
    (org-roam-ui-update-on-save t)
    (org-roam-ui-open-on-start nil)
    ))
+

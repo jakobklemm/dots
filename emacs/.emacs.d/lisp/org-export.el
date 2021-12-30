@@ -1,5 +1,3 @@
-(setq-default org-startup-with-latex-preview t)
-
 (setq TeX-parse-self t)
 (setq TeX-auto-save t)
 
@@ -25,39 +23,12 @@
   (setq org-hugo-auto-set-lastmod t)
   )
 
-(use-package plantuml-mode
-  :defer t
-  :config
-  (setq org-plantuml-jar-path (expand-file-name "~/.tools/plantuml.jar"))
-  (add-to-list 'org-src-lang-modes '("plantuml" . plantuml))
-  )
-
 (use-package ox-reveal
   :defer t
   :custom ((org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")
            (org-reveal-mathjax t)
            (org-reveal-ignore-speaker-notes nil)
            (org-reveal-note-key-char nil)))
-
-(use-package ob-elixir
-  :defer t
-  )
-
-(use-package ob-rust
-  :defer t
-  )
-
-(use-package ob-go
-  :defer t
-  )
-
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((emacs-lisp . t)
-   (elixir . t)
-   (latex . t)
-   (rust . t)
-   ))
 
 (require 'ox-latex)
 (add-to-list 'org-latex-packages-alist '("" "minted"))
@@ -73,7 +44,3 @@
 (setcdr (assoc "\\.pdf\\'" org-file-apps) "brave %s")
 
 (require 'ox-publish)
-
-(use-package htmlize
-  :defer t
-  )
