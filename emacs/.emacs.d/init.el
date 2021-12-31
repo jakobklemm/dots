@@ -30,9 +30,11 @@
 ;; Git, Programming & Modes
 (load-file (concat user-emacs-directory "lisp/programming.el"))
 
-;; Keybinds, evil stuff
+;; Keybinds, evil-like stuff
 (load-file (concat user-emacs-directory "lisp/binds.el"))
 
+;; Email
+(load-file (concat user-emacs-directory "lisp/com.el"))
 ;; Any custom stuff
 (setq custom-file (concat user-emacs-directory "custom.el"))
 (load custom-file 'noerror)

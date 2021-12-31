@@ -1,7 +1,7 @@
 ;; Core config, more advanced than defaults since packages get loaded
 
 (setq user-full-name "Jakob Klemm"
-      user-mail-address "github@jeykey.net")
+      user-mail-address "jakob@jeykey.net")
 
 (setq smtpmail-smtp-server "mail.cyon.ch"
       smtpmail-smtp-service 465
@@ -33,7 +33,7 @@
   (split-window-below)
   (balance-windows)
   (other-window 1)
-  (ivy-switch-buffer)
+  (counsel-switch-buffer)
   )
 
 (defun hrs/split-window-right-and-switch ()
@@ -42,8 +42,10 @@
   (split-window-right)
   (balance-windows)
   (other-window 1)
-  (ivy-switch-buffer)
+  (counsel-switch-buffer)
   )
 
-(global-set-key (kbd "C-x 2") 'hrs/split-window-below-and-switch)
-(global-set-key (kbd "C-x 3") 'hrs/split-window-right-and-switch)
+(defun kill-current-buffer ()
+  (interactive)
+  (kill-buffer (current-buffer)))
+

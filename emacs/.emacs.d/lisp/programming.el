@@ -48,7 +48,6 @@
   )
 
 (use-package yasnippet
-  :defer t
   :config
   (use-package yasnippet-snippets
     :defer t
