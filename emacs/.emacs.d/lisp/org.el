@@ -178,23 +178,3 @@
 
 ;; Open directly PDFs in browser.
 (setcdr (assoc "\\.pdf\\'" org-file-apps) "brave %s")
-
-;; Content
-(use-package org-roam
-  :defer t
-  )
-
-(setq org-roam-directory "~/documents/braindump/")
-(org-roam-db-autosync-mode)
-(setq org-roam-v2-ack t)
-
-(use-package org-roam-ui
-  :disabled t
-  :defer t
-  :after org-roam
-  :custom
-  ((org-roam-ui-sync-theme t)
-   (org-roam-ui-follow t)
-   (org-roam-ui-update-on-save t)
-   (org-roam-ui-open-on-start nil)
-   ))

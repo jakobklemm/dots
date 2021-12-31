@@ -3,7 +3,15 @@
 
 (setq-default indent-tabs-mode nil)
 
-(use-package company)
+(use-package company
+  :config
+  (add-hook 'after-init-hook 'global-company-mode)
+  )
+
+(use-package company-posframe
+  :config
+  (company-posframe-mode 1)
+  )
 
 (use-package lsp-mode
   :defer t
@@ -21,7 +29,6 @@
   (setq lsp-ui-sideline-show-hover nil)
   (setq lsp-ui-doc-position 'bottom)
   (lsp-ui-doc-show))
-
 
 ;; Let's run 8 checks at once instead.
 (setq flymake-max-parallel-syntax-checks 8)

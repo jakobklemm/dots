@@ -84,6 +84,7 @@
   ("bs" save-buffer "save")
   ("bk" kill-current-buffer "kill buffer")
   ("bj" kill-buffer-and-window "kill buffer and window")
+  ("bf" counsel-find-file "open file")
   ("bb" counsel-switch-buffer "switch buffer")
   ("bh" previous-buffer "previous buffer")
   
@@ -129,6 +130,13 @@
   ("gi" magit-init "create repo")
   ("gm" git-messenger:popup-message "show commit message")
   ("gp" magit-pull "pull")
+
+  ;; Roam
+  ("nt" org-roam-buffer-toggle "org roam")
+  ("nf" org-roam-node-find "find node")
+  ("nr" org-roam-node-random "random node")
+  ("ni" org-roam-node-insert "insert node")
+  ("nc" org-roam-capture "capture")
   
   ;; Extras
   ("qq" save-buffers-kill-terminal "quit")
