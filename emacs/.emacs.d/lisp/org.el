@@ -178,3 +178,7 @@
 
 ;; Open directly PDFs in browser.
 (setcdr (assoc "\\.pdf\\'" org-file-apps) "brave %s")
+
+;; Additional files
+(load-file (concat user-emacs-directory "lisp/org-checklist-plus.el"))
+(load-file (concat user-emacs-directory "lisp/org-content.el"))

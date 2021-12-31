@@ -118,7 +118,8 @@
 
 (use-package cargo
   :defer 2
-  :hook (rust-mode . cargo-minor-mode))
+  :hook (rust-mode . cargo-minor-mode)
+  )
 
 (use-package toml-mode
   :defer 2
@@ -131,4 +132,5 @@
               tramp-file-name-regexp))
 
 (use-package markdown-mode
-  :defer t)
+  :defer t
+  )

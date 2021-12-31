@@ -95,7 +95,7 @@ windowCount = gets $ Just . show . length . W.integrate' . W.stack . W.workspace
 myStartupHook :: X ()
 myStartupHook = do
   spawnOnce "picom &"
-  spawnOnce "emacs --daemon"
+  --  spawnOnce "emacs --daemon"
   spawnOnce "feh --bg-scale ~/Pictures/wallpapers/0003.jpg  &"
 
 ------------------------------------------------------------------------
