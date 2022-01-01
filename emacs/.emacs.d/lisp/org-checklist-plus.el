@@ -7,9 +7,5 @@
   (insert-file-contents (read-file-name "Select template:" "~/supervisor/checklists/"))
   )
 
-(defun jk/from-file (path)
-  (insert-file-contents path)
-  )
-
 (require 'org-mouse)
 (add-to-list 'org-modules 'org-mouse t)
