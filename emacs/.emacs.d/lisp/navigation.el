@@ -6,6 +6,22 @@
   :init
   (add-hook 'ibuffer-mode-hook #'hl-line-mode))
 
+(use-package popper
+  :defer t
+  :bind (("C-;"   . popper-toggle-latest)
+         ("M-;"   . popper-cycle)
+         ("C-M-;" . popper-toggle-type))
+  :custom
+  ((popper-reference-buffers
+        '("\\*Messages\\*"
+          "Output\\*$"
+          "\\*Async Shell Command\\*"
+          help-mode
+          compilation-mode)))
+  :init
+  (popper-mode +1)
+  (popper-echo-mode +1))       
+
 (use-package counsel
   :defer t
   :diminish ivy-mode counsel-mode

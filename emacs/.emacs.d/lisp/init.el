@@ -1,6 +1,3 @@
-;; Entry point for the emacs config. The actual config is in
-;; =config.org= and evaluated here.
-
 (add-hook 'emacs-startup-hook
           (lambda ()
             (message "Emacs ready in %s with %d garbage collections."
