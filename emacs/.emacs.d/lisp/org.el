@@ -81,3 +81,4 @@
 (load-file (concat user-emacs-directory "lisp/org-content.el"))
 (load-file (concat user-emacs-directory "lisp/org-export.el"))
 (load-file (concat user-emacs-directory "lisp/org-active.el"))
+(load-file (concat user-emacs-directory "lisp/org-sync.el"))

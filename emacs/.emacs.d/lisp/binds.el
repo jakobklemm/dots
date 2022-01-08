@@ -7,6 +7,10 @@
 (global-set-key (kbd "C-x C-k") 'kill-current-buffer)
 (global-set-key (kbd "C-x j") 'kill-buffer-and-window)
 
+(defun jk/disable-modalka ()
+  (setq modalka-mode nil)
+  )
+
 (defun defkey (f g)
   (modalka-define-kbd f g)
   )
@@ -84,6 +88,7 @@
   ;; Quick access
   ("," counsel-find-file)
   ("." counsel-switch-buffer)
+  ("g" keyboard-quit)
   
   ;; Buffers
   ("bs" save-buffer)
@@ -131,10 +136,10 @@
   ("mf" mu4e~view-save-attach-from-binding)
 
   ;; Git
-  ("gg" magit-status)
-  ("gi" magit-init)
-  ("gm" git-messenger:popup-message)
-  ("gp" magit-pull)
+  ("hg" magit-status)
+  ("hi" magit-init)
+  ("hm" git-messenger:popup-message)
+  ("hp" magit-pull)
 
   ;; Roam
   ("nt" org-roam-buffer-toggle)

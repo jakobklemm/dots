@@ -71,3 +71,9 @@
 
 ;; Open directly PDFs in browser.
 (setcdr (assoc "\\.pdf\\'" org-file-apps) "brave %s")
+
+(require 'ox-publish)
+
+(use-package htmlize
+  :defer t
+  )

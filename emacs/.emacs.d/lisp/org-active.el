@@ -13,12 +13,12 @@
   )
 
 (setq org-log-done 'time
-      org-todo-keywords '((sequence "TODO(t)" "PROGRESS(p)" "WAITING(w)" "|" "DONE(d)" "PAL(a)"))
+      org-todo-keywords '((sequence "TODO(t)" "PROGRESS(p)" "WAITING(w)" "|" "DONE(d)" "SEP(s)"))
       org-todo-keyword-faces '(("TODO" . (:foreground "#af1212" :weight bold))
                                ("PROGRESS" . (:foreground "#FAA022" :weight bold))
                                ("WAITING" . (:foreground "#990099" :weight bold))
                                ("DONE" . (:foreground "#ffffff" :weight bold))
-                               ("PAL" . (:foreground "#474A44" :weight bold))
+                               ("SEP" . (:foreground "#474A44" :weight bold))
                                )
       org-tag-alist '()
       org-agenda-deadline-faces '((1.001 . error)
@@ -30,26 +30,14 @@
 (use-package org-journal
   :defer t
   :custom
-  ((org-journal-dir "~/supervisor/")
+  ((org-journal-dir "~/supervisor/journal/")
    (org-journal-file-type 'daily)
    (org-journal-date-format "%Y-%m-%d, %A")
    (org-journal-file-format "%Y%m%d.org")
    (org-journal-time-prefix "* ")
    (org-journal-date-prefix "#+TITLE: ")
    (org-journal-enable-agenda-integration t)
-   (org-journal-carryover-items "TODO=”TODO|PROGRESS|BLOCKED”")
+   (org-journal-carryover-items "")
    )
   )
 
-(defun my-old-carryover (old_carryover)
-  (save-excursion
-    (let ((matcher (cdr (org-make-tags-matcher org-journal-carryover-items))))
-      (dolist (entry (reverse old_carryover))
-        (save-restriction
-          (narrow-to-region (car entry) (cadr entry)) 
-          (goto-char (point-min))
-          (org-scan-tags '(lambda ()
-                            (org-set-tags ":carried:"))
-                         matcher org--matcher-tags-todo-only))))))
-
-(setq org-journal-handle-old-carryover 'my-old-carryover)
