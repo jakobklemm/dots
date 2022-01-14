@@ -1,7 +1,7 @@
 ;; Collection of important major modes
 
 (use-package web-mode
-  :ensure t
+  :defer t
   :config
   (add-hook 'web-mode-hook
             (lambda ()
@@ -11,22 +11,22 @@
   )
 
 (use-package elixir-mode
-  :ensure t
+  :defer t
   )
 
 (use-package markdown-mode
-  :ensure t
+  :defer t
   )
 
 (use-package systemd
-  :ensure t
+  :defer t
   :mode
   ("\\.service\\'" "\\.timer\\'" "\\.target\\'" "\\.mount\\'"
    "\\.automount\\'" "\\.slice\\'" "\\.socket\\'" "\\.path\\'"
    "\\.netdev\\'" "\\.network\\'" "\\.link\\'"))
 
 (use-package yaml-mode
-  :ensure t
+  :defer t
   :mode ("\\.yaml\\'" "\\.yml\\'")
   :custom-face
   (font-lock-variable-name-face ((t (:foreground "violet"))))
@@ -65,5 +65,9 @@
   )
 
 (use-package toml-mode
+  :defer 2
+  )
+
+(use-package csv-mode
   :defer 2
   )

@@ -5,6 +5,9 @@
 
 (require 'org-caldav)
 
+(setq org-icalendar-include-todo 'all
+      org-caldav-sync-todo t)
+
 (setq org-caldav-url "https://caldav.jeykey.net/dav.php/calendars/jeykey/")
 (setq org-caldav-calendar-id "jeykey-personal")
 (setq org-caldav-inbox "~/supervisor/inbox.org")

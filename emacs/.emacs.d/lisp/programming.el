@@ -18,11 +18,11 @@
   :commands lsp
   :hook ((typescript-mode js2-mode web-mode) . lsp)
   :bind (:map lsp-mode-map
-         ("TAB" . completion-at-point))
+              ("TAB" . completion-at-point))
   :custom (lsp-headerline-breadcrumb-enable nil))
 
 (use-package lsp-ui
-  :defer t
+  :ensure t
   :hook (lsp-mode . lsp-ui-mode)
   :config
   (setq lsp-ui-sideline-enable t)
@@ -56,9 +56,7 @@
 
 (use-package yasnippet
   :config
-  (use-package yasnippet-snippets
-    :defer t
-    )
+  (use-package yasnippet-snippets)
   (yas-global-mode 1)
   :custom
   ((yas-indent-line 'auto))
@@ -104,4 +102,3 @@
 (use-package flycheck
   :defer 2
   )
-

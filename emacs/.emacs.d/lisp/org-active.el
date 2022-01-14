@@ -27,17 +27,9 @@
 	                                (0.0 . org-upcoming-distant-deadline))
       )
 
-(use-package org-journal
-  :defer t
-  :custom
-  ((org-journal-dir "~/supervisor/journal/")
-   (org-journal-file-type 'daily)
-   (org-journal-date-format "%Y-%m-%d, %A")
-   (org-journal-file-format "%Y%m%d.org")
-   (org-journal-time-prefix "* ")
-   (org-journal-date-prefix "#+TITLE: ")
-   (org-journal-enable-agenda-integration t)
-   (org-journal-carryover-items "")
-   )
+
+(defun jk/random-quote ()
+  (interactive)
+  (message (nth (random (length quotes)) quotes))
   )
 

@@ -6,6 +6,7 @@
 (global-set-key (kbd "C-x 3") 'hrs/split-window-right-and-switch)
 (global-set-key (kbd "C-x C-k") 'kill-current-buffer)
 (global-set-key (kbd "C-x j") 'kill-buffer-and-window)
+(global-set-key (kbd "C-x k") 'kill-current-buffer)
 
 (defun jk/disable-modalka ()
   (setq modalka-mode nil)

@@ -68,7 +68,6 @@
   :defer t
   :if (window-system))
 
-;; TODO ?
 (use-package beacon
   :defer t
   :custom
