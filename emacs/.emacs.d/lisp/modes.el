@@ -49,7 +49,7 @@
   )
 
 (use-package rustic
-  :defer 2
+  :defer t
   :bind (:map rustic-mode-map
               ("C-c r" . rustic-cargo-run)
               ("C-c C-r" . lsp-rename)
@@ -71,3 +71,13 @@
 (use-package csv-mode
   :defer 2
   )
+
+(use-package conf-mode
+  :ensure nil
+  :bind
+  (:map conf-mode-map
+        (("M-D" . awesome-pair-kill)
+         ("SPC" . awesome-pair-space)
+         ("=" . awesome-pair-equal)
+         ("M-F" . awesome-pair-jump-right)
+         ("M-B" . awesome-pair-jump-left))))
