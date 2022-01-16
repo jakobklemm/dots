@@ -157,8 +157,13 @@
   (sp-pair "$" "$" :actions '(wrap))
   )
 
-(use-package yasnippet)
-(use-package yasnippet-snippets)
+(use-package yasnippet
+  :defer t
+  )
+
+(use-package yasnippet-snippets
+  :defer t
+  )
 
 (yas-global-mode t)
 (define-key yas-minor-mode-map (kbd "M-z") 'yas-expand)
