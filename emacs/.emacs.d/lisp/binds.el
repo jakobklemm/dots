@@ -1,12 +1,14 @@
 (define-key yas-minor-mode-map (kbd "<tab>") nil)
 (define-key yas-minor-mode-map (kbd "TAB") nil)
-(define-key yas-minor-mode-map (kbd "C-<tab>") 'yas-expand)
+(define-key yas-minor-mode-map (kbd "C-f") 'yas-expand)
 
 (global-set-key (kbd "C-x 2") 'hrs/split-window-below-and-switch)
 (global-set-key (kbd "C-x 3") 'hrs/split-window-right-and-switch)
 (global-set-key (kbd "C-x C-k") 'kill-current-buffer)
 (global-set-key (kbd "C-x j") 'kill-buffer-and-window)
 (global-set-key (kbd "C-x k") 'kill-current-buffer)
+
+(global-set-key (kbd "C-x l") 'display-line-numbers-mode)
 
 (defun jk/disable-modalka ()
   (setq modalka-mode nil)

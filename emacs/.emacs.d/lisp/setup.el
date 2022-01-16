@@ -111,6 +111,8 @@
 (set-fringe-mode 10)
 (menu-bar-mode -1)            ; Disable the menu bar
 
+(setq display-line-numbers-type 'relative)
+
 ;; No message in scratch buffer
 (setq initial-scratch-message nil)
 
