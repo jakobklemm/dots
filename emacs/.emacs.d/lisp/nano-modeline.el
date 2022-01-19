@@ -250,12 +250,7 @@ Modeline is composed as:
 
 (defun mode-getter ()
   ;; TODO: Multiline if, move out of modeline?
-  (if modalka-mode
-      (setq cursor-type 'box) (setq cursor-type 'bar)
-      )
-  (if modalka-mode
-      "1" "0"
-     )
+  (format "%s" evil-state)
   )
 
 ;; ---------------------------------------------------------------------

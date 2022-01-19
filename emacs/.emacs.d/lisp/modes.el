@@ -73,11 +73,5 @@
   )
 
 (use-package conf-mode
-  :ensure nil
-  :bind
-  (:map conf-mode-map
-        (("M-D" . awesome-pair-kill)
-         ("SPC" . awesome-pair-space)
-         ("=" . awesome-pair-equal)
-         ("M-F" . awesome-pair-jump-right)
-         ("M-B" . awesome-pair-jump-left))))
+  :defer t
+  )

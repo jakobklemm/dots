@@ -136,6 +136,8 @@
   :hook
   ((org-mode . olivetti-mode)))
 
+(add-hook 'prog-mode-hook 'display-line-numbers-mode)
+
 ;; Colors
 ;; http://xahlee.info/emacs/emacs/emacs_CSS_colors.html
 (defun xah-syntax-color-hex ()

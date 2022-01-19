@@ -26,12 +26,44 @@
   :config (evil-collection-init)
   )
 
+(use-package evil-commentary
+  :config
+  (evil-commentary-mode)
+  )
+
+(use-package evil-nerd-commenter
+  :defer t
+  )
+
 (use-package evil-org
   :after org
   :hook (org-mode . (lambda () evil-org-mode))
   )
 
-(use-package evil-dvorak
-  :config (global-evil-dvorak-mode 1)
-  :diminish evil-dvorak-mode
+(use-package evil-surround
+  :ensure t
+  :config
+  (global-evil-surround-mode 1)
+  (define-key evil-normal-state-map (kbd "gs") 'evil-surround-change)
   )
+
+(require 'evil-dvorak)
+;;(global-evil-dvorak-mode 1)
+
+(use-package evil-leader
+  :config
+  (global-evil-leader-mode)
+  )
+
+(evil-leader/set-leader ",")
+
+(evil-leader/set-key
+  "e" 'find-file
+  "b" 'switch-to-buffer
+  "k" 'kill-buffer)
+
+(evil-leader/set-key
+  "cc" 'evilnc-comment-or-uncomment-lines
+  "cp" 'evilnc-copy-and-comment-lines
+  "cr" 'comment-or-uncomment-region
+)
