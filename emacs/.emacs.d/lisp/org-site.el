@@ -42,9 +42,10 @@
       org-html-head-include-default-style nil
       org-src-fontify-natively t
       org-src-tab-acts-natively t
+      ;; <link rel=\"stylesheet\" href=\"style/style.css\" />
       org-html-head "
 <meta name=\"author\" content=\"Jakob Klemm\">
-<link rel=\"stylesheet\" href=\"style/style.css\" />
+<link href=\"http://thomasf.github.io/solarized-css/solarized-dark.min.css\" rel=\"stylesheet\"></link>
 <h1><a href=\"/\">Jakob Klemm</a></h1>
 <div class=\"hdr\">
 <a href=\"https://github.com/jakobklemm\" target=\"_blank\">Github</a>

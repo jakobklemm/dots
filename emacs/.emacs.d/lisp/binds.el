@@ -10,6 +10,9 @@
 
 (global-set-key (kbd "C-x l") 'display-line-numbers-mode)
 
+(global-set-key (kbd "C-§") 'popper-toggle-latest)
+(global-set-key (kbd "M-§") 'popper-toggle-type)
+
 (use-package evil
   :custom ((evil-move-cursor-back nil)
            (evil-move-beyond-eol t)

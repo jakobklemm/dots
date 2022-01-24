@@ -132,7 +132,9 @@
 (use-package olivetti
   :defer t
   :custom
-  ((olivetti-style 'fancy))
+  ((olivetti-style 'fancy)
+   (olivetti-body-width 80)
+   )
   :hook
   ((org-mode . olivetti-mode)))
 
