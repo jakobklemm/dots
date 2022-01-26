@@ -16,10 +16,10 @@
 (load-file (concat user-emacs-directory "lisp/navigation.el"))
 (load-file (concat user-emacs-directory "lisp/org.el"))
 (load-file (concat user-emacs-directory "lisp/programming.el"))
-(load-file (concat user-emacs-directory "lisp/binds.el"))
 (load-file (concat user-emacs-directory "lisp/com.el"))
 (load-file (concat user-emacs-directory "lisp/modes.el"))
 (load-file (concat user-emacs-directory "lisp/misc.el"))
+(load-file (concat user-emacs-directory "lisp/binds.el"))
 (setq custom-file (concat user-emacs-directory "custom.el"))
 (load custom-file 'noerror)
 

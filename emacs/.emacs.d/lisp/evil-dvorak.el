@@ -56,7 +56,9 @@
   (kbd "C-h") 'evil-next-line
   (kbd "C-t") 'evil-previous-line
   (kbd "C-n") 'backward-char
-  (kbd "C-s") 'forward-char)
+  (kbd "C-s") 'forward-char
+  (kbd "M-x") 'counsel-M-x
+  )
 
 (evil-define-key 'normal evil-dvorak-mode-map
   "H" 'evil-forward-paragraph

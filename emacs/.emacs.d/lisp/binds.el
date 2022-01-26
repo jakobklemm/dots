@@ -16,6 +16,8 @@
 (global-set-key (kbd "C-;") 'popper-toggle-latest)
 (global-set-key (kbd "M-;") 'popper-toggle-type)
 
+(global-set-key (kbd "C-c c") 'evil-dvorak-mode)
+
 (use-package evil
   :custom ((evil-move-cursor-back nil)
            (evil-move-beyond-eol t)
