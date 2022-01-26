@@ -1,5 +1,5 @@
-;;; evil-dvorak.el --- allows you to use evil with appropriate dvorak bindings
-;; https://github.com/jbranso/evil-dvorak
+;; Evil dvorak mode
+;; https://github.com/jbranso/evil-dvorak/blob/master/evil-dvorak.el
 
 (require 'evil)
 
@@ -21,10 +21,10 @@
   "Global mode to let you use evil with dvorak friendly keybindings.")
 
 (evil-define-key 'visual evil-dvorak-mode-map
-  "t" 'evil-next-line
-  "h" 'evil-previous-line
-  "n" 'evil-backward-char
-  "s" 'evil-forward-char
+  "h" 'evil-next-line
+  "t" 'evil-previous-line
+  "d" 'evil-backward-char
+  "n" 'evil-forward-char
   ;;I what to be able to use vaw (visual around word) and viw (visual inner word)
   ;; that's why in visual mode, u and a are not defined.
   ;; BUT it would be cool to say cie and mean change forward to word-end
@@ -36,26 +36,14 @@
 
 (evil-define-key 'normal evil-dvorak-mode-map
   ;; Miscellancus
-  (kbd "t") #'evil-next-line
-  (kbd "h") #'previous-line
-  (kbd "n") #'backward-char
-  (kbd "s") #'forward-char
-  "k" 'kill-line
-  "K" #'(lambda () (interactive)
-          "kill from point to the beginning of the line"
-          (kill-line 0))
+  (kbd "h") #'evil-next-line
+  (kbd "t") #'previous-line
+  (kbd "d") #'backward-char
+  (kbd "n") #'forward-char
 
   ;;move the cursor around
   (kbd "C-l") 'recenter-top-bottom
 
-  ;;line manipulation
-  "J" 'join-line
-  "j" #'(lambda () (interactive)
-          "join this line at the end of the line below"
-          (join-line 1))
-  (kbd "C-h") 'evil-open-below
-  (kbd "C-t") 'evil-open-above
-  "'" 'evil-goto-mark
   ;;there is no need to set return to newline-and-indent, because electric-indent-mode is now on by default.
   (kbd "<return>") 'newline-and-indent)
 
@@ -69,6 +57,28 @@
   (kbd "C-t") 'evil-previous-line
   (kbd "C-n") 'backward-char
   (kbd "C-s") 'forward-char)
+
+(evil-define-key 'normal evil-dvorak-mode-map
+  "H" 'evil-forward-paragraph
+  "T" 'evil-backward-paragraph
+  "D" 'evil-first-non-blank
+  "N" 'evil-last-non-blank
+
+  "s" 'evil-open-below
+  "S" 'evil-open-above
+
+  "w" 'evil-delete
+  "W" 'kill-line
+
+  "j" 'evil-backward-word-begin
+  "J" 'evil-backward-section-begin
+
+  "k" 'evil-forward-word-end
+  "K" 'evil-forward-section-end
+
+  "'" 'evil-first-non-blank
+  "c" 'evil-end-of-line  
+  )
 
 (provide 'evil-dvorak)
 

@@ -13,6 +13,9 @@
 (global-set-key (kbd "C-§") 'popper-toggle-latest)
 (global-set-key (kbd "M-§") 'popper-toggle-type)
 
+(global-set-key (kbd "C-;") 'popper-toggle-latest)
+(global-set-key (kbd "M-;") 'popper-toggle-type)
+
 (use-package evil
   :custom ((evil-move-cursor-back nil)
            (evil-move-beyond-eol t)
@@ -47,26 +50,93 @@
   :ensure t
   :config
   (global-evil-surround-mode 1)
-  (define-key evil-normal-state-map (kbd "gs") 'evil-surround-change)
-  )
+  (define-key evil-normal-state-map (kbd "gs") 'evil-surround-change))
 
 (require 'evil-dvorak)
-;;(global-evil-dvorak-mode 1)
+(global-evil-dvorak-mode 1)
 
 (use-package evil-leader
   :config
   (global-evil-leader-mode)
   )
 
-(evil-leader/set-leader ",")
+(evil-leader/set-leader "SPC")
 
 (evil-leader/set-key
-  "e" 'find-file
-  "b" 'switch-to-buffer
-  "k" 'kill-buffer)
+  "," 'counsel-find-file
+  "." 'ivy-switch-buffer
+  )
+
+(evil-leader/set-key
+  "bs" 'save-buffer
+  "bk" 'kill-current-buffer
+  "bj" 'kill-buffer-and-window
+  "bb" 'bufler-switch-buffer
+  "bh" 'previous-buffer
+  )
+
+(evil-leader/set-key
+  "wv" 'evil-window-vsplit
+  "wk" 'hrs/split-window-below-and-switch
+  "wc" 'hrs/split-window-right-and-switch
+  "wj" 'delete-other-windows
+  "wo" 'ace-window
+  )
+
+(evil-leader/set-key
+  "ss" 'consult-line
+  "sS" 'consult-imenu
+  "sr" 'replace-string
+  "sg" 'rgrep
+  )
+
+(evil-leader/set-key
+  "qq" 'save-buffers-kill-terminal
+  "qs" 'kill-emacs
+  "qe" 'eshell
+  )
+
+(evil-leader/set-key
+  "ot" 'counsel-org-tag
+  "or" 'org-refile
+  "ol" 'org-insert-link
+  "oo" 'org-open-at-point
+  "op" 'org-link-open-as-file
+  "of" 'org-agenda-file-to-front
+  "oe" 'org-export-dispatch
+  "oa" 'org-archive-subtree
+  )
+
+(evil-leader/set-key
+  "gg" 'magit-status
+  "gi" 'magit-init
+  "gm" 'git-messenger:popup-message
+  "gp" 'magit-pull
+  )
+
+(evil-leader/set-key
+ "nl" 'org-roam-buffer-toggle
+ "ni" 'org-roam-insert
+ "nf" 'org-roam-find-file
+ "nc" 'org-roam-capture
+ "nr" 'org-roam-random-note
+ "ns" 'org-roam-server-mode
+ )
+
+(evil-leader/set-key
+  "mo" 'mu4e
+  "mc" 'mu4e-compose-new
+  "mm" 'message-send-and-exit
+  "ma" 'mail-add-attachment
+  "ms" 'mml-secure-message-sign-pgp
+  "me" 'mml-secure-message-encrypt-pgp
+  "mj" 'mu4e~headers-jump-to-maildir
+  "ml" 'mu4e~view-browse-url-from-binding
+  "mf" 'mu4e~view-save-attach-from-binding
+  )
 
 (evil-leader/set-key
   "cc" 'evilnc-comment-or-uncomment-lines
   "cp" 'evilnc-copy-and-comment-lines
   "cr" 'comment-or-uncomment-region
-)
+  )

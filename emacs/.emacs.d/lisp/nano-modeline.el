@@ -249,8 +249,7 @@ Modeline is composed as:
                                       'nano-modeline-inactive-secondary)))))
 
 (defun mode-getter ()
-  ;; TODO: Multiline if, move out of modeline?
-  (format "%s" evil-state)
+  (format "%s - %s" evil-dvorak-mode evil-state)
   )
 
 ;; ---------------------------------------------------------------------
