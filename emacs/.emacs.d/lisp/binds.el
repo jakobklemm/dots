@@ -16,7 +16,7 @@
 (global-set-key (kbd "C-;") 'popper-toggle-latest)
 (global-set-key (kbd "M-;") 'popper-toggle-type)
 
-(global-set-key (kbd "C-c c") 'evil-dvorak-mode)
+(global-set-key (kbd "C-c c") 'global-evil-dvorak-mode)
 
 (use-package evil
   :custom ((evil-move-cursor-back nil)
@@ -73,7 +73,7 @@
   "bs" 'save-buffer
   "bk" 'kill-current-buffer
   "bj" 'kill-buffer-and-window
-  "bb" 'bufler-switch-buffer
+  "bb" 'counsel-switch-buffer
   "bh" 'previous-buffer
   )
 
@@ -118,11 +118,10 @@
 
 (evil-leader/set-key
  "nl" 'org-roam-buffer-toggle
- "ni" 'org-roam-insert
- "nf" 'org-roam-find-file
+ "ni" 'org-roam-node-insert
+ "nf" 'org-roam-node-find
  "nc" 'org-roam-capture
- "nr" 'org-roam-random-note
- "ns" 'org-roam-server-mode
+ "nr" 'org-roam-node-random
  )
 
 (evil-leader/set-key
