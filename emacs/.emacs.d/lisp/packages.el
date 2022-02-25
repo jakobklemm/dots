@@ -25,21 +25,18 @@
          'silent 'inhibit-cookies)
       (goto-char (point-max))
       (eval-print-last-sexp)))
-(load bootstrap-file nil 'nomessage))
+  (load bootstrap-file nil 'nomessage))
 
 (straight-use-package 'use-package)
 (setq straight-use-package-by-default t)
-
-;; TODO: Test
+;;(setq straight-disable-compile t)
+;;(setq straight-disable-native-compile t)
 (setq use-package-always-ensure t)
 
 (use-package quelpa
-:ensure t
-:config
-(setq quelpa-upgrade-interval 7);; upgrade all packages once a week according to https://github.com/quelpa/quelpa
-(add-hook #'after-init-hook #'quelpa-upgrade-all-maybe)
-)
+  :ensure t
+  )
 
 (use-package quelpa-use-package
   :ensure t
-)
+  )

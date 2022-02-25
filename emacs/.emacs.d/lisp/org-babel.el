@@ -11,8 +11,6 @@
    (plantuml . t)
    ))
 
-
-
 (use-package plantuml-mode
   :defer t
   :config

@@ -79,10 +79,12 @@
   ((org-latex-preview-ltxpng-directory "~/.ltxpng/")))
 
 ;; Additional files
-(load-file (concat user-emacs-directory "lisp/org-checklist-plus.el"))
+
+;; (load-file (concat user-emacs-directory "lisp/org-checklist-plus.el"))
+(load-file (concat user-emacs-directory "lisp/org-productivity.el"))
 (load-file (concat user-emacs-directory "lisp/org-content.el"))
 (load-file (concat user-emacs-directory "lisp/org-export.el"))
-(load-file (concat user-emacs-directory "lisp/org-active.el"))
-(load-file (concat user-emacs-directory "lisp/org-sync.el"))
+;; (load-file (concat user-emacs-directory "lisp/org-active.el"))
+;; (load-file (concat user-emacs-directory "lisp/org-sync.el"))
 (load-file (concat user-emacs-directory "lisp/org-babel.el"))
 (load-file (concat user-emacs-directory "lisp/org-site.el"))

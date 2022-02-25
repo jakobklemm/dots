@@ -61,8 +61,6 @@ schemes:
       cyan: '#3C8990'
       white: '#8b8283'
   
-background_opacity: 0.9
-
 shell:
   program: /bin/fish
   args:
