@@ -6,8 +6,8 @@
 (custom-set-faces '(org-ellipsis ((t (:foreground "#6483b5" :underline nil)))))
 
 ;; https://github.com/hrs/dotfiles
-;; (setq hrs/default-fixed-font "Fira Code")
-(setq hrs/default-fixed-font "Roboto Mono")
+(setq hrs/default-fixed-font "Fira Code")
+;;(setq hrs/default-fixed-font "Roboto Mono")
 (setq hrs/default-fixed-font-size 110)
 (setq hrs/current-fixed-font-size hrs/default-fixed-font-size)
 (set-face-attribute 'default nil
