@@ -8,7 +8,7 @@
   :custom
   ((org-directory "~/documents/")
    (org-archive-location "~/archive/2021.org::* From %s")
-   (org-agenda-files '("~/supervisor/supervisor.org"))
+   (org-agenda-files '("~/supervisor"))
    (org-image-actual-width '(600))
    (org-ellipsis " ▼ ")
    (org-adapt-indentation nil)
@@ -78,13 +78,14 @@
   :custom
   ((org-latex-preview-ltxpng-directory "~/.ltxpng/")))
 
+(setq org-num-max-level 1)
+
 ;; Additional files
 
 ;; (load-file (concat user-emacs-directory "lisp/org-checklist-plus.el"))
 (load-file (concat user-emacs-directory "lisp/org-productivity.el"))
 (load-file (concat user-emacs-directory "lisp/org-content.el"))
 (load-file (concat user-emacs-directory "lisp/org-export.el"))
-;; (load-file (concat user-emacs-directory "lisp/org-active.el"))
-;; (load-file (concat user-emacs-directory "lisp/org-sync.el"))
+(load-file (concat user-emacs-directory "lisp/org-sync.el"))
 (load-file (concat user-emacs-directory "lisp/org-babel.el"))
 (load-file (concat user-emacs-directory "lisp/org-site.el"))
