@@ -134,9 +134,9 @@
       (save-excursion (org-agenda-bulk-mark)))
   (dolist (m org-agenda-bulk-marked-entries)
     (unless (and (markerp m)
-		 (marker-buffer m)
-		 (buffer-live-p (marker-buffer m))
-		 (marker-position m))
+		         (marker-buffer m)
+		         (buffer-live-p (marker-buffer m))
+		         (marker-position m))
       (user-error "Marker %s for bulk command is invalid" m)))
 
   (setq cmd (lambda () (jk/refile-to-active-tasks)))
@@ -183,3 +183,17 @@
       (if (= (org-element-property :level hl) 1)
           (push (format "%s" (org-element-property :raw-value hl)) jk/projects)
         ))))
+
+(defun jk/parse-test ()
+  (interactive)
+  (with-temp-buffer
+    (insert-file-contents "~/supervisor/projects.org")
+    (org-element-map (org-element-parse-buffer) 'headline
+      (lambda (hl)
+        (if (= (org-element-property :level hl) 4)
+            (message (format "%s" (org-element-property hl "id")))
+          )
+        )
+      )
+    )
+  )
