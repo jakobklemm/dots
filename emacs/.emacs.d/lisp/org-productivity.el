@@ -197,3 +197,92 @@
       )
     )
   )
+
+(defun jk/refile-with-id (file headline)
+  (save-excursion
+    (let ((pos (save-excursion
+                 (find-file file)
+                 (org-find-exact-headline-in-buffer headline))))
+      (org-with-point-at pos
+        (let (
+              (id (org-entry-get nil "ID"))
+              (org-refile-keep t)
+              )
+          (org-refile nil nil (list headline file nil pos) (format "%s" id))
+          (org-entry-put pos "ID" "PLACEHOLDER")
+          (org-id-add-location id file)
+          (let (
+                (pom (org-find-entry-with-id id))
+                (new (format "%s-Z" id))
+                )
+            (save-excursion
+              (if (get-buffer "target.org")
+                  (switch-to-buffer "target.org")
+                (find-file file)
+                )
+              (org-entry-put pom "ID" new)
+              )
+            (org-entry-put pos "ID" id)
+            (org-id-add-location new file)
+            (org-id-add-location id "~/supervisor/test.org")
+            )
+          )))))
+
+(defun jk/done-active ()
+  (interactive)
+  (org-todo 'done)
+  (save-excursion
+    (let* (
+           (pos (point-marker))
+           (zid (org-entry-get pos "ID"))
+           (id (jk/parse-id zid))
+           (pos (org-id-find id))
+           )
+      (save-excursion
+        (jk/find-buffer-or-file pos)
+        (org-todo 'done)
+        (save-buffer)
+        )
+      )
+    )
+  (save-buffer)
+  )
+
+(defun jk/marker-test ()
+  (interactive)
+  (save-excursion
+    (let ((pos (org-id-goto "9a6319cb-cf6e-48bb-8036-a9e0a3848b88")))
+      (message (format "%s" pos))
+      )
+    )
+  )
+
+(defun jk/parse-id (id)
+  (let* (
+         (items (s-split "-" id))
+         (filtered '())
+         )
+    (dolist (i items)
+      (if (not (= (length i) 1))
+          (push i filtered)
+        )
+      )
+    (s-join "-" (reverse filtered))
+    )
+  )
+
+(defun jk/find-buffer-or-file (name)
+  "name = (path . pos)"
+  (let ((file (car (reverse (s-split "/" (car name))))))
+    (if (get-buffer file)
+        (switch-to-buffer file)
+      (find-file (car name))
+      )
+    )
+  )
+
+(defun jk/refile-to-test ()
+  (interactive)
+  (org-mark-ring-push)
+  (jk/refile-with-id "~/supervisor/target.org" "")
+  (org-mark-ring-goto))
