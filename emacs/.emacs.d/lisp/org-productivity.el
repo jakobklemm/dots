@@ -3,15 +3,17 @@
 ;; Capture templates
 (setq org-capture-templates
       '(
-        ("t" "Todo" entry (file "~/supervisor/inbox.org")
+        ("i" "Inbox" entry (file "~/supervisor/inbox.org")
          "* TODO %?\n%T\n%a")
         ("i" "Idea" entry (file "~/supervisor/ideas.org")
          "* %?\n%T\n%a")
         ("e" "Event" entry (file "~/supervisor/events.org")
          "* STATIC %?\n%T\n%a")
         ("r" "Reference" entry (function get-file)
-         "* %? \n
-%T\n%a"
+         "* %? \n\n%T\n%a"
+         )
+        ("p" "Project" entry (function get-project)
+         "* TODO %? \n%T\n%a"
          )
         )
       )
@@ -30,6 +32,15 @@
   (interactive)
   (let ((search (read-from-minibuffer "Search for: ")))
     (rg search "*.org" "~/documents/files/references/")
+    )
+  )
+(defun get-project ()
+  (let* (
+         (selection (jk/select-project))
+         (file (format "~/supervisor/%s" selection))
+         )
+    (find-file file)
+    (goto-char (org-find-exact-headline-in-buffer "Inbox"))
     )
   )
 
@@ -67,6 +78,7 @@
   (interactive)
   (message "Not implemented!")
   )
+
 ;; Todos
 (setq org-todo-keywords
       '((sequence "TODO(t)" "NEXT(p)" "WAITING(w)" "STATIC(s)" "|" "DONE(d)" "SEP(e)"))
@@ -89,9 +101,8 @@
     (org-refile nil nil (list headline file nil pos))))
 (defun jk/refile-to-project ()
   (interactive)
-  (jk/parse-projects-file)
-  (let ((selection
-         (completing-read "Project: " jk/projects nil t)))
+  (jk/all-projects)
+  (let ((selection (jk/select-project)))
     (org-mark-ring-push)
     (jk/refile-to jk/projects-file selection)
     (org-mark-ring-goto)))
@@ -100,34 +111,23 @@
   (org-mark-ring-push)
   (jk/refile-to jk/events-file "")
   (org-mark-ring-goto))
-(defun jk/refile-to-quotes ()
-  (interactive)
-  (org-mark-ring-push)
-  (jk/refile-to jk/quotes-file "")
-  (org-mark-ring-goto))
 (defun jk/refile-to-ideas ()
   (interactive)
   (org-mark-ring-push)
   (jk/refile-to jk/ideas-file "")
   (org-mark-ring-goto))
-(defun jk/refile-to-active-tasks ()
-  (interactive)
-  (org-mark-ring-push)
-  (jk/refile-to jk/active-file "Tasks")
-  (org-mark-ring-goto))
-(defun jk/refile-to-active-tasks ()
-  (interactive)
-  (org-mark-ring-push)
-  (jk/refile-to jk/active-file "Events")
-  (org-mark-ring-goto))
 
 ;; Active
-(defun jk/generate-template ()
+(defun jk/active ()
   (interactive)
+  (org-toggle-checkbox)
+  (save-buffer)
+  (jk/store-active)
+  (jk/generate-active)
+  (revert-buffer nil t nil)
   )
 (defun jk/store-active ()
-  (interactive)
-  (let ((date (format "~/documents/completed/%s.org" (format-time-string "%F"))))
+  (let ((date (format "~/documents/files/completed/%s.org" (format-time-string "%F"))))
     (with-temp-buffer
       (insert-file-contents "~/supervisor/active.org")
       (write-region nil nil date)
@@ -135,7 +135,6 @@
     )
   )
 (defun jk/generate-active ()
-  (interactive)
   (let* ((content '())
          (habit-base "~/documents/templates/habits/%s")
          (action-base "~/documents/templates/actions/%s")
@@ -166,15 +165,7 @@
     )
   )
 
-(defun jk/capture-reference ()
-  (interactive)
-  (setcar(reverse org-capture-templates) '("r" "RAFJKAFJ"))
-  (setq org-capture-templates (reverse org-capture-templates))
-  )
-
 ;; Utilities
-;; Execute code in org with [[elisp:(jk/test-function)][name]]
-
 (global-auto-revert-mode t)
 (setq auto-revert-use-notify nil)
 (setq org-startup-folded nil)
@@ -215,6 +206,8 @@
 (setq org-reverse-note-order t)
 
 (setq jk/projects '(""))
+(setq jk/base-dir "~/supervisor")
+(setq jk/base-files '("events.org" "inbox.org" "active.org" "ideas.org" ".stfolder" "." ".."))
 (setq jk/projects-file "~/supervisor/projects.org")
 (setq jk/ideas-file "~/supervisor/ideas.org")
 (setq jk/quotes-file "~/supervisor/quotes.org")
@@ -222,34 +215,21 @@
 (setq jk/active-file "~/supervisor/active.org")
 (setq jk/inbox-file "~/supervisor/inbox.org")
 
-;; Warning: elisp sucks and returning things from fuctions is
-;; impossible. this is not a /nice/ solution but it works.
-;; This requires
-(defun jk/parse-projects-file ()
-  (with-temp-buffer
-    (insert-file-contents jk/projects-file)
-    (jk/parse-projects-buffer)))
-
-(defun jk/parse-projects-buffer ()
-  (interactive)
-  (org-element-map (org-element-parse-buffer) 'headline
-    (lambda (hl)
-      (if (= (org-element-property :level hl) 1)
-          (push (format "%s" (org-element-property :raw-value hl)) jk/projects)
-        ))))
-
-(defun jk/parse-test ()
-  (interactive)
-  (with-temp-buffer
-    (insert-file-contents "~/supervisor/projects.org")
-    (org-element-map (org-element-parse-buffer) 'headline
-      (lambda (hl)
-        (if (= (org-element-property :level hl) 4)
-            (message (format "%s" (org-element-property hl "id")))
-          )
+(defun jk/all-projects ()
+  (let (
+        (all (directory-files jk/base-dir))
+        )
+    (dolist (f all)
+      (if (not (member f jk/base-files))
+          (push f jk/projects)
         )
       )
     )
+  )
+
+(defun jk/select-project ()
+  (jk/all-projects)
+  (completing-read "Project: " jk/projects nil t)
   )
 
 (defun jk/refile-with-id (file headline)
@@ -309,8 +289,6 @@
            (todo (org-entry-get pos "TODO"))
            (sched (org-entry-get pos "SCHEDULED"))
            (dead (org-entry-get pos "DEADLINE"))
-           (tags (org-entry-get pos "TAGS"))
-           (head (nth 4 (org-heading-components)))
            (zid (org-entry-get pos "ID"))
            (id (jk/parse-id zid))
            (pos (org-id-find id))
@@ -323,11 +301,9 @@
             )
           )
         (goto-char (cdr pos))
-        (org-edit-headline head)
         (org-todo todo)
         (org--deadline-or-schedue nil 'schedule sched)
         (org--deadline-or-schedue nil 'deadline dead)
-        (org-set-tags tags)
         )
       )
     )
@@ -346,15 +322,6 @@
 (defun jk/linked-set-todo ()
   (interactive)
   (jk/linked-todo "TODO")
-  )
-
-(defun jk/marker-test ()
-  (interactive)
-  (save-excursion
-    (let ((pos (org-id-goto "9a6319cb-cf6e-48bb-8036-a9e0a3848b88")))
-      (message (format "%s" pos))
-      )
-    )
   )
 
 (defun jk/parse-id (id)
@@ -380,9 +347,3 @@
       )
     )
   )
-
-(defun jk/refile-to-test ()
-  (interactive)
-  (org-mark-ring-push)
-  (jk/refile-with-id "~/supervisor/target.org" "")
-  (org-mark-ring-goto))
