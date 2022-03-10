@@ -1,6 +1,7 @@
 ;; Productivity
 
 ;; Capture templates
+(setq org-id-link-to-org-use-id t)
 (setq org-capture-templates
       '(
         ("i" "Inbox" entry (file "~/supervisor/inbox.org")
@@ -23,24 +24,31 @@
   (setq modalka-mode nil)
   (evil-insert-state)
   )
-
-;; Reference system
 (defun get-file ()
   (find-file (format "~/documents/files/references/%s.org" (format-time-string "%Y-%m-%d-%H:%M:%S")))
-  )
-(defun jk/search-references ()
-  (interactive)
-  (let ((search (read-from-minibuffer "Search for: ")))
-    (rg search "*.org" "~/documents/files/references/")
-    )
   )
 (defun get-project ()
   (let* (
          (selection (jk/select-project))
          (file (format "~/supervisor/%s" selection))
+         (activity (jk/select-activity file))
          )
     (find-file file)
-    (goto-char (org-find-exact-headline-in-buffer "Inbox"))
+    (if (eq activity "")
+        (goto-char (point-max))
+      (goto-char (org-find-exact-headline-in-buffer activity))
+      )
+    )
+  )
+
+;; References
+(use-package rg
+  :defer t
+  )
+(defun jk/search-references ()
+  (interactive)
+  (let ((search (read-from-minibuffer "Search for: ")))
+    (rg search "*.org" "~/documents/files/references/")
     )
   )
 
@@ -101,20 +109,34 @@
     (org-refile nil nil (list headline file nil pos))))
 (defun jk/refile-to-project ()
   (interactive)
+  (org-id-get-create)
   (jk/all-projects)
-  (let ((selection (jk/select-project)))
+  (let* (
+         (selection (jk/select-project))
+         (file (format "~/supervisor/%s" selection))
+         (activity (jk/select-activity file))
+         )
     (org-mark-ring-push)
-    (jk/refile-to jk/projects-file selection)
+    (jk/refile-to file activity)
+    (save-buffer)
     (org-mark-ring-goto)))
 (defun jk/refile-to-events ()
   (interactive)
+  (org-id-get-create)
   (org-mark-ring-push)
   (jk/refile-to jk/events-file "")
   (org-mark-ring-goto))
 (defun jk/refile-to-ideas ()
   (interactive)
+  (org-id-get-create)
   (org-mark-ring-push)
   (jk/refile-to jk/ideas-file "")
+  (org-mark-ring-goto))
+(defun jk/refile-to-reference ()
+  (interactive)
+  (org-id-get-create)
+  (org-mark-ring-push)
+  (jk/refile-to (format "~/documents/files/references/%s.org" (format-time-string "%Y-%m-%d-%H:%M:%S")) "")
   (org-mark-ring-goto))
 
 ;; Active
@@ -168,7 +190,12 @@
 ;; Utilities
 (global-auto-revert-mode t)
 (setq auto-revert-use-notify nil)
-(setq org-startup-folded nil)
+;; (setq org-startup-folded nil)
+
+(add-hook 'org-agenda-mode-hook
+          (lambda ()
+            (add-hook 'auto-save-hook 'org-save-all-org-buffers nil t)
+            (auto-save-mode)))
 
 ;; (add-to-list 'org-agenda-bulk-custom-functions '(?R jk/bulk-refile))
 ;; ;; Cloned from org-agenda.el
@@ -206,6 +233,7 @@
 (setq org-reverse-note-order t)
 
 (setq jk/projects '(""))
+(setq jk/activities '(""))
 (setq jk/base-dir "~/supervisor")
 (setq jk/base-files '("events.org" "inbox.org" "active.org" "ideas.org" ".stfolder" "." ".."))
 (setq jk/projects-file "~/supervisor/projects.org")
@@ -216,6 +244,7 @@
 (setq jk/inbox-file "~/supervisor/inbox.org")
 
 (defun jk/all-projects ()
+  (setq jk/projects '(""))
   (let (
         (all (directory-files jk/base-dir))
         )
@@ -226,102 +255,89 @@
       )
     )
   )
-
 (defun jk/select-project ()
   (jk/all-projects)
   (completing-read "Project: " jk/projects nil t)
   )
-
-(defun jk/refile-with-id (file headline)
+(defun jk/select-activity (path)
   (save-excursion
-    (let ((pos (save-excursion
-                 (find-file file)
-                 (org-find-exact-headline-in-buffer headline))))
-      (org-with-point-at pos
-        (let (
-              (id (org-entry-get nil "ID"))
-              (org-refile-keep t)
-              )
-          (org-refile nil nil (list headline file nil pos) (format "%s" id))
-          (org-entry-put pos "ID" "PLACEHOLDER")
-          (org-id-add-location id file)
-          (let (
-                (pom (org-find-entry-with-id id))
-                (new (format "%s-Z" id))
-                )
-            (save-excursion
-              (if (get-buffer "target.org")
-                  (switch-to-buffer "target.org")
-                (find-file file)
-                )
-              (org-entry-put pom "ID" new)
-              )
-            (org-entry-put pos "ID" id)
-            (org-id-add-location new file)
-            (org-id-add-location id "~/supervisor/test.org")
-            )
-          )))))
+    (find-file path)
+    (jk/parse-project)
+    (completing-read "Activity: " jk/activities nil t)
+    )
+  )
+(defun jk/parse-project ()
+  (interactive)
+  (setq jk/activities '(""))
+  (org-element-map (org-element-parse-buffer) 'headline
+    (lambda (hl)
+      (if (= (org-element-property :level hl) 1)
+          (push (format "%s" (org-element-property :raw-value hl)) jk/activities)
+        )))
+  )
 
-(defun jk/linked-todo (keyword)
-  (org-todo keyword)
-  (save-excursion
+(defun jk/activate ()
+  (interactive)
+  (save-window-excursion
     (let* (
-           (pos (point-marker))
-           (zid (org-entry-get pos "ID"))
-           (id (jk/parse-id zid))
-           (pos (org-id-find id))
+           (start (point-marker))
+           (headline (nth 4 (org-heading-components)))
+           (pos (save-excursion
+                  (find-file "~/supervisor/active.org")
+                  (org-find-exact-headline-in-buffer "Tasks")))
+           (id (org-entry-get nil "ID"))
+           (org-refile-keep t)
            )
-      (save-excursion
-        (jk/find-buffer-or-file pos)
-        (org-todo keyword)
+      (org-refile nil nil (list "Tasks" "~/supervisor/active.org" nil pos))
+      (org-entry-put start "ID" "PLACEHOLDER")
+      (let (
+            (pom (save-excursion
+                   (find-file "~/supervisor/active.org")
+                   (org-find-exact-headline-in-buffer headline)
+                   ))
+            (new (format "%s-Z" id))
+            )
+        (save-excursion
+          (if (get-buffer "active.org")
+              (switch-to-buffer "active.org")
+            (find-file "~/supervisor/active.org")
+            )
+          (org-entry-put pom "ID" new)
+          (goto-char pom)
+          (org-todo "TODO")
+          (save-buffer)
+          )
+        (org-entry-put start "ID" id)
+        (org-id-add-location new "~/supervisor/active.org")
+        (org-id-add-location id (buffer-file-name))
+        (org-id-locations-save)
         (save-buffer)
         )
       )
     )
-  (save-buffer)
   )
 
-(defun jk/linked-update ()
+(defun jk/linked-done ()
   (interactive)
-  (save-excursion
+  (org-todo "DONE")
+  (save-window-excursion
     (let* (
            (pos (point-marker))
-           (todo (org-entry-get pos "TODO"))
-           (sched (org-entry-get pos "SCHEDULED"))
-           (dead (org-entry-get pos "DEADLINE"))
            (zid (org-entry-get pos "ID"))
            (id (jk/parse-id zid))
            (pos (org-id-find id))
            )
-      (save-excursion
-        (let ((file (car (reverse (s-split "/" (car pos))))))
-          (if (get-buffer file)
-              (switch-to-buffer file)
-            (find-file (car name))
+      (if (not (eq pos nil))
+          (save-window-excursion
+            (jk/find-buffer-or-file pos)
+            (goto-char (cdr pos))
+            (org-todo "DONE")
+            (save-buffer)
             )
-          )
-        (goto-char (cdr pos))
-        (org-todo todo)
-        (org--deadline-or-schedue nil 'schedule sched)
-        (org--deadline-or-schedue nil 'deadline dead)
         )
       )
     )
-  )
-
-(defun jk/linked-set-done ()
-  (interactive)
-  (jk/linked-todo "DONE")
-  )
-
-(defun jk/linked-set-next ()
-  (interactive)
-  (jk/linked-todo "NEXT")
-  )
-
-(defun jk/linked-set-todo ()
-  (interactive)
-  (jk/linked-todo "TODO")
+  (save-buffer)
   )
 
 (defun jk/parse-id (id)

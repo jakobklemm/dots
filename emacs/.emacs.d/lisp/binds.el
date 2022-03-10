@@ -62,6 +62,12 @@
   (global-evil-leader-mode)
   )
 
+(defun jk/save-all ()
+  (interactive)
+  (save-buffer)
+  (org-save-all-org-buffers)
+  )
+
 (evil-leader/set-leader "SPC")
 
 (evil-leader/set-key
@@ -70,7 +76,7 @@
   )
 
 (evil-leader/set-key
-  "bs" 'save-buffer
+  "bs" 'jk/save-all
   "bk" 'kill-current-buffer
   "bj" 'kill-buffer-and-window
   "bb" 'counsel-switch-buffer
