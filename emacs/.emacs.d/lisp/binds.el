@@ -147,3 +147,20 @@
   "cp" 'evilnc-copy-and-comment-lines
   "cr" 'comment-or-uncomment-region
   )
+
+;; Prod
+(evil-leader/set-key
+  "a" 'jk/activate
+  "d" 'jk/linked-done
+  "zz" 'jk/active-file
+  "zp" 'jk/project-file
+  "zf" 'jk/ideas-file
+  "za" 'jk/store-active
+  "zt" 'org-todo
+  "zc" 'org-capture
+  "zi" 'jk/insert-checklist
+  "zs" 'jk/search-references
+  "zrp" 'jk/refile-to-project
+  "zri" 'jk/refile-to-ideas
+  "zrr" 'jk/refile-to-reference
+  )

@@ -52,6 +52,7 @@
 
 ;; Links
 (require 'org-mouse)
+(add-to-list 'org-modules 'org-mouse t)
 (defun jk/open-office-email ()
   (interactive)
   (shell-command "brave https://outlook.office.com/mail/")
@@ -80,22 +81,42 @@
   (org-toggle-checkbox)
   (org-agenda "n")
   )
-(defun jk/push-to-server ()
+
+;; Files
+(defun jk/active-file ()
   (interactive)
-  (message "Not implemented!")
+  (find-file "~/supervisor/active.org")
+  )
+(defun jk/project-file ()
+  (interactive)
+  (let* (
+         (selection (jk/select-project))
+         (file (format "~/supervisor/%s" selection))
+         )
+    (find-file file)
+    )
+  )
+(defun jk/ideas-file ()
+  (interactive)
+  (find-file "~/supervisor/ideas.org")
   )
 
 ;; Todos
 (setq org-todo-keywords
-      '((sequence "TODO(t)" "NEXT(p)" "WAITING(w)" "STATIC(s)" "|" "DONE(d)" "SEP(e)"))
+      '((sequence "TODO(t)" "NEXT(p)" "WAITING(w)" "|" "DONE(d)" "SEP(e)"))
       org-todo-keyword-faces '(("TODO" . (:foreground "#af1212" :weight bold))
                                ("NEXT" . (:foreground "#A0FF9F" :weight bold))
                                ("WAITING" . (:foreground "#990099" :weight bold))
-                               ("STATIC" . (:foreground "#B26722" :weight bold))
                                ("DONE" . (:foreground "#ffffff" :weight bold))
                                ("SEP" . (:foreground "#474A44" :weight bold))
                                )
       )
+
+;; Checklists
+(defun jk/insert-checklist ()
+  (interactive)
+  (insert-file-contents (read-file-name "Select template:" "~/documents/templates/actions"))
+  )
 
 ;; Refile
 ;; https://emacs.stackexchange.com/questions/8045/org-refile-to-a-known-fixed-location
@@ -179,62 +200,6 @@
     )
   )
 
-;; Utilities
-(global-auto-revert-mode t)
-(setq auto-revert-use-notify nil)
-;; (setq org-startup-folded nil)
-
-(add-hook 'org-agenda-mode-hook
-          (lambda ()
-            (add-hook 'auto-save-hook 'org-save-all-org-buffers nil t)
-            (auto-save-mode)))
-
-(setq org-link-elisp-skip-confirm-regexp "jk")
-(setq org-reverse-note-order t)
-
-(setq jk/projects '(""))
-(setq jk/activities '(""))
-(setq jk/base-dir "~/supervisor")
-(setq jk/base-files '("inbox.org" "active.org" "ideas.org" ".stfolder" "." ".."))
-(setq jk/projects-file "~/supervisor/projects.org")
-(setq jk/ideas-file "~/supervisor/ideas.org")
-(setq jk/quotes-file "~/supervisor/quotes.org")
-(setq jk/active-file "~/supervisor/active.org")
-(setq jk/inbox-file "~/supervisor/inbox.org")
-
-(defun jk/all-projects ()
-  (setq jk/projects '(""))
-  (let (
-        (all (directory-files jk/base-dir))
-        )
-    (dolist (f all)
-      (if (not (member f jk/base-files))
-          (push f jk/projects)
-        )
-      )
-    )
-  )
-(defun jk/select-project ()
-  (jk/all-projects)
-  (completing-read "Project: " jk/projects nil t)
-  )
-(defun jk/select-activity (path)
-  (save-excursion
-    (find-file path)
-    (jk/parse-project)
-    (completing-read "Activity: " jk/activities nil t)
-    )
-  )
-(defun jk/parse-project ()
-  (interactive)
-  (setq jk/activities '(""))
-  (org-element-map (org-element-parse-buffer) 'headline
-    (lambda (hl)
-      (if (= (org-element-property :level hl) 1)
-          (push (format "%s" (org-element-property :raw-value hl)) jk/activities)
-        )))
-  )
-
 (defun jk/activate ()
   (interactive)
   (save-window-excursion
@@ -299,6 +264,62 @@
       )
     )
   (save-buffer)
+  )
+
+;; Utilities
+(global-auto-revert-mode t)
+(setq auto-revert-use-notify nil)
+;; (setq org-startup-folded nil)
+
+(add-hook 'org-agenda-mode-hook
+          (lambda ()
+            (add-hook 'auto-save-hook 'org-save-all-org-buffers nil t)
+            (auto-save-mode)))
+
+(setq org-link-elisp-skip-confirm-regexp "jk")
+(setq org-reverse-note-order t)
+
+(setq jk/projects '(""))
+(setq jk/activities '(""))
+(setq jk/base-dir "~/supervisor")
+(setq jk/base-files '("inbox.org" "active.org" "ideas.org" ".stfolder" "." ".."))
+(setq jk/projects-file "~/supervisor/projects.org")
+(setq jk/ideas-file "~/supervisor/ideas.org")
+(setq jk/quotes-file "~/supervisor/quotes.org")
+(setq jk/active-file "~/supervisor/active.org")
+(setq jk/inbox-file "~/supervisor/inbox.org")
+
+(defun jk/all-projects ()
+  (setq jk/projects '(""))
+  (let (
+        (all (directory-files jk/base-dir))
+        )
+    (dolist (f all)
+      (if (not (member f jk/base-files))
+          (push f jk/projects)
+        )
+      )
+    )
+  )
+(defun jk/select-project ()
+  (jk/all-projects)
+  (completing-read "Project: " jk/projects nil t)
+  )
+(defun jk/select-activity (path)
+  (save-excursion
+    (find-file path)
+    (jk/parse-project)
+    (completing-read "Activity: " jk/activities nil t)
+    )
+  )
+(defun jk/parse-project ()
+  (interactive)
+  (setq jk/activities '(""))
+  (org-element-map (org-element-parse-buffer) 'headline
+    (lambda (hl)
+      (if (= (org-element-property :level hl) 1)
+          (push (format "%s" (org-element-property :raw-value hl)) jk/activities)
+        )))
   )
 
 (defun jk/parse-id (id)
