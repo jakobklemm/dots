@@ -120,6 +120,66 @@
   (insert-file-contents (read-file-name "Select template:" "~/documents/templates/actions"))
   )
 
+;; Agenda
+(use-package org-super-agenda
+  :config
+  (org-super-agenda-mode)
+  )
+
+(setq org-agenda-sorting-strategy '((agenda habit-down time-up priority-down category-keep)
+                                    (todo priority-down category-keep)
+                                    (tags priority-down category-keep)
+                                    (search category-keep))
+      )
+
+(setq org-agenda-skip-scheduled-if-done t
+      org-agenda-skip-deadline-if-done t
+      org-agenda-include-deadlines t
+      org-agenda-include-diary t
+      org-agenda-compact-blocks t
+      org-agenda-start-with-log-mode t)
+
+(setq org-agenda-custom-commands
+      '(("z" "Personal super agenda"
+         ((agenda "" ((org-agenda-span 'day)
+                      (org-super-agenda-groups
+                       '((:name "Today"
+                                :time-grid t
+                                :date today
+                                :deadline today
+                                :scheduled today
+                                :order 1)))))
+          (alltodo "" ((org-agenda-overriding-header "")
+                       (org-super-agenda-groups
+                        '(
+                          (:name "Active"
+                                 :order 1
+                                 :category "active"
+                                 :regexp "State \"DONE\""
+                                 )
+                          (:name "Next to do"
+                                 :todo "NEXT"
+                                 :order 10)
+                          (:auto-planning t
+                                          :order 80
+                                          )
+                          (:name "Waiting"
+                                 :todo "WAITING"
+                                 :order 20
+                                 )
+                          (:name "Schule"
+                                 :category "schule"
+                                 :order 30
+                                 )
+                          (:name "Database"
+                                 :category "database"
+                                 :order 40
+                                 )
+                          (:auto-category t
+                                          :order 90
+                                          )
+                          (:discard (:tag ("Chore" "Routine" "Daily")))))))))))
+
 ;; Refile
 ;; https://emacs.stackexchange.com/questions/8045/org-refile-to-a-known-fixed-location
 (defun jk/refile-to (file headline)

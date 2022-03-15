@@ -117,6 +117,7 @@
   "od" 'org-deadline
   "oi" 'org-id-get-create
   "oc" 'org-capture
+  "oz" 'org-agenda
   )
 
 (evil-leader/set-key
