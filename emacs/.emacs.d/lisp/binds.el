@@ -113,6 +113,10 @@
   "of" 'org-agenda-file-to-front
   "oe" 'org-export-dispatch
   "oa" 'org-archive-subtree
+  "os" 'org-schedule
+  "od" 'org-deadline
+  "oi" 'org-id-get-create
+  "oc" 'org-capture
   )
 
 (evil-leader/set-key

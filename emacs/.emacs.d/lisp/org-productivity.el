@@ -4,7 +4,7 @@
 (setq org-id-link-to-org-use-id t)
 (setq org-capture-templates
       '(
-        ("i" "Inbox" entry (file "~/supervisor/inbox.org")
+        ("c" "Inbox" entry (file "~/supervisor/inbox.org")
          "* TODO %?\n%T\n%a")
         ("i" "Idea" entry (file "~/supervisor/ideas.org")
          "* %?\n%T\n%a")
@@ -37,7 +37,9 @@
       (goto-char (org-find-exact-headline-in-buffer activity))
       )
     )
+  (org-id-get-create)
   )
+(add-hook 'org-capture-prepare-finalize-hook 'org-id-get-create)
 
 ;; References
 (use-package rg
@@ -137,6 +139,10 @@
          )
     (org-mark-ring-push)
     (jk/refile-to file activity)
+    (save-excursion
+      (switch-to-buffer selection)
+      (save-buffer)
+      )
     (save-buffer)
     (org-mark-ring-goto)))
 (defun jk/refile-to-ideas ()
@@ -162,12 +168,13 @@
   (revert-buffer nil t nil)
   )
 (defun jk/store-active ()
-  (let ((date (format "~/documents/files/completed/%s.org" (format-time-string "%F"))))
+  (let ((path "~/documents/files/archive/active.org"))
     (with-temp-buffer
       (insert-file-contents "~/supervisor/active.org")
-      (write-region nil nil date)
+      (write-region nil nil path)
       )
     )
+  ;; give to CLI
   )
 (defun jk/generate-active ()
   (let* ((content '())

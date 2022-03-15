@@ -24,6 +24,10 @@ else
 	end
 end
 
+function search
+    command rg -i -C 1 $argv "/home/jeykey/documents/files/archive/org/"
+end 
+
 alias ls='exa -al --color=always --group-directories-first'
 
 alias ..='cd ..'
