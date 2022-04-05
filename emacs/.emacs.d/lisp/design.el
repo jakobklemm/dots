@@ -79,6 +79,14 @@
   ((after-init . beacon-mode))
   )
 
+(use-package sublimity
+  :defer t
+  :config
+  (require 'sublimity)
+  (require 'sublimity-map)
+  (sublimity-mode 1)
+  )
+
 (use-package rainbow-delimiters
   :defer t
   :config

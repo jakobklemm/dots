@@ -18,6 +18,8 @@
 
 (global-set-key (kbd "C-c c") 'global-evil-dvorak-mode)
 
+(global-set-key (kbd "C-c b") 'org-toggle-checkbox)
+
 (use-package evil
   :custom ((evil-move-cursor-back nil)
            (evil-move-beyond-eol t)
