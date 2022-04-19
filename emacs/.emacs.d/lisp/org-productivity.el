@@ -237,6 +237,7 @@
   ;; give to CLI
   (message (shell-command-to-string "windermere add -f ~/documents/files/archive/active.org"))
   (delete-file "~/documents/files/archive/active.org")
+  (message (shell-command-to-string "~/documents/files/archive/push.sh"))
   )
 (defun jk/generate-active ()
   (let* ((content '())

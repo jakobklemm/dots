@@ -115,6 +115,10 @@
   (ivy-posframe-mode 1)
   )
 
+(use-package consult
+  :defer t
+  )
+
 (use-package ace-window
   :defer t
   :init
