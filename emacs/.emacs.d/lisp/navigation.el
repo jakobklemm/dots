@@ -100,9 +100,9 @@
      (ivy-wrap t)
      )
     :custom-face
-    (ivy-posframe ((t (:background "#212026" :foreground "#83C6F0"))))
-    (ivy-posframe-border ((t (:background "#7F7F7F"))))
-    (ivy-posframe-cursor ((t (:background "#7F7F7F"))))
+    (ivy-posframe ((t (:background "#292735" :foreground "#f0f0f0"))))
+    (ivy-posframe-border ((t (:background "#212026"))))
+    (ivy-posframe-cursor ((t (:background "#e456e9"))))
     :hook
     (ivy-mode . ivy-posframe-mode)
     )

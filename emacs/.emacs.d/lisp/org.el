@@ -58,18 +58,6 @@
 	 (org-appear-autosubmarkers t))
   )
 
-(use-package org-superstar
-  :defer t
-  :hook (org-mode . (lambda () (org-superstar-mode 1)))
-  :custom
-  ((org-superstar-headline-bullets-list '("◉" "○" "✸" "✿" "✤" "✜" "◆" "▶"))
-   (org-superstar-prettify-item-bullets t)
-   (org-superstar-configure-like-org-bullets t)
-   (org-hide-leading-stars nil)
-   (org-superstar-leading-bullet ?\s)
-   (org-superstar-special-todo-items t)
-   ))
-
 (setq-default org-startup-with-latex-preview t)
 
 (use-package org-fragtog
@@ -80,12 +68,14 @@
 
 (setq org-num-max-level 1)
 
-;; Additional files
+(use-package org-modern
+  :config
+  (global-org-modern-mode)
+  )
 
-;; (load-file (concat user-emacs-directory "lisp/org-checklist-plus.el"))
+;; Additional files
 (load-file (concat user-emacs-directory "lisp/org-productivity.el"))
 (load-file (concat user-emacs-directory "lisp/org-content.el"))
 (load-file (concat user-emacs-directory "lisp/org-export.el"))
-(load-file (concat user-emacs-directory "lisp/org-sync.el"))
 (load-file (concat user-emacs-directory "lisp/org-babel.el"))
 (load-file (concat user-emacs-directory "lisp/org-site.el"))

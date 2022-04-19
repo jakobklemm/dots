@@ -1,13 +1,7 @@
-(use-package kaolin-themes
-  :config
-  (load-theme 'kaolin-galaxy t)
-  )
-
 (custom-set-faces '(org-ellipsis ((t (:foreground "#6483b5" :underline nil)))))
 
 ;; https://github.com/hrs/dotfiles
 (setq hrs/default-fixed-font "Fira Code")
-;;(setq hrs/default-fixed-font "Roboto Mono")
 (setq hrs/default-fixed-font-size 110)
 (setq hrs/current-fixed-font-size hrs/default-fixed-font-size)
 (set-face-attribute 'default nil
@@ -21,9 +15,9 @@
 (defun hrs/set-font-size ()
   "Change default, fixed-pitch, and variable-pitch font sizes to match respective variables."
   (set-face-attribute 'default nil
-		                  :height hrs/current-fixed-font-size)
+		              :height hrs/current-fixed-font-size)
   (set-face-attribute 'fixed-pitch nil
-		                  :height hrs/current-fixed-font-size)
+		              :height hrs/current-fixed-font-size)
   )
 
 (defun hrs/reset-font-size ()
@@ -79,14 +73,6 @@
   ((after-init . beacon-mode))
   )
 
-(use-package sublimity
-  :defer t
-  :config
-  (require 'sublimity)
-  (require 'sublimity-map)
-  (sublimity-mode 1)
-  )
-
 (use-package rainbow-delimiters
   :defer t
   :config
@@ -94,57 +80,25 @@
   (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
   )
 
-(setq-default prettify-symbols-alist '(("#+BEGIN_SRC" . "λ")
-                                       ("#+END_SRC" . "λ")
-                                       ("#+begin_src" . "λ")
-                                       ("#+end_src" . "λ")
-                                       ("#+TITLE:" . "𝙏")
-                                       ("#+title:" . "𝙏")
-                                       ("#+SUBTITLE:" . "𝙩")
-                                       ("#+subtitle:" . "𝙩")
-                                       ("#+DATE:" . "𝘿")
-                                       ("#+date:" . "𝘿")
-                                       ("#+PROPERTY:" . "☸")
-                                       ("#+property:" . "☸")
-                                       ("#+OPTIONS:" . "⌥")
-                                       ("#+options:" . "⌥")
-                                       ("#+LATEX_HEADER:" . "⇾")
-                                       ("#+latex_header:" . "⇾")
-                                       ("#+LATEX_CLASS:" . "⇥")
-                                       ("#+latex_class:" . "⇥")
-                                       ("#+ATTR_LATEX:" . "🄛")
-                                       ("#+attr_latex:" . "🄛")
-                                       ("#+LATEX:" . "ℓ")
-                                       ("#+latex:" . "ℓ")
-                                       ("#+ATTR_HTML:" . "🄗")
-                                       ("#+attr_html:" . "🄗")
-                                       ("#+BEGIN_QUOTE:" . "❮")
-                                       ("#+begin_quote:" . "❮")
-                                       ("#+END_QUOTE:" . "❯")
-                                       ("#+end_quote:" . "❯")
-                                       ("#+CAPTION:" . "☰")
-                                       ("#+caption:" . "☰")
-                                       (":PROPERTIES:" . "⚙")
-                                       (":properties:" . "⚙")
-                                       ("#+AUTHOR:" . "A")
-                                       ("#+author:" . "A")
-                                       ("#+IMAGE:" . "I")
-                                       ("#+image:" . "I")
-                                       ("#+LANGUAGE:" . "L")
-                                       ("#+language:" . "L")
-                                       ))
-(setq prettify-symbols-unprettify-at-point 'right-edge)
-(add-hook 'org-mode-hook 'prettify-symbols-mode)
 (global-prettify-symbols-mode 1)
 
-(use-package olivetti
-  :defer t
-  :custom
-  ((olivetti-style 'fancy)
-   (olivetti-body-width 80)
-   )
-  :hook
-  ((org-mode . olivetti-mode)))
+(defcustom perfect-margin-ignore-regexps
+  '("^minibuf" "^[*]" "Minibuf" "[*]" "magit" "mu4e" ".el" ".rs" ".toml" ".go")
+  "List of strings to determine if window is ignored.
+Each string is used as regular expression to match the window buffer name."
+  :group 'perfect-margin)
+
+(defcustom perfect-margin-ignore-filters
+  '(window-minibuffer-p)
+  "List of functions to determine if window is ignored.
+Each function is called with window as its sole arguemnt, returning a non-nil value indicate to ignore the window."
+  :group 'perfect-margin)
+
+(use-package perfect-margin
+  :ensure t
+  :config
+  (perfect-margin-mode 1)
+  )
 
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 
@@ -174,36 +128,87 @@ Version 2017-03-12"
           (match-end 0)
           'face (list :background (match-string-no-properties 0)))))))
   (font-lock-flush))
-
 (add-hook 'prog-mode-hook 'xah-syntax-color-hex)
 
 (set-fringe-mode '(5 . 0))
 (set-face-attribute 'fringe nil :background "#212026" :foreground "#e6e6e8")
 
 ;; Modeline setup (most color config comes from customize-face)
+
+(use-package kaolin-themes
+  )
+
+(use-package doom-themes
+  )
+
 (require 'nano-modeline)
+
+(defun jk/switch-mode ()
+  (interactive)
+  (if (eq dark-mode t)
+      (jk/setup-light)
+    (jk/setup-dark)
+    )
+  )
+
+(defun jk/setup-dark ()
+  (setq dark-mode t)
+  (load-theme 'kaolin-galaxy t)
+  (setq bg0 "#212026")
+  (setq bg1 "#292735")
+  (setq accent0 "#4EB8CA")
+  (setq accent1 "#C74A4D")
+  (setq accent2 "#4FBB8A")
+  (setq fg0 "#EEE6D3")
+  (setq fg1 "#9d81ba")
+  (set-face-attribute 'nano-modeline-active nil :background bg1 :foreground fg0 :box nil)
+  (set-face-attribute 'nano-modeline-active-name nil :background bg0 :foreground accent2 :box nil)
+  (set-face-attribute 'nano-modeline-active-primary nil :foreground fg0 :background bg1 :box nil)
+  (set-face-attribute 'nano-modeline-active-secondary nil :foreground accent0 :background bg1 :box nil)
+  (set-face-attribute 'nano-modeline-active-status-** nil :foreground accent1 :background bg1 :box nil)
+  (set-face-attribute 'nano-modeline-active-status-RO nil :foreground fg0 :background bg1 :box nil)
+  (set-face-attribute 'nano-modeline-active-status-RW nil :foreground fg0 :background bg1 :box nil)
+
+  (set-face-attribute 'nano-modeline-inactive nil :background bg0 :foreground fg1 :box nil)
+  (set-face-attribute 'nano-modeline-inactive-name nil :background bg0 :foreground fg0 :box nil)
+  (set-face-attribute 'nano-modeline-inactive-primary nil :foreground fg1 :background bg0 :box nil)
+  (set-face-attribute 'nano-modeline-inactive-secondary nil :foreground fg0 :background bg0 :box nil)
+  (set-face-attribute 'nano-modeline-inactive-status-** nil :foreground accent1 :background bg0 :box nil)
+  (set-face-attribute 'nano-modeline-inactive-status-RO nil :foreground fg1 :background bg0 :box nil)
+  (set-face-attribute 'nano-modeline-inactive-status-RW nil :foreground fg1 :background bg0 :box nil)
+
+  (set-face-attribute 'line-number nil :foreground fg0 :background bg1)
+  )
+
+(defun jk/setup-light ()
+  (setq dark-mode nil)
+  (load-theme 'doom-one-light t)
+  (setq bg0 "#f0f0f0")
+  (setq bg1 "#f0f0f0")
+  (setq accent0 "#4db5bd")
+  (setq accent1 "#e45649")
+  (setq accent2 "#50a14f")
+  (setq fg0 "#383a42")
+  (setq fg1 "#c6c7c7")
+  (set-face-attribute 'nano-modeline-active nil :background bg1 :foreground fg0 :box nil)
+  (set-face-attribute 'nano-modeline-active-name nil :background bg0 :foreground accent2 :box nil)
+  (set-face-attribute 'nano-modeline-active-primary nil :foreground fg0 :background bg1 :box nil)
+  (set-face-attribute 'nano-modeline-active-secondary nil :foreground accent0 :background bg1 :box nil)
+  (set-face-attribute 'nano-modeline-active-status-** nil :foreground accent1 :background bg1 :box nil)
+  (set-face-attribute 'nano-modeline-active-status-RO nil :foreground fg0 :background bg1 :box nil)
+  (set-face-attribute 'nano-modeline-active-status-RW nil :foreground fg0 :background bg1 :box nil)
+
+  (set-face-attribute 'nano-modeline-inactive nil :background bg0 :foreground fg1 :box nil)
+  (set-face-attribute 'nano-modeline-inactive-name nil :background bg0 :foreground fg0 :box nil)
+  (set-face-attribute 'nano-modeline-inactive-primary nil :foreground fg1 :background bg0 :box nil)
+  (set-face-attribute 'nano-modeline-inactive-secondary nil :foreground fg0 :background bg0 :box nil)
+  (set-face-attribute 'nano-modeline-inactive-status-** nil :foreground accent1 :background bg0 :box nil)
+  (set-face-attribute 'nano-modeline-inactive-status-RO nil :foreground fg1 :background bg0 :box nil)
+  (set-face-attribute 'nano-modeline-inactive-status-RW nil :foreground fg1 :background bg0 :box nil)
+
+  (set-face-attribute 'line-number nil :foreground fg1 :background bg0)
+  (set-face-attribute 'org-ellipsis nil :foreground fg1 :background bg0)
+  )
+
+(jk/setup-dark)
 (nano-modeline-mode t)
-
-(setq bg0 "#212026")
-(setq bg1 "#292735")
-(setq accent0 "#4EB8CA")
-(setq accent1 "#C74A4D")
-(setq accent2 "#4FBB8A")
-(setq fg0 "#EEE6D3")
-(setq fg1 "#9d81ba")
-
-(set-face-attribute 'nano-modeline-active nil :background bg1 :foreground fg0 :box nil)
-(set-face-attribute 'nano-modeline-active-name nil :background bg0 :foreground accent2 :box nil)
-(set-face-attribute 'nano-modeline-active-primary nil :foreground fg0 :background bg1 :box nil)
-(set-face-attribute 'nano-modeline-active-secondary nil :foreground accent0 :background bg1 :box nil)
-(set-face-attribute 'nano-modeline-active-status-** nil :foreground accent1 :background bg1 :box nil)
-(set-face-attribute 'nano-modeline-active-status-RO nil :foreground fg0 :background bg1 :box nil)
-(set-face-attribute 'nano-modeline-active-status-RW nil :foreground fg0 :background bg1 :box nil)
-
-(set-face-attribute 'nano-modeline-inactive nil :background bg0 :foreground fg1 :box nil)
-(set-face-attribute 'nano-modeline-inactive-name nil :background bg0 :foreground fg0 :box nil)
-(set-face-attribute 'nano-modeline-inactive-primary nil :foreground fg1 :background bg0 :box nil)
-(set-face-attribute 'nano-modeline-inactive-secondary nil :foreground fg0 :background bg0 :box nil)
-(set-face-attribute 'nano-modeline-inactive-status-** nil :foreground accent1 :background bg0 :box nil)
-(set-face-attribute 'nano-modeline-inactive-status-RO nil :foreground fg1 :background bg0 :box nil)
-(set-face-attribute 'nano-modeline-inactive-status-RW nil :foreground fg1 :background bg0 :box nil)
