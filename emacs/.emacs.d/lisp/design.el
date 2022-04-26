@@ -153,6 +153,7 @@ Version 2017-03-12"
 
 (defun jk/setup-dark ()
   (setq dark-mode t)
+  (org-modern-mode)
   (load-theme 'kaolin-galaxy t)
   (setq bg0 "#212026")
   (setq bg1 "#292735")
@@ -178,10 +179,13 @@ Version 2017-03-12"
   (set-face-attribute 'nano-modeline-inactive-status-RW nil :foreground fg1 :background bg0 :box nil)
 
   (set-face-attribute 'line-number nil :foreground fg0 :background bg1)
+  (set-face-attribute 'line-number-current-line nil :background bg0 :foreground fg1)
+  (org-modern-mode)
   )
 
 (defun jk/setup-light ()
   (setq dark-mode nil)
+  (org-modern-mode)
   (load-theme 'doom-one-light t)
   (setq bg0 "#f0f0f0")
   (setq bg1 "#f0f0f0")
@@ -208,7 +212,11 @@ Version 2017-03-12"
 
   (set-face-attribute 'line-number nil :foreground fg1 :background bg0)
   (set-face-attribute 'org-ellipsis nil :foreground fg1 :background bg0)
+  (set-face-attribute 'line-number-current-line nil :background bg0 :foreground fg1)
+  (org-modern-mode)
   )
 
-(jk/setup-dark)
-(nano-modeline-mode t)
+(with-eval-after-load "org"
+  (jk/setup-dark)
+  (nano-modeline-mode t)
+  )
