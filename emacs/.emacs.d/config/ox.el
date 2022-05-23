@@ -1,13 +1,3 @@
-(setq TeX-parse-self t)
-(setq TeX-auto-save t)
-
-(setq TeX-PDF-mode t)
-
-(add-hook 'LaTeX-mode-hook
-          (lambda ()
-            (LaTeX-math-mode)
-            (setq TeX-master t)))
-
 (eval-after-load "org" '(require 'ox-odt nil t))
 
 (use-package htmlize

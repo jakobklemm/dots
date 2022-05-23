@@ -1,5 +1,3 @@
-;; Legacy website (reference)
-
 (require 'ox-publish)
 (use-package htmlize)
 

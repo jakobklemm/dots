@@ -1,25 +1,3 @@
-(define-key yas-minor-mode-map (kbd "<tab>") nil)
-(define-key yas-minor-mode-map (kbd "TAB") nil)
-(define-key yas-minor-mode-map (kbd "C-f") 'yas-expand)
-
-(global-set-key (kbd "C-x 2") 'hrs/split-window-below-and-switch)
-(global-set-key (kbd "C-x 3") 'hrs/split-window-right-and-switch)
-(global-set-key (kbd "C-x C-k") 'kill-current-buffer)
-(global-set-key (kbd "C-x j") 'kill-buffer-and-window)
-(global-set-key (kbd "C-x k") 'kill-current-buffer)
-
-(global-set-key (kbd "C-x l") 'display-line-numbers-mode)
-
-(global-set-key (kbd "C-§") 'popper-toggle-latest)
-(global-set-key (kbd "M-§") 'popper-toggle-type)
-
-(global-set-key (kbd "C-;") 'popper-toggle-latest)
-(global-set-key (kbd "M-;") 'popper-toggle-type)
-
-(global-set-key (kbd "C-c c") 'global-evil-dvorak-mode)
-
-(global-set-key (kbd "C-c b") 'org-toggle-checkbox)
-
 (use-package evil
   :custom ((evil-move-cursor-back nil)
            (evil-move-beyond-eol t)
@@ -64,12 +42,6 @@
   (global-evil-leader-mode)
   )
 
-(defun jk/save-all ()
-  (interactive)
-  (save-buffer)
-  (org-save-all-org-buffers)
-  )
-
 (evil-leader/set-leader "SPC")
 
 (evil-leader/set-key
@@ -78,7 +50,7 @@
   )
 
 (evil-leader/set-key
-  "bs" 'jk/save-all
+  "bs" 'save-buffer
   "bk" 'kill-current-buffer
   "bj" 'kill-buffer-and-window
   "bb" 'counsel-switch-buffer
@@ -142,4 +114,3 @@
   "cp" 'evilnc-copy-and-comment-lines
   "cr" 'comment-or-uncomment-region
   )
-

@@ -1,27 +1,3 @@
-;; Navigation
-
-(use-package ibuffer
-  :defer t
-  :bind (("C-x C-b" . ibuffer))
-  :init
-  (add-hook 'ibuffer-mode-hook #'hl-line-mode))
-
-(use-package popper
-  :defer t
-  :bind (("C-;"   . popper-toggle-latest)
-         ("M-;"   . popper-cycle)
-         ("C-M-;" . popper-toggle-type))
-  :custom
-  ((popper-reference-buffers
-    '("\\*Messages\\*"
-      "Output\\*$"
-      "\\*Async Shell Command\\*"
-      help-mode
-      compilation-mode)))
-  :init
-  (popper-mode +1)
-  (popper-echo-mode +1))
-
 (use-package counsel
   :defer t
   :diminish ivy-mode counsel-mode
@@ -118,27 +94,3 @@
 (use-package consult
   :defer t
   )
-
-(use-package ace-window
-  :defer t
-  :init
-  (setq aw-scope 'frame ; limit to single frame
-	    aw-keys '(?a ?o ?e ?u ?i ?d ?h ?t ?n)
-	    )
-  )
-
-(defun window-half-height ()
-  (max 1 (/ (1- (window-height (selected-window))) 2)))
-
-(defun scroll-up-half ()
-  (interactive)
-  (scroll-up (window-half-height)))
-
-(defun scroll-down-half ()
-  (interactive)
-  (scroll-down (window-half-height)))
-
-(global-set-key [next] 'scroll-up-half)
-(global-set-key [prior] 'scroll-down-half)
-(global-set-key (kbd "M-n") 'scroll-up-half)
-(global-set-key (kbd "M-p") 'scroll-down-half)

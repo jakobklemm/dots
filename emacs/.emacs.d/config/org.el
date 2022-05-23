@@ -47,34 +47,3 @@
   (require 'org-tempo)
   (add-hook 'ispell-change-dictionary-hook #'flyspell-buffer)
   )
-
-(use-package org-appear
-  :defer t
-  :hook (org-mode . org-appear-mode)
-  :custom
-  ((org-hide-emphasis-markers t)
-	 (org-appear-autoemphasis t)
-	 (org-appear-autolinks t)
-	 (org-appear-autosubmarkers t))
-  )
-
-(setq-default org-startup-with-latex-preview t)
-
-(use-package org-fragtog
-  :defer t
-  :hook (org-mode . org-fragtog-mode)
-  :custom
-  ((org-latex-preview-ltxpng-directory "~/.ltxpng/")))
-
-(setq org-num-max-level 1)
-
-(use-package org-modern
-  :config
-  (global-org-modern-mode)
-  )
-
-;; Additional files
-(load-file (concat user-emacs-directory "lisp/org-content.el"))
-(load-file (concat user-emacs-directory "lisp/org-export.el"))
-(load-file (concat user-emacs-directory "lisp/org-babel.el"))
-(load-file (concat user-emacs-directory "lisp/org-site.el"))

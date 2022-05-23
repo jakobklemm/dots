@@ -1,5 +1,3 @@
-;; Basic settings
-
 ;; Turn off backup files
 (setq-default backup-inhibited t)
 

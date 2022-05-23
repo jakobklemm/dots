@@ -17,5 +17,3 @@
   (setq org-plantuml-jar-path (expand-file-name "~/.tools/plantuml.jar"))
   (add-to-list 'org-src-lang-modes '("plantuml" . plantuml))
   )
-
-

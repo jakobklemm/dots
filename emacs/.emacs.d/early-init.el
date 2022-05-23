@@ -23,4 +23,7 @@
 			      (tool-bar-lines . 0)
 			      (vertical-scroll-bars . nil))))
 
+;; Nicer symbols
+(global-prettify-symbols-mode 1)
+
 (provide 'early-init)
