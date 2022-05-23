@@ -74,7 +74,6 @@
   )
 
 ;; Additional files
-(load-file (concat user-emacs-directory "lisp/org-productivity.el"))
 (load-file (concat user-emacs-directory "lisp/org-content.el"))
 (load-file (concat user-emacs-directory "lisp/org-export.el"))
 (load-file (concat user-emacs-directory "lisp/org-babel.el"))

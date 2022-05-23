@@ -8,52 +8,6 @@
 ;; Package-Requires: ((emacs "27.1"))
 ;; Keywords: convenience, mode-line, header-line
 
-;; This file is not part of GNU Emacs.
-
-;; This file is free software; you can redistribute it and/or modify
-;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 3, or (at your option)
-;; any later version.
-
-;; This file is distributed in the hope that it will be useful,
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-;; GNU General Public License for more details.
-
-;; For a full copy of the GNU General Public License
-;; see <https://www.gnu.org/licenses/>.
-
-;;; Commentary:
-;; 
-;; Nano modeline is a minor mode that modify the modeline as:
-;; [ status | name (primary)                               secondary ]
-;;
-;; It can be displayed at the bottom (mode-line) or at the top (header-line)
-;; depending on nano-modeline-position custom setting.
-;;
-;; There are two sets of faces (for active and inactive modelines) that
-;; can be customized (M-x: customize-group + nano-modeline)
-;;
-;; - nano-modeline-active-name      / nano-modeline-inactive-name
-;; - nano-modeline-active-primary   / nano-modeline-inactive-primary
-;; - nano-modeline-active-secondary / nano-modeline-inactive-secondary
-;; - nano-modeline-active-status-RO / nano-modeline-inactive-status-RO
-;; - nano-modeline-active-status-RW / nano-modeline-inactive-status-RW
-;; - nano-modeline-active-status-** / nano-modeline-inactive-status-**
-;;
-;; Usage example:
-;;
-;; M-x: nano-modeline-mode
-;;
-;;; NEWS:
-;;
-;; Vesrion 0.2
-;; - Implements modeline as minor mode
-;;
-;; Version 0.1
-;; - Submission to ELPA
-;;
-
 ;;; Code:
 (defgroup nano nil
   "N Λ N O"
@@ -76,7 +30,6 @@ Modeline is composed as:
 Modeline is composed as:
 [ status | name (primary)                        secondary ]"
   :group 'nano-modeline)
-
 
 (defcustom nano-modeline-position 'top
   "Default position (top or bottom)"
@@ -181,7 +134,6 @@ Modeline is composed as:
 (defun nano-modeline-mode-name ()
   "Return current major mode name"
   (format-mode-line mode-name))
-
 
 ;; From https://amitp.blogspot.com/2011/08/emacs-custom-mode-line.html
 (defun nano-modeline-shorten-directory (dir max-length)

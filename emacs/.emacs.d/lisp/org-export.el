@@ -30,6 +30,9 @@
            (org-reveal-ignore-speaker-notes nil)
            (org-reveal-note-key-char nil)))
 
+(use-package ox-gemini
+  )
+
 (require 'ox-latex)
 (add-to-list 'org-latex-packages-alist '("" "minted"))
 (setq org-latex-listings 'minted)

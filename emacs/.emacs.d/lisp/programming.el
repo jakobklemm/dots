@@ -136,15 +136,6 @@
         )
   )
 
-(use-package treemacs
-  :defer t
-  )
-
-(use-package lsp-treemacs
-  :defer t
-  :after lsp
-  )
-
 (use-package smartparens
   :defer t
   :hook
@@ -166,9 +157,6 @@
   )
 
 (yas-global-mode t)
-(define-key yas-minor-mode-map (kbd "M-z") 'yas-expand)
-(define-key yas-keymap (kbd "M-j") 'yas-next-field-or-maybe-expand)
-(define-key yas-keymap (kbd "M-k") 'yas-prev-field)
 
 (use-package format-all
   :defer 2

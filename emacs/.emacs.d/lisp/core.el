@@ -3,10 +3,6 @@
 (setq user-full-name "Jakob Klemm"
       user-mail-address "jakob@jeykey.net")
 
-(setq smtpmail-smtp-server "mail.cyon.ch"
-      smtpmail-smtp-service 465
-      message-send-mail-function 'smtpmail-send-it)
-
 (desktop-save-mode t)
 
 (use-package no-littering)
@@ -47,5 +43,6 @@
 
 (defun kill-current-buffer ()
   (interactive)
-  (kill-buffer (current-buffer)))
+  (kill-buffer (current-buffer))
+  )
 

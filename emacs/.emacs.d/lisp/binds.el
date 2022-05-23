@@ -138,36 +138,8 @@
  )
 
 (evil-leader/set-key
-  "mo" 'mu4e
-  "mc" 'mu4e-compose-new
-  "mm" 'message-send-and-exit
-  "ma" 'mail-add-attachment
-  "ms" 'mml-secure-message-sign-pgp
-  "me" 'mml-secure-message-encrypt-pgp
-  "mj" 'mu4e~headers-jump-to-maildir
-  "ml" 'mu4e~view-browse-url-from-binding
-  "mf" 'mu4e~view-save-attach-from-binding
-  )
-
-(evil-leader/set-key
   "cc" 'evilnc-comment-or-uncomment-lines
   "cp" 'evilnc-copy-and-comment-lines
   "cr" 'comment-or-uncomment-region
   )
 
-;; Prod
-(evil-leader/set-key
-  "a" 'jk/activate
-  "d" 'jk/linked-done
-  "zz" 'jk/active-file
-  "zp" 'jk/project-file
-  "zf" 'jk/ideas-file
-  "za" 'jk/store-active
-  "zt" 'org-todo
-  "zc" 'org-capture
-  "zi" 'jk/insert-checklist
-  "zs" 'jk/search-references
-  "zrp" 'jk/refile-to-project
-  "zri" 'jk/refile-to-ideas
-  "zrr" 'jk/refile-to-reference
-  )

@@ -11,8 +11,7 @@
 
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 
-(add-to-list 'load-path "~/.emacs.d/lisp/use-package")
-(require 'use-package)
+(setq package-enable-at-startup nil)
 
 (defvar bootstrap-version)
 (let ((bootstrap-file
@@ -29,9 +28,7 @@
 
 (straight-use-package 'use-package)
 (setq straight-use-package-by-default t)
-;;(setq straight-disable-compile t)
-;;(setq straight-disable-native-compile t)
-(setq use-package-always-ensure t)
+;; (setq use-package-always-ensure t)
 
 (use-package quelpa
   :ensure t
