@@ -38,9 +38,8 @@
 
 (defun jk/build-entry (a b c)
   ""
-  ;; (format-time-string "%d.%m.%Y" (time-convert (org-publish-find-date a c) 'integer) t)
+  (format "%s- %s" (format-time-string "%d.%m.%Y" (time-convert (org-publish-find-date a c) 'integer) t) a)
   ;; (format "%s" (time-convert (org-publish-find-date a c) 'integer) t)
-  ""
   )
 
 (setq org-html-validation-link nil

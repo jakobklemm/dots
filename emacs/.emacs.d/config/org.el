@@ -1,5 +1,4 @@
 (use-package org
-  :defer t
   :hook
   (org-mode . org-toggle-inline-images)
   (org-mode . org-indent-mode)

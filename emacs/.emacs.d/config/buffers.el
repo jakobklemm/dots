@@ -1,4 +1,3 @@
-
 (use-package ibuffer
   :defer t
   :bind (("C-x C-b" . ibuffer))

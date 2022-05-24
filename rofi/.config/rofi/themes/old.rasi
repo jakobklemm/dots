@@ -1,0 +1,63 @@
+* {
+    background-color:            #23272a;
+    border-color:                #282c34;
+    text-color:                  #bbc2cf;
+    font:                        "JetBrains Mono 11";
+    prompt-font:                 "JetBrains Mono 11";
+    prompt-background:           #51afef;
+    prompt-foreground:           #282c34;
+    prompt-padding:              4px;
+    selected-normal-background:  #ae3f3e;
+    selected-normal-foreground:  #ffffff;
+    spacing:                     3;
+}
+#window {
+    border:  1;
+    padding: 5;
+    height: 20%;
+    width: 42%;
+}
+#mainbox {
+    border:  0;
+    padding: 2;
+}
+#listview {
+    fixed-height: 0;
+    border:       2px dash 0px 0px ;
+    spacing:      2px ;
+    scrollbar:    false;
+    padding:      2px 0px 0px ;
+}
+#element {
+    border:  0;
+    padding: 2px ;
+}
+#element.selected.normal {
+    background-color: #54b0a5;
+    text-color:       @selected-normal-foreground;
+}
+#scrollbar {
+    width:        0px ;
+    border:       0;
+    handle-width: 0px ;
+    padding:      0;
+}
+#sidebar {
+    border: 2px dash 0px 0px ;
+}
+#inputbar {
+    spacing:    0;
+    padding:    1px ;
+}
+#entry {
+    padding: 4px 4px;
+    expand: false;
+    width: 10em;
+}
+#prompt {
+    padding:          @prompt-padding;
+    background-color: @prompt-background;
+    text-color:       @prompt-foreground;
+    font:             @prompt-font;
+    border-radius:    2px;
+}
