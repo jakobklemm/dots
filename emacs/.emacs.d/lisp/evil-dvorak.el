@@ -72,14 +72,14 @@
   "w" 'evil-delete
   "W" 'kill-line
 
-  "j" 'evil-backward-word-begin
-  "J" 'evil-backward-section-begin
+  "q" 'evil-backward-word-begin
+  "Q" 'evil-backward-section-begin
 
-  "k" 'evil-forward-word-end
-  "K" 'evil-forward-section-end
+  "j" 'evil-forward-word-end
+  "J" 'evil-forward-section-end
 
   "'" 'evil-first-non-blank
-  "c" 'evil-end-of-line  
+  "k" 'evil-end-of-line  
   )
 
 (provide 'evil-dvorak)
