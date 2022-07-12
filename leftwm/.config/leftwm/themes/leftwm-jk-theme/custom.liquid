@@ -1,11 +1,11 @@
 {% for tag in workspace.tags %}
 {% if tag.mine %}
-[{{tag.name}}]
+[{{tag.name}}] 
 {% elsif tag.visible  %}
--{{tag.name}}-
+({{tag.name}}) 
 {% elsif tag.busy  %}
-_{{tag.name}}_
+<{{tag.name}}> 
 {% else tag.visible  %}
- {{tag.name}} 
+{{tag.name}} 
 {% endif %}
 {% endfor %}

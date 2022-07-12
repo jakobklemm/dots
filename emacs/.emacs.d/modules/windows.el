@@ -1,3 +1,5 @@
+;; windows.el
+
 (use-package ace-window
   :defer t
   :init
@@ -12,7 +14,7 @@
   (split-window-below)
   (balance-windows)
   (other-window 1)
-  (counsel-switch-buffer)
+  (consult-buffer)
   )
 
 (defun hrs/split-window-right-and-switch ()
@@ -21,6 +23,7 @@
   (split-window-right)
   (balance-windows)
   (other-window 1)
-  (counsel-switch-buffer)
+  (consult-buffer)
   )
 
+(provide 'windows)

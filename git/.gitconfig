@@ -5,3 +5,5 @@
 	name = Jakob Klemm
 [init]
 	defaultBranch = master
+[credentials]
+	helper = store

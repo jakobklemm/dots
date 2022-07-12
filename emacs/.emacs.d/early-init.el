@@ -1,4 +1,4 @@
-;;; init.el --- -*- lexical-binding: t -*-
+;; early-init.el
 
 (setq gc-cons-threshold (* 1024 1024 1024))
 
@@ -10,9 +10,12 @@
 
 (setq package-enable-at-startup nil)
 
+(defvar file-name-handler-alist-original file-name-handler-alist)
+(setq file-name-handler-alist nil)
+
 (setq site-run-file nil)
 
-(menu-bar-mode -1)
+
 (unless (display-graphic-p)
   (setq default-frame-alist '((fullscreen . maximized)
 			      (menu-bar-lines . 0)
@@ -22,8 +25,5 @@
 			      (menu-bar-lines . 0)
 			      (tool-bar-lines . 0)
 			      (vertical-scroll-bars . nil))))
-
-;; Nicer symbols
-(global-prettify-symbols-mode 1)
 
 (provide 'early-init)

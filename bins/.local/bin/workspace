@@ -1,0 +1,3 @@
+#! /bin/bash 
+
+leftwm-state -w 0 -q -t ~/.config/leftwm/themes/current/custom.liquid

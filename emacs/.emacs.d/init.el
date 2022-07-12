@@ -1,17 +1,46 @@
-(add-hook 'emacs-startup-hook
-          (lambda ()
-            (message "Emacs ready in %s with %d garbage collections."
-                     (format "%.2f seconds"
-                             (float-time
-                              (time-subtract after-init-time before-init-time)))
-                     gcs-done)))
+;; init.el
 
-(setq custom-file (concat user-emacs-directory "custom.el"))
-(load custom-file 'noerror)
-(setq gc-cons-threshold 100000000)
+;; Global settings
+(defgroup jk/config nil
+  "Global settings and constants used all through out the config."
+  )
 
-;; Initialize package sources
+(defcustom jk/org-base-dir "~/documents/database"
+  "Base path for org-mode to find files."
+  :type 'sting
+  :group 'jk/config
+  )
+
+(defcustom jk/is-qwerty nil
+  "Whether the system uses a qwerty or dvorak layout."
+  :type 'bool
+  :group 'jk/config
+  )
+
+;; https://github.com/mishamyrt/Lilex
+(defcustom jk/font "Lilex"
+  "What font to use, might get overwritten for special (local) cases."
+  :type 'string
+  :group 'jk/config
+  )
+
+(defconst jk/modules-path "~/.emacs.d/modules/"
+  "Path to the custom modules of the config."
+  )
+
+(defvar jk/active-modules '(base input windows apperance navigation programming rust writing)
+  "List of all currently active modules, get loaded at startup."
+  )
+
+(setq user-full-name "Jakob Klemm"
+      user-mail-address "jakob@jeykey.net")
+
+;; Package setup
 (require 'package)
+
+(when (version< "29.0.50" emacs-version)
+  (setq package-native-compile t
+	warning-minimum-level :emergency))
 
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                          ("melpa-stable" . "https://stable.melpa.org/packages/")
@@ -20,54 +49,42 @@
 
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 
-(setq package-enable-at-startup nil)
+(package-initialize)
 
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
 
-(straight-use-package 'use-package)
-(setq straight-use-package-by-default t)
-;; (setq use-package-always-ensure t)
+(while (not (package-installed-p 'use-package))
+  (sleep-for 1))
 
-(use-package quelpa
-  :ensure t
-  )
+(require 'use-package)
+
+(use-package use-package
+  :custom
+  ((use-package-always-ensure t)
+   (use-package-compute-statistics t)))
 
 (use-package quelpa-use-package
-  :ensure t
+  :custom
+  ((quelpa-checkout-melpa-p nil)))
+
+;; Modules
+(add-to-list 'load-path jk/modules-path)
+
+(dolist (m jk/active-modules)
+  (require m)
   )
 
+(setq custom-file (concat user-emacs-directory "custom.el"))
+(load custom-file 'noerror)
 
-(setq user-full-name "Jakob Klemm"
-      user-mail-address "jakob@jeykey.net")
+;; Metrics
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (message "Emacs ready in %s."
+		     (emacs-init-time)
+                     )))
 
-(desktop-save-mode t)
+(provide 'init)
 
-;; Files
-;; https://www.emacswiki.org/emacs/DotEmacsModular
-(add-to-list 'load-path "~/.emacs.d/lisp/")
-
-(defun load-directory (directory)
-  "Load recursively all `.el' files in DIRECTORY."
-  (dolist (element (directory-files-and-attributes directory nil nil nil))
-    (let* ((path (car element))
-           (fullpath (concat directory "/" path))
-           (isdir (car (cdr element)))
-           (ignore-dir (or (string= path ".") (string= path ".."))))
-      (cond
-       ((and (eq isdir t) (not ignore-dir))
-        (load-directory fullpath))
-       ((and (eq isdir nil) (string= (substring path -3) ".el"))
-        (load (file-name-sans-extension fullpath)))))))
-
-(load-directory "~/.emacs.d/config")
