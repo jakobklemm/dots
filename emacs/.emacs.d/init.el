@@ -28,7 +28,7 @@
   "Path to the custom modules of the config."
   )
 
-(defvar jk/active-modules '(base input windows apperance navigation programming rust writing)
+(defvar jk/active-modules '(base input windows apperance navigation programming rust writing site)
   "List of all currently active modules, get loaded at startup."
   )
 
