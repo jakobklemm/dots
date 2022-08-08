@@ -9,7 +9,7 @@
   :custom
   ((org-directory "~/documents/")
    (org-archive-location "~/archive/2022.org::* From %s")
-   (org-agenda-files '("~/documents/"))
+   (org-agenda-files '("~/supervisor/"))
    (org-image-actual-width '(600))
    (org-ellipsis " ▼ ")
    (org-adapt-indentation nil)
@@ -42,6 +42,20 @@
   (require 'org-tempo)
   )
 
+(use-package langtool
+  :init
+  (setq langtool-http-server-host "172.16.3.15"
+	langtool-http-server-port 8010)
+  )
+
+(use-package langtool-ignore-fonts
+  :config 
+  (add-hook 'LaTeX-mode-hook 'langtool-ignore-fonts-minor-mode)
+  (add-hook 'org-mode-hook 'langtool-ignore-fonts-minor-mode)
+  (add-hook 'markdown-mode-hook 'langtool-ignore-fonts-minor-mode)
+  (langtool-ignore-fonts-add 'markdown-mode '(markdown-code-face))
+  )
+
 (use-package org-modern
   :config
   (global-org-modern-mode)
@@ -66,8 +80,8 @@
 (use-package org-roam
   :custom
   (
-   (org-roam-db-location "~/documents/org-roam.db")
-   (org-roam-directory "~/documents/braindump/")
+   (org-roam-db-location "~/Documents/org-roam.db")
+   (org-roam-directory "~/org/database/")
    (org-roam-v2-ack t)
    (org-roam-completion-everywhere t)
    )
@@ -84,5 +98,23 @@
    (org-roam-ui-update-on-save t)
    (org-roam-ui-open-on-start nil)
    ))
+
+(use-package org-hyperscheduler
+  :custom
+  ((org-hyperscheduler-readonly-mode nil)
+   (org-hyperscheduler-exclude-from-org-roam t)
+   (org-hyperscheduler-inbox-file "~/supervisor/inbox.org")
+   )
+  )
+
+(use-package org-caldav
+  :custom
+  ((org-caldav-url "https://cloud.jeykey.net/remote.php/dav/calendars/jeykey/")
+   (org-caldav-calendar-id "supervisor")
+   (org-caldav-inbox "~/supervisor/inbox.org")
+   (org-caldav-files '("~/supervisor/events.org"))
+   (org-caldav-timezone "Europe/Berlin")
+   )
+  )
 
 (provide 'writing)

@@ -7,7 +7,7 @@
       (list
        (list "site"
              :recursive nil
-             :base-directory "~/documents/jeykey.net/content/"
+             :base-directory "~/Documents/jeykey.net/content/"
              :with-author nil
              :with-creator nil
              :with-date t
@@ -17,12 +17,12 @@
              :section-numbers nil
              :auto-sitemap nil
              :sitemap-format-entry 'jk/build-entry
-             :publishing-directory "~/documents/jeykey.net/public/"
+             :publishing-directory "~/Documents/jeykey.net/public/"
              :publishing-function 'org-html-publish-to-html
              )
        (list "blog"
 	     :recursive t
-             :base-directory "~/documents/jeykey.net/content/posts"
+             :base-directory "~/org/output/posts/"
              :with-author nil
              :with-creator nil
              :with-date t
@@ -37,19 +37,19 @@
              :sitemap-date-format "%d.%m.%Y"
              :sitemap-format-entry 'jk/build-entry
 	     :sitemap-function 'jk/build-sitemap
-             :publishing-directory "~/documents/jeykey.net/public/posts/"
+             :publishing-directory "~/Documents/jeykey.net/public/posts/"
              :publishing-function 'org-html-publish-to-html
 	     )
        (list "static"
-             :base-directory "~/documents/jeykey.net/content/static/"
+             :base-directory "~/Documents/jeykey.net/content/static/"
              :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf\\|asc"
-             :publishing-directory "~/documents/jeykey.net/public/static/"
+             :publishing-directory "~/Documents/jeykey.net/public/static/"
              :publishing-function 'org-publish-attachment
              :recursive t)
        (list "style"
-             :base-directory "~/documents/jeykey.net/style/"
+             :base-directory "~/Documents/jeykey.net/style/"
              :base-extension "css\\|js"
-             :publishing-directory "~/documents/jeykey.net/public/style/"
+             :publishing-directory "~/Documents/jeykey.net/public/style/"
              :publishing-function 'org-publish-attachment
              :recursive t)
        ))

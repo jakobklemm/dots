@@ -142,9 +142,8 @@
 
 (evil-leader/set-key
   "ss" 'consult-line
-  "sS" 'consult-imenu
+  "sS" 'helm-rg
   "sr" 'replace-string
-  "sg" 'rgrep
   )
 
 (evil-leader/set-key
