@@ -30,6 +30,17 @@
   ((which-key-idle-delay 1.0))
   )
 
+(add-hook 'after-load-functions 'my-keys-have-priority)
+
+(defun my-keys-have-priority (_file)
+  "Try to ensure that my keybindings retain priority over other minor modes.
+
+Called via the `after-load-functions' special hook."
+  (unless (eq (caar minor-mode-map-alist) 'evil-dvorak-mode)
+    (let ((mykeys (assq 'evil-dvorak-mode minor-mode-map-alist)))
+      (assq-delete-all 'evil-dvorak-mode minor-mode-map-alist)
+      (add-to-list 'minor-mode-map-alist mykeys))))
+
 ;; Originally based on: https://github.com/jbranso/evil-dvorak/blob/master/evil-dvorak.el
 (define-minor-mode evil-dvorak-mode
   "Custom minor mode for ortholinear-split ergonomic keyboard with custom programmer dvorak layout."
@@ -67,8 +78,8 @@
   (kbd "C-d") 'delete-char
   (kbd "<backspace>") 'delete-backward-char
   (kbd "<return>") 'newline-and-indent
-  (kbd "C-h") 'evil-next-line
-  (kbd "C-t") 'evil-previous-line
+  ;; (kbd "C-h") 'evil-next-line
+  ;; (kbd "C-t") 'evil-previous-line
   (kbd "C-n") 'backward-char
   (kbd "C-s") 'forward-char
   (kbd "M-x") 'counsel-M-x
@@ -94,6 +105,16 @@
 
   "'" 'evil-first-non-blank
   "k" 'evil-end-of-line  
+  )
+
+(evil-define-key '(normal visual) corfu-map
+  "C-h" 'corfu-next
+  "C-t" 'corfu-previous
+  )
+
+(evil-define-key '(normal visual) org-agenda-mode-map
+  "h" 'org-agenda-next-line
+  "t" 'org-agenda-previous-line 
   )
 
 (global-set-key (kbd "C-x 2") 'hrs/split-window-below-and-switch)

@@ -99,13 +99,6 @@
    (org-roam-ui-open-on-start nil)
    ))
 
-(use-package org-hyperscheduler
-  :custom
-  ((org-hyperscheduler-readonly-mode nil)
-   (org-hyperscheduler-exclude-from-org-roam t)
-   (org-hyperscheduler-inbox-file "~/supervisor/inbox.org")
-   )
-  )
 
 (use-package org-caldav
   :custom

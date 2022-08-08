@@ -28,6 +28,9 @@
   (orderless-skip-highlighting (lambda () selectrum-is-active))
   (selectrum-highlight-candidates-function #'orderless-highlight-matches)
   (selectrum-refine-candidates-function #'orderless-filter)
+  (completion-styles '(orderless partial-completion basic))
+  (completion-category-defaults nil)
+  (completion-category-overrides nil)
   )
 
 (use-package consult
@@ -67,5 +70,16 @@
   :demand t
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
+
+(use-package corfu
+  :custom
+  ((corfu-cycle t)
+   (corfu-auto t)
+   )
+  :config
+  (define-key corfu-map (kbd "C-c h") 'corfu-next)
+  (define-key corfu-map (kbd "C-c t") 'corfu-previous)
+  (global-corfu-mode)
+  )
 
 (provide 'navigation)
