@@ -86,3 +86,8 @@ xmonad.o
 
 recentf
 org-roam.db
+
+.cache/
+.lsp-session-v1
+bookmarks
+url/

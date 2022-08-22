@@ -5,7 +5,7 @@
   "Global settings and constants used all through out the config."
   )
 
-(defcustom jk/org-base-dir "~/documents/database"
+(defcustom jk/org-base-dir "~/org/"
   "Base path for org-mode to find files."
   :type 'sting
   :group 'jk/config
@@ -28,7 +28,7 @@
   "Path to the custom modules of the config."
   )
 
-(defvar jk/active-modules '(base input windows apperance navigation search programming rust writing site)
+(defvar jk/active-modules '(base binds navigation programming design writing site prod)
   "List of all currently active modules, get loaded at startup."
   )
 

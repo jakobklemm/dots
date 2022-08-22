@@ -1,4 +1,4 @@
-;; apperance.el
+;; Design
 
 ;; https://github.com/hrs/dotfiles
 (setq hrs/default-fixed-font jk/font)
@@ -167,4 +167,4 @@ Each function is called with window as its sole arguemnt, returning a non-nil va
   (perfect-margin-mode 1)
   )
 
-(provide 'apperance)
+(provide 'design)

@@ -1,17 +1,51 @@
-;; navigation.el
+;; Navigation
 
-(use-package selectrum
-  :config
-  (selectrum-mode t)
+(use-package ace-window
+  :init
+  (setq aw-scope 'frame
+	    aw-keys '(?a ?o ?e ?u ?i ?d ?h ?t ?n)
+	    )
   )
 
-(define-key selectrum-minibuffer-map (kbd "C-h") 'selectrum-next-candidate)
-(define-key selectrum-minibuffer-map (kbd "C-t") 'selectrum-previous-candidate)
-(define-key selectrum-minibuffer-map (kbd "C-d") 'selectrum-submit-exact-input)
+(defun hrs/split-window-below-and-switch ()
+  "Split the window horizontally, then switch to the new pane."
+  (interactive)
+  (split-window-below)
+  (balance-windows)
+  (other-window 1)
+  (consult-buffer)
+  )
 
-(define-key selectrum-minibuffer-map (kbd "C-n") 'selectrum-backward-kill-sexp)
+(defun hrs/split-window-right-and-switch ()
+  "Split the window vertically, then switch to the new pane."
+  (interactive)
+  (split-window-right)
+  (balance-windows)
+  (other-window 1)
+  (consult-buffer)
+  )
 
-;; Enable richer annotations using the Marginalia package
+(use-package consult
+  :config
+  (consult-preview-at-point-mode)
+ ) 
+
+(use-package vertico
+  :init
+  (vertico-mode)
+  (vertico-reverse-mode)
+  :custom
+  ((enable-recursive-minibuffers t))
+  )
+
+(use-package orderless
+  :init
+  (setq completion-styles '(orderless partial-completion basic)
+        completion-category-defaults nil
+        completion-category-overrides nil ;;'((file (styles partial-completion)))))
+	)
+  )
+
 (use-package marginalia
   :bind (("M-A" . marginalia-cycle)
          :map minibuffer-local-map
@@ -20,26 +54,48 @@
   (marginalia-mode)
   )
 
-(use-package orderless
+(use-package marginalia
+  :config
+  (marginalia-mode))
+
+;; TODO: Embark
+
+(use-package corfu
   :custom
-  (completion-styles '(orderless basic))
-  (completion-category-overrides '((file (styles basic partial-completion))))
-  (completion-styles '(orderless))
-  (orderless-skip-highlighting (lambda () selectrum-is-active))
-  (selectrum-highlight-candidates-function #'orderless-highlight-matches)
-  (selectrum-refine-candidates-function #'orderless-filter)
-  (completion-styles '(orderless partial-completion basic))
-  (completion-category-defaults nil)
-  (completion-category-overrides nil)
+  (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+  (corfu-auto t)                 ;; Enable auto completion
+  (corfu-separator ?\s)          ;; Orderless field separator
+  (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
+  (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
+  (corfu-preview-current nil)    ;; Disable current candidate preview
+  (corfu-preselect-first nil)    ;; Disable candidate preselection
+  (corfu-on-exact-match nil)     ;; Configure handling of exact matches
+  (corfu-echo-documentation nil) ;; Disable documentation in the echo area
+  (corfu-scroll-margin 5)        ;; Use scroll margin
+  (tab-always-indent 'complete)
+
+  :init
+  (global-corfu-mode)
   )
 
-(use-package consult
-  :bind (("C-s" . consult-line)
-         ("M-s" . consult-imenu)
-         :map minibuffer-local-map
-         ("C-r" . consult-history))
+(use-package corfu-doc
+  :after corfu 
+  :hook
+  (corfu-mode . corfu-doc-mode)
+  )
+
+(use-package ripgrep)
+
+(custom-set-variables
+ '(mini-frame-show-parameters
+   '((top . 400)
+     (width . 0.5)
+     (left . 0.5)
+     )))
+
+(use-package mini-frame
   :config
-  (consult-preview-at-point-mode)
+  (mini-frame-mode)
   )
 
 (use-package savehist
@@ -47,39 +103,13 @@
   (savehist-mode)
   )
 
-(use-package embark
-  :bind
-  (("C-." . embark-act)
-   ("C-h B" . embark-bindings)
-   :map selectrum-minibuffer
-   ("C-s" . embark-act)
-   ("C-;" . embark-dwim)
-   )
-  :init
-  (setq prefix-help-command #'embark-prefix-help-command)
-  :config
-  (add-to-list 'display-buffer-alist
-               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
-                 nil
-                 (window-parameters (mode-line-format . none))))
-  )
-
-(use-package embark-consult
-  :ensure t
-  :after (embark consult)
-  :demand t
-  :hook
-  (embark-collect-mode . consult-preview-at-point-mode))
-
-(use-package corfu
-  :custom
-  ((corfu-cycle t)
-   (corfu-auto t)
+(use-package smooth-scrolling
+  :custom 
+  (
+   (smooth-scroll-margin 12)
    )
   :config
-  (define-key corfu-map (kbd "C-c h") 'corfu-next)
-  (define-key corfu-map (kbd "C-c t") 'corfu-previous)
-  (global-corfu-mode)
+  (smooth-scrolling-mode t)
   )
 
 (provide 'navigation)
