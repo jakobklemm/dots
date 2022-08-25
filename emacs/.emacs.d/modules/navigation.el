@@ -88,7 +88,7 @@
 
 (custom-set-variables
  '(mini-frame-show-parameters
-   '((top . 400)
+   '((top . 0)
      (width . 0.5)
      (left . 0.5)
      )))

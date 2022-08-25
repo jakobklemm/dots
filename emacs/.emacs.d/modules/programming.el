@@ -26,6 +26,8 @@
    (lsp-ui-doc-delay 1.0)
    ))
 
+(use-package format-all)
+
 (use-package rustic
   :custom
   ((rustic-format-on-save t)

@@ -7,6 +7,7 @@
   (setq evil-want-keybinding nil)
   (setq evil-move-beyond-eol t)
   (setq evil-want-Y-yant-to-eol t)
+  (setq evil-move-cursor-back nil)
   :config
   (evil-mode 1)
   )
@@ -17,6 +18,12 @@
   (evil-collection-init)
   )
 
+(use-package evil-org
+  :after org
+  :config
+  :hook (org-mode . (lambda () evil-org-mode))
+  )
+
 (use-package which-key
   :init (which-key-mode)
   :defer t
@@ -25,57 +32,80 @@
   ((which-key-idle-delay 0.5))
   )
 
-(general-define-key
- :states '(motion visual normal)
- :keymaps 'override
- "h" 'evil-next-line
- "t" 'evil-previous-line
- "d" 'evil-backward-char
- "n" 'evil-forward-char
+(defun jk/define-binds-dvorak ()
+  (general-define-key
+   :states '(motion visual normal)
+   :keymaps 'override
+   "h" 'evil-next-line
+   "t" 'evil-previous-line
+   "d" 'evil-backward-char
+   "n" 'evil-forward-char
 
- "H" 'evil-forward-paragraph
- "T" 'evil-backward-paragraph
- "D" 'evil-first-non-blank
- "N" 'evil-last-non-blank
+   "H" 'evil-forward-paragraph
+   "T" 'evil-backward-paragraph
+   "D" 'evil-first-non-blank
+   "N" 'evil-last-non-blank
 
- "s" 'evil-open-below
- "S" 'evil-open-above
+   "s" 'evil-open-below
+   "S" 'evil-open-above
 
- "w" 'evil-delete
- "W" 'kill-line
+   "w" 'evil-delete
+   "W" 'kill-line
 
- "q" 'evil-backward-word-begin
- "Q" 'evil-backward-section-begin
+   "q" 'evil-backward-word-begin
+   "Q" 'evil-backward-section-begin
 
- "j" 'evil-forward-word-end
- "J" 'evil-forward-section-end
+   "j" 'evil-forward-word-end
+   "J" 'evil-forward-section-end
 
- "'" 'evil-first-non-blank
- "k" 'evil-end-of-line
- )
+   "'" 'evil-first-non-blank
+   "k" 'evil-end-of-line
+   )
 
-(add-hook 'emacs-startup-hook
-          (lambda ()
-	    (unbind-key "C-t")
-            ))
+  (general-define-key
+   :states '(motion normal visual)
+   :keymaps 'vertico-map
+   "C-n" 'vertico-directory-up
+   "C-h" 'vertico-previous
+   "C-t" 'vertico-next
+   "C-<return>" 'vertico-exit-input
+   )
 
-(general-define-key
- :instert '(motion normal visual)
- :keymaps 'vertico-map
+  (general-define-key
+   :state 'insert
+   :keymaps 'corfu-map
+   "C-h" 'corfu-next
+   "C-t" 'corfu-previous
+   )
+  )
 
- "C-n" 'vertico-directory-up
- "C-h" 'vertico-previous
- "C-t" 'vertico-next
- "C-<return>" 'vertico-exit-input
- )
+(defun jk/define-binds-qwertz ()
+  (general-define-key
+   :states '(motion normal visual)
+   :keymaps 'override
+   "$" 'evil-open-below
+   "£" 'evil-open-above
 
-(general-define-key
- :state 'insert
- :keymaps 'corfu-map
+   "J" 'evil-forward-paragraph
+   "K" 'evil-backward-paragraph
+   "H" 'evil-first-non-blank
+   "L" 'evil-end-of-line
 
- "C-h" 'corfu-next
- "C-t" 'corfu-previous
- )
+   "ä" 'evil-end-of-line
+   "ö" 'evil-first-non-blank
+   )
+
+  (general-define-key
+   :keymaps 'vertico-map
+   "C-<backspace>" 'vertico-directory-up
+   "C-<return>" 'vertico-exit-input
+   )
+  )
+
+(if (string= (system-name) "voyager")
+    (jk/define-binds-qwertz)
+  (jk/define-binds-dvorak)
+  )
 
 (general-define-key
  :states '(normal motion visual)
@@ -109,11 +139,41 @@
 
  ;; Programming
  "rs" '(lsp-ui-doc-show :which-key "doc-show")
+ "rf" '(format-all-buffer :which-key "format")
 
- ;; TODO: org, roam, prod, magit
+ ;; Git
+ "gg" 'magit-status
+ "gi" 'magit-init
+ "gp" 'magit-pull
+
+ ;; org-mode
+ "or" 'org-refile
+ "ol" 'org-insert-link
+ "oo" 'org-open-at-point
+ "op" 'org-link-open-as-file
+ "of" 'org-agenda-file-to-front
+ "oe" 'org-export-dispatch
+ "os" 'org-schedule
+ "od" 'org-deadline
+ "oi" 'org-id-get-create
+ "oc" 'org-capture
+ "oz" 'org-agenda
+
+ ;; org-roam
+ "nn" 'org-roam-buffer-toggle
+ "ni" 'org-roam-node-insert
+ "nf" 'org-roam-node-find
+ "nc" 'org-roam-capture
+ "nr" 'org-roam-node-random
+
+ ;; TODO: prod
  )
 
-;; TODO: To general.el style
-(global-set-key (kbd "C-x j") 'kill-buffer-and-window)
- 
+(general-define-key
+ "C-x j" 'kill-buffer-and-window
+ "C-x 3" 'hrs/split-window-right-and-switch
+ "C-x 2" 'hrs/split-window-below-and-switch
+ "C-c C-f" 'format-all-buffer
+ )
+
 (provide 'binds)

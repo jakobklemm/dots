@@ -11,12 +11,6 @@
   :group 'jk/config
   )
 
-(defcustom jk/is-qwerty nil
-  "Whether the system uses a qwerty or dvorak layout."
-  :type 'bool
-  :group 'jk/config
-  )
-
 ;; https://github.com/mishamyrt/Lilex
 (defcustom jk/font "Lilex"
   "What font to use, might get overwritten for special (local) cases."

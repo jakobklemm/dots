@@ -119,11 +119,6 @@ Version 2017-03-12"
   (feebleline-mode 1)
   )
 
-(defun jk/feeble-workspace ()
-  "Returns the current leftwm workspace setup."
-  "acb"
-  )
-
 (defun jk/line-time ()
   "Returns the current system time for the modeline."
   (format-time-string "%H:%M:%S")
@@ -136,7 +131,8 @@ Version 2017-03-12"
 
 (defun jk/line-workspace ()
   "Returns the current workspace for the modeline."
-  (string-trim (shell-command-to-string "~/.local/bin/workspace"))
+  ;; (string-trim (shell-command-to-string "~/.local/bin/workspace"))
+  ""
   )
 
 (defun jk/line-modified ()
