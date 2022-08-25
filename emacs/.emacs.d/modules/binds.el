@@ -151,13 +151,25 @@
  "ol" 'org-insert-link
  "oo" 'org-open-at-point
  "op" 'org-link-open-as-file
- "of" 'org-agenda-file-to-front
  "oe" 'org-export-dispatch
- "os" 'org-schedule
- "od" 'org-deadline
  "oi" 'org-id-get-create
  "oc" 'org-capture
- "oz" 'org-agenda
+ "oh" 'org-archive-subtree
+
+ ;; Headings
+ "tt" 'org-todo
+ "tx" 'jk/todo-done
+ "td" 'org-deadline
+ "ts" 'org-schedule
+
+ ;; Links
+ "lo" 'org-open-at-point
+ "lf" 'org-link-open-as-file
+
+ ;; Agenda
+ "ao" 'org-agenda
+ "as" 'org-caldav-sync
+ "af" 'org-agenda-file-to-front
 
  ;; org-roam
  "nn" 'org-roam-buffer-toggle
@@ -166,7 +178,9 @@
  "nc" 'org-roam-capture
  "nr" 'org-roam-node-random
 
- ;; TODO: prod
+ ;; Duplicates
+ "cc" 'org-capture
+ "cr" 'org-roam-capture
  )
 
 (general-define-key

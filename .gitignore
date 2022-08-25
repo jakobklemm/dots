@@ -91,3 +91,4 @@ org-roam.db
 .lsp-session-v1
 bookmarks
 url/
+*.lock

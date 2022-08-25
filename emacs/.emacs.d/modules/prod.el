@@ -153,6 +153,28 @@ Reason:
    )
   )
 
+(defun jk/todo-done ()
+  (interactive)
+  (org-todo 'done)
+  )
+
+(use-package openwith
+  :config
+  (openwith-mode)
+  )
+
+(custom-set-variables
+ '(openwith-associations
+   '(("\\.pdf\\'" "firefox"
+      (file))
+     ("\\.mp3\\'" "xmms"
+      (file))
+     ("\\.\\(?:mpe?g\\|avi\\|wmv\\)\\'" "mplayer"
+      ("-idx" file))
+     ("\\.\\(?:jp?g\\|png\\)\\'" "gwenview"
+      (file)))))
+
+
 (require 'org-mouse)
 
 (setq spacemacs-theme-org-agenda-height nil
@@ -166,7 +188,7 @@ Reason:
       org-agenda-start-with-log-mode t)
 
 (setq org-agenda-custom-commands
-      '(("z" "Super zaen view"
+      '(("z" "Custom agenda"
          ((agenda "" ((org-agenda-span 'day)
                       (org-super-agenda-groups
                        '((:name "Today"
