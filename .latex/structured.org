@@ -1,0 +1,4 @@
+#+EMAIL: kontakt@jeykey.net
+#+LATEX_CLASS: structured
+#+LANGUAGE: DE
+#+LATEX_HEADER: \input{~/.dots/.latex/setup.tex}
