@@ -28,7 +28,7 @@
   "Path to the custom modules of the config."
   )
 
-(defvar jk/active-modules '(base binds navigation programming design writing site prod)
+(defvar jk/active-modules '(base binds navigation programming design writing site prod export)
   "List of all currently active modules, get loaded at startup."
   )
 

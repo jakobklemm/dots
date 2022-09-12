@@ -77,4 +77,13 @@
   :custom
   ((org-latex-preview-ltxpng-directory "~/.ltxpng/")))
 
+(use-package ob-rust)
+(use-package ob-go)
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((emacs-lisp . t)
+   (latex . t)
+   (rust . t)
+   ))
+
 (provide 'writing)
