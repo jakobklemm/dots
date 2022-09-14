@@ -61,6 +61,20 @@ Description:
 Reason: 
 "
 	 )
+
+	("b" "Book" entry (file "~/org/active/ref.org")
+	 "* %?
+:PROPERTIES:
+:DATE: %t
+:SOURCE: %l
+:AUTHOR:
+:END:
+
+Context:
+Reason: 
+"
+	 )
+
 	)
       )
 
@@ -75,10 +89,44 @@ Reason:
 	)
       )
 
-(setq org-log-done 'note
-      org-log-redeadline 'note
-      org-log-refile 'note
+(setq org-log-done 'time
+      org-log-redeadline 'time
+      org-log-refile 'time
       )
+
+;; Refile
+
+;; https://yiming.dev/blog/2018/03/02/my-org-refile-workflow/
+(defun +org/opened-buffer-files ()
+  "Return the list of files currently opened in emacs"
+  (delq nil
+        (mapcar (lambda (x)
+                  (if (and (buffer-file-name x)
+                           (string-match "\\.org$"
+                                         (buffer-file-name x)))
+                      (buffer-file-name x)))
+                (buffer-list))))
+
+(setq org-refile-targets '((+org/opened-buffer-files :maxlevel . 9)))
+
+(setq org-refile-use-outline-path 'file)
+;; makes org-refile outline working with helm/ivy
+;; (setq org-outline-path-complete-in-steps nil)
+(setq org-refile-allow-creating-parent-nodes 'confirm)
+
+(defun jk/org-search ()
+  (interactive)
+  (org-refile '(4)))
+
+;; Archive
+(setq org-archive-location "~/org/archive/2022.org::* From %s")
+
+(defun jk/done-archive ()
+  "Mark done and archive."
+  (interactive)
+  (org-todo 'done)
+  (org-archive-subtree)
+  )
 
 (defun jk/instert-template ()
   "Insert a custom template from templates directory."
@@ -96,8 +144,8 @@ Reason:
    (org-roam-capture-templates '(
 				 ("d" "Direct" plain
 				  "%?"
-				  :if-new (file+head "main/${slug}.org"
-						     "#+TITLE: ${title}\n#+FILETAGS: "
+				  :if-new (file+head "main/%<%Y%m%d>-${slug}.org"
+						     "#+TITLE: ${title}\n#+FILETAGS: \n#+DATE: "
 						     )
 				  :immediate-finish t
 				  :unnarrowed t
@@ -105,7 +153,7 @@ Reason:
 
 				 ("r" "Reference" plain
 				  "%?"
-				  :if-new (file+head "references/${slug}.org"
+				  :if-new (file+head "references/%<%Y%m%d>.org"
 						     "#+TITLE: ${title}\n#+FILETAGS: :reference\n"
 						     )
 				  :immediate-finish t
@@ -114,7 +162,7 @@ Reason:
 
 				 ("c" "Capture" plain
 				  "%?"
-				  :if-new (file+head "${slug}.org"
+				  :if-new (file+head "%<%Y%m%d>-${slug}.org"
 						     "#+TITLE: ${title}\n#+FILETAGS: :capture\n"
 						     )
 				  :immediate-finish t
@@ -127,6 +175,9 @@ Reason:
   (org-roam-db-autosync-enable)
   )
 
+(setq org-roam-node-display-template
+        (concat "${tags:25}: ${title:*}"))
+
 (use-package org-roam-ui
   :after org-roam
   :custom
@@ -136,12 +187,16 @@ Reason:
    (org-roam-ui-open-on-start nil)
    ))
 
-(use-package deft
+(use-package org-roam-timestamps
   :config
-  (setq deft-directory "~/org/") 
-  (setq deft-extensions '("org"))
-  (setq deft-recursive t)
+  (setq org-roam-timestamps-remember-timestamps t)
+  (setq org-roam-timestamps-minimum-gap 3600)
   )
+
+(use-package org-roam-bibtex
+  :after org-roam
+  :config
+  (require 'org-ref))
 
 (use-package org-caldav
   :custom
@@ -174,37 +229,6 @@ Reason:
      ("\\.\\(?:jp?g\\|png\\)\\'" "gwenview"
       (file)))))
 
-
 (require 'org-mouse)
-
-(setq spacemacs-theme-org-agenda-height nil
-      org-agenda-time-grid '((daily today require-timed) "----------------------" nil)
-      org-agenda-skip-scheduled-if-done t
-      org-agenda-skip-deadline-if-done t
-      org-agenda-include-deadlines t
-      org-agenda-include-diary t
-      org-agenda-block-separator nil
-      org-agenda-compact-blocks t
-      org-agenda-start-with-log-mode t)
-
-(setq org-agenda-custom-commands
-      '(("z" "Custom agenda"
-         ((agenda "" ((org-agenda-span 'day)
-                      (org-super-agenda-groups
-                       '((:name "Today"
-                                :time-grid t
-                                :date today
-                                :scheduled today
-				:deadline today
-                                :order 1)))))
-          (alltodo "" ((org-agenda-overriding-header "")
-                       (org-super-agenda-groups
-                        '(
-			  (:name "Next to do"
-                                 :todo "NEXT"
-                                 :order 1
-				 )
-			  (:discard t)
-                          ))))))))
 
 (provide 'prod)

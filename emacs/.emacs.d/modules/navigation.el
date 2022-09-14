@@ -25,6 +25,15 @@
   (consult-buffer)
   )
 
+(defun jk/split-window-right-and-roam ()
+  "Split the window vertically, then switch to the new pane."
+  (interactive)
+  (split-window-right)
+  (balance-windows)
+  (other-window 1)
+  (org-roam-node-find)
+  )
+
 (use-package consult
   :config
   (consult-preview-at-point-mode)
@@ -59,6 +68,8 @@
   (marginalia-mode))
 
 ;; TODO: Embark
+(use-package embark
+  )
 
 (use-package corfu
   :custom
@@ -95,7 +106,7 @@
 
 (use-package mini-frame
   :config
-  (mini-frame-mode)
+  ;;(mini-frame-mode)
   )
 
 (use-package savehist

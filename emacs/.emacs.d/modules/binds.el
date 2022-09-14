@@ -133,18 +133,25 @@
  "wc" '(hrs/split-window-right-and-switch :which-key "window-right")
  "wj" '(kill-buffer-and-window :which-key "buffer-and-window")
  "wo" '(ace-window :which-key "switch-window")
+ "wn" '(jk/split-window-right-and-roam :which-key "switch-roam")
 
  ;; Emacs
  "qq" '(save-buffers-kill-emacs :which-key "kill-emacs")
 
  ;; Programming
- "rs" '(lsp-ui-doc-show :which-key "doc-show")
- "rf" '(format-all-buffer :which-key "format")
+ "ps" '(lsp-ui-doc-show :which-key "doc-show")
+ "pf" '(format-all-buffer :which-key "format")
 
  ;; Git
  "gg" 'magit-status
  "gi" 'magit-init
  "gp" 'magit-pull
+
+ ;; References
+ "ri" '(citar-insert-citation :which-key "insert citation")
+ "rr" '(citar-insert-reference :which-key "insert reference")
+ "ro" '(citar-open-entry :which-key "open bibtex")
+ "rl" '(citar-open :which-key "open link")
 
  ;; org-mode
  "or" 'org-refile
@@ -154,13 +161,15 @@
  "oe" 'org-export-dispatch
  "oi" 'org-id-get-create
  "oc" 'org-capture
- "oh" 'org-archive-subtree
+ "oa" 'org-archive-subtree
+ "os" 'jk/org-search
 
- ;; Headings
+ ;; Tasks
  "tt" 'org-todo
  "tx" 'jk/todo-done
  "td" 'org-deadline
  "ts" 'org-schedule
+ "ta" 'jk/done-archive
 
  ;; Links
  "lo" 'org-open-at-point
@@ -177,8 +186,16 @@
  "nf" 'org-roam-node-find
  "nc" 'org-roam-capture
  "nr" 'org-roam-node-random
+ "nt" 'org-roam-tag-add
 
- ;; Duplicates
+ ;; Language
+ "hc" 'langtool-check
+ "hv" 'langtool-correct-buffer
+ "hd" 'langtool-check-done
+ "hw" 'ispell-word
+ "hb" 'flyspell-buffer
+
+ ;; Capture
  "cc" 'org-capture
  "cr" 'org-roam-capture
  )
