@@ -1,5 +1,9 @@
 ;; Writing
 
+(setenv
+ "DICPATH"
+ "/home/jeykey/.tools/dict/")
+
 (use-package org
   :hook
   (org-mode . org-toggle-inline-images)
@@ -8,7 +12,6 @@
   (org-mode . flyspell-mode)
   :custom
   ((org-directory "~/documents/")
-   (org-archive-location "~/archive/2022.org::* From %s")
    (org-agenda-files '("~/supervisor/"))
    (org-image-actual-width '(600))
    (org-ellipsis " ▼ ")
@@ -49,7 +52,7 @@
   )
 
 (use-package langtool-ignore-fonts
-  :config 
+  :config
   (add-hook 'LaTeX-mode-hook 'langtool-ignore-fonts-minor-mode)
   (add-hook 'org-mode-hook 'langtool-ignore-fonts-minor-mode)
   (add-hook 'markdown-mode-hook 'langtool-ignore-fonts-minor-mode)
@@ -66,7 +69,7 @@
   :custom
   ((org-hide-emphasis-markers t)
    (org-appear-autoemphasis t)
-   (org-appear-autolinks t)
+   (org-appear-autolinks nil)
    (org-appear-autosubmarkers t))
   )
 
@@ -85,5 +88,56 @@
    (latex . t)
    (rust . t)
    ))
+
+(setq bibtex-dialect 'biblatex)
+
+(setq bib-files-directory (directory-files
+                           (concat (getenv "HOME") "/org/database/references/") t
+                           "^[A-Z|a-z].+.bib$")
+      pdf-files-directory (concat (getenv "HOME") "/files/references/"))
+
+(use-package helm-bibtex
+    :config
+    (setq bibtex-completion-bibliography bib-files-directory
+          bibtex-completion-library-path pdf-files-directory
+          bibtex-completion-pdf-field "File"
+          bibtex-completion-notes-path org-directory
+          bibtex-completion-additional-search-fields '(keywords))
+  )
+
+(use-package citar
+  :bind (("C-c b" . citar-insert-citation)
+         :map minibuffer-local-map
+         ("M-b" . citar-insert-preset))
+  :custom
+  (citar-bibliography '("~/org/database/references/references.bib")))
+
+(setq citar-symbols
+      `((file ,(all-the-icons-faicon "file-o" :face 'all-the-icons-green :v-adjust -0.1) . " ")
+        (note ,(all-the-icons-material "speaker_notes" :face 'all-the-icons-blue :v-adjust -0.3) . " ")
+        (link ,(all-the-icons-octicon "link" :face 'all-the-icons-orange :v-adjust 0.01) . " ")))
+(setq citar-symbol-separator "  ")
+
+(setq org-ref-default-citation-link "citep")
+
+(require 'ox-latex)
+(add-to-list 'org-latex-packages-alist '("" "minted"))
+(setq org-latex-listings 'minted)
+
+(use-package org-roam-bibtex)
+
+(setq org-latex-pdf-process
+      '("pdflatex -interaction nonstopmode -output-directory %o %f"
+        "bibtex %b"
+        "pdflatex -interaction nonstopmode -output-directory %o %f"
+        "pdflatex -interaction nonstopmode -output-directory %o %f"))
+
+;; (setq org-latex-pdf-process
+;;       '("latexmk -pdflatex='pdflatex -interaction nonstopmode' -pdf -bibtex -f %f"))
+
+(setq org-src-fontify-natively t)
+
+;; Open directly PDFs in browser.
+(setcdr (assoc "\\.pdf\\'" org-file-apps) "firefox %s")
 
 (provide 'writing)

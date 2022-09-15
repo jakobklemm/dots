@@ -22,7 +22,7 @@
              )
        (list "blog"
 	     :recursive t
-             :base-directory "~/org/output/posts/"
+             :base-directory "~/Documents/jeykey.net/content/posts/"
              :with-author nil
              :with-creator nil
              :with-date t
