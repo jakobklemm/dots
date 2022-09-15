@@ -16,6 +16,7 @@
   :config
   (setq org-plantuml-jar-path (expand-file-name "~/.tools/plantuml.jar"))
   (add-to-list 'org-src-lang-modes '("plantuml" . plantuml))
+  (org-babel-do-load-languages 'org-babel-load-languages '((plantuml . t)))
   )
 
 (use-package ox-reveal
@@ -79,22 +80,21 @@
 
 
 (defun jk/title-title ()
-     (car (org-roam--extract-titles-title))
-     )
+  (car (org-roam--extract-titles-title))
+  )
+(defun jk/title-author ()
+  (cdr (car (org-roam--extract-global-props '("AUTHOR"))))
+  )
+(defun jk/title-image ()
+  (cdr (car (org-roam--extract-global-props '("IMAGE"))))
+  )
+(defun jk/title-subtitle ()
+  (cdr (car (org-roam--extract-global-props '("SUBTITLE"))))
+  )
 
-   (defun jk/title-author ()
-     (cdr (car (org-roam--extract-global-props '("AUTHOR"))))
-     )
-   (defun jk/title-image ()
-     (cdr (car (org-roam--extract-global-props '("IMAGE"))))
-     )
-   (defun jk/title-subtitle ()
-     (cdr (car (org-roam--extract-global-props '("SUBTITLE"))))
-     )
-
-   (defun jk/title-compose ()
-     (interactive)
-     (insert (concat "
+(defun jk/title-compose ()
+  (interactive)
+  (insert (concat "
    #+LATEX_HEADER: \\usepackage[utf8]{inputenc}
    #+LATEX_HEADER: \\usepackage[dvipsnames]{xcolor}
    #+LATEX_HEADER: \\usepackage{tikz}
@@ -105,7 +105,7 @@
 		 \\node[anchor=north west,yshift=-1.5pt,xshift=1pt]%
 		 at (current page.north west)
 		 {\\includegraphics[scale=1]{~/.tools/"
-		       (jk/title-image)
+		       "IMAGE"
 		       ".png}};
    \\end{tikzpicture}
 
@@ -113,16 +113,16 @@
 
 	     \\Huge
 	     \\textbf{"
-		       (jk/title-title)
+		       "TITILE"
 		       "}
 
 	     \\vspace{3.0cm}
 	     \\LARGE"
-		       (jk/title-subtitle)
+		       "SUBTITLE"
 		       "
    \\vspace{4.2cm}"
 
-		       (jk/title-author)
+		       "AUTHOR"
 
 	     "\\
 	     \\vfill
