@@ -96,6 +96,8 @@
                            "^[A-Z|a-z].+.bib$")
       pdf-files-directory (concat (getenv "HOME") "/files/references/"))
 
+(use-package org-ref)
+
 (use-package helm-bibtex
     :config
     (setq bibtex-completion-bibliography bib-files-directory

@@ -131,8 +131,10 @@ Version 2017-03-12"
 
 (defun jk/line-workspace ()
   "Returns the current workspace for the modeline."
-  ;; (string-trim (shell-command-to-string "~/.local/bin/workspace"))
-  ""
+  (if (string= (system-name) "voyager")
+      ""
+    (string-trim (shell-command-to-string "~/.local/bin/workspace"))
+    )
   )
 
 (defun jk/line-modified ()

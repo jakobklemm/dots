@@ -150,11 +150,10 @@ Reason:
 				  :immediate-finish t
 				  :unnarrowed t
 				  )
-
 				 ("r" "Reference" plain
 				  "%?"
 				  :if-new (file+head "references/%<%Y%m%d>.org"
-						     "#+TITLE: ${title}\n#+FILETAGS: :reference\n"
+						     "#+TITLE: ${title}\n#+FILETAGS: :reference:\n"
 						     )
 				  :immediate-finish t
 				  :unnarrowed t
@@ -163,7 +162,7 @@ Reason:
 				 ("c" "Capture" plain
 				  "%?"
 				  :if-new (file+head "%<%Y%m%d>-${slug}.org"
-						     "#+TITLE: ${title}\n#+FILETAGS: :capture\n"
+						     "#+TITLE: ${title}\n#+FILETAGS: :capture:\n"
 						     )
 				  :immediate-finish t
 				  :unnarrowed t
@@ -176,7 +175,7 @@ Reason:
   )
 
 (setq org-roam-node-display-template
-        (concat "${tags:25}: ${title:*}"))
+        (concat "${tags:20}: ${title:*}"))
 
 (use-package org-roam-ui
   :after org-roam
