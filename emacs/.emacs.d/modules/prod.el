@@ -18,10 +18,10 @@
 :DATE: %t
 :SOURCE: %l
 :END:
-" 
+"
 	 )
 
-	("q" "Quote" entry (function inbox-file)
+	("w" "Quote" entry (function inbox-file)
 	 "* QUOTE %?
 :PROPERTIES:
 :DATE: %t
@@ -54,11 +54,11 @@ Description:
 :DATE: %t
 :SOURCE: %l
 :PRODUCT:
-:SITE: %^L 
+:SITE: %^L
 :END:
 
 Description:
-Reason: 
+Reason:
 "
 	 )
 
@@ -71,7 +71,7 @@ Reason:
 :END:
 
 Context:
-Reason: 
+Reason:
 "
 	 )
 
@@ -86,6 +86,15 @@ Reason:
       '(
 	(sequence "TODO(t)" "NEXT(n)" "BLOCKED(b)" "|" "DONE(d)" "SEP(s)")
 	(sequence "NOTE(r)" "LINK(l)" "QUOTE(q)" "|" "ARCHIVE(a)")
+	)
+      org-todo-keyword-faces
+      '(("TODO" . (:foreground "#af1212" :weight bold))
+	("NEXT" . (:foreground "#a8fa80" :weight bold))
+	("BLOCKED" . (:foreground "#b213c4" :weight bold))
+	("SEP" . (:foreground "#30bb03" :weight bold))
+	("NOTE" . (:foreground "#eaa222" :weight bold))
+	("LINK" . (:foreground "#eaa222" :weight bold))
+	("DONE" . (:foreground "#ffffff" :weight bold))
 	)
       )
 
@@ -175,7 +184,7 @@ Reason:
   )
 
 (setq org-roam-node-display-template
-        (concat "${tags:20}: ${title:*}"))
+      (concat "${tags:20}: ${title:*}"))
 
 (use-package org-roam-ui
   :after org-roam

@@ -1,6 +1,28 @@
 ;; Binds
 
 (use-package general)
+(use-package evil
+  :init
+  (setq evil-want-fine-undo t)
+  (setq evil-want-keybinding nil)
+  (setq evil-move-beyond-eol t)
+  (setq evil-want-Y-yant-to-eol t)
+  (setq evil-move-cursor-back nil)
+  :config
+  (evil-mode 1)
+  )
+
+(use-package evil-collection
+  :after evil
+  :config
+  (evil-collection-init)
+  )
+
+(use-package evil-org
+  :after org
+  :config
+  :hook (org-mode . (lambda () evil-org-mode))
+  )
 
 (use-package which-key
   :init (which-key-mode)
@@ -10,65 +32,82 @@
   ((which-key-idle-delay 0.5))
   )
 
-(use-package meow
+(defun jk/define-binds-dvorak ()
+  (general-define-key
+   :states '(motion visual normal)
+   :keymaps 'override
+   "h" 'evil-next-line
+   "t" 'evil-previous-line
+   "d" 'evil-backward-char
+   "n" 'evil-forward-char
+
+   "H" 'evil-forward-paragraph
+   "T" 'evil-backward-paragraph
+   "D" 'evil-first-non-blank
+   "N" 'evil-last-non-blank
+
+   "s" 'evil-open-below
+   "S" 'evil-open-above
+
+   "w" 'evil-delete
+   "W" 'kill-line
+
+   "q" 'evil-backward-word-begin
+   "Q" 'evil-backward-section-begin
+
+   "j" 'evil-forward-word-end
+   "J" 'evil-forward-section-end
+
+   "'" 'evil-first-non-blank
+   "k" 'evil-end-of-line
+   )
+
+  (general-define-key
+   :states '(motion normal visual)
+   :keymaps 'vertico-map
+   "C-n" 'vertico-directory-up
+   "C-h" 'vertico-previous
+   "C-t" 'vertico-next
+   "C-<return>" 'vertico-exit-input
+   )
+
+  (general-define-key
+   :state 'insert
+   :keymaps 'corfu-map
+   "C-h" 'corfu-next
+   "C-t" 'corfu-previous
+   )
   )
 
-(defun meow-setup ()
-  (setq meow-cheatsheet-layout meow-cheatsheet-layout-dvorak)
-  (meow-motion-overwrite-define-key
-   ;; custom keybinding for motion state
-   '("<escape>" . ignore))
-  (meow-normal-define-key
-   '("h" . meow-next)
-   '("H" . forward-paragraph)
-   '("t" . meow-prev)
-   '("T" . backward-paragraph)
-   '("d" . meow-left)
-   '("D" . meow-left-expand)
-   '("n" . meow-right)
-   '("N" . meow-right-expand)
+(defun jk/define-binds-qwertz ()
+  (general-define-key
+   :states '(motion normal visual)
+   :keymaps 'override
+   "ö" 'evil-open-below
+   "Ö" 'evil-open-above
 
-   '("s" . meow-open-below)
-   '("S" . meow-open-below)
-   '("i" . meow-insert)
+   "J" 'evil-forward-paragraph
+   "K" 'evil-backward-paragraph
+   "H" 'evil-first-non-blank
+   "L" 'evil-end-of-line
 
-   '("q" . backward-word)
-   '("j" . forward-word)
-   '("k" . end-of-line)
-   '("'" . beginning-of-line-text)
+   "ä" 'evil-end-of-line
+   )
 
-   '("b" . backward-word)
-   '("m" . forward-word)
+  (general-define-key
+   :keymaps 'vertico-map
+   "C-<backspace>" 'vertico-directory-up
+   "C-<return>" 'vertico-exit-input
+   )
+  )
 
-   '("Q" . backward-page)
-   '("J" . forward-page)
-   '("K" . end-of-line)
-   '("\"" . beginning-of-line)
-   
-   '("w" . meow-kill)
-   '("W" . meow-kill-whole-line)
-
-   '("x" . meow-delete)
-   '("u" . meow-undo)
-   '("p" . yank)
-
-   '("C-SPC" . forward-word)
-   
-   ;;'("<SPC>" . forward-word)
-   '("<escape>" . ignore)))
-
-(meow-setup)
-(meow-global-mode 1)
-
-(add-to-list 'load-path "~/.emacs.d/lisp/")
-
-;; (require 'xah-fly-keys)
-
-;; specify a layout
-;; (xah-fly-keys-set-layout "dvorak")
+(if (string= (system-name) "voyager")
+    (jk/define-binds-qwertz)
+  (jk/define-binds-dvorak)
+  )
 
 (general-define-key
- :keymaps 'meow-insert-state-?map
+ :keymaps '(normal emacs visual)
  :prefix "SPC"
  :non-normal-prefix "M-SPC"
 

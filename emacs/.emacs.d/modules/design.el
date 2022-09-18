@@ -165,7 +165,7 @@ Each function is called with window as its sole arguemnt, returning a non-nil va
   (perfect-margin-mode 1)
   )
 
-(pixel-scroll-precision-mode t)
+;; (pixel-scroll-precision-mode t)
 (setq pixel-scroll-precision-large-scroll-height 40.0)
 (setq pixel-scroll-precision-interpolation-factor 30)
 (smooth-scrolling-mode 1)
