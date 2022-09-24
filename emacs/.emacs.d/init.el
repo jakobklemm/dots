@@ -18,55 +18,34 @@
   :group 'jk/config
   )
 
-(defconst jk/modules-path "~/.emacs.d/modules/"
+(defconst jk/core-path (concat user-emacs-directory "core/")
   "Path to the custom modules of the config."
   )
 
-(defvar jk/active-modules '(base binds navigation programming design writing site prod export)
+(defvar jk/core-modules '(packages settings font colors modeline util windows input)
+  "List of all currently active modules, get loaded at startup."
+  )
+
+(defconst jk/modules-path (concat user-emacs-directory "modules/")
+  "Path to the custom modules of the config."
+  )
+
+(defvar jk/modules '(jk-site jk-ivy jk-evil jk-leader)
   "List of all currently active modules, get loaded at startup."
   )
 
 (setq user-full-name "Jakob Klemm"
-      user-mail-address "jakob@jeykey.net")
+      user-mail-address "github@jeykey.net")
 
-;; Package setup
-(require 'package)
+(add-to-list 'load-path jk/core-path)
 
-(when (version< "29.0.50" emacs-version)
-  (setq package-native-compile t
-	warning-minimum-level :emergency))
+(dolist (m jk/core-modules)
+  (require m)
+  )
 
-(setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                         ("melpa-stable" . "https://stable.melpa.org/packages/")
-                         ("org" . "https://orgmode.org/elpa/")
-                         ("elpa" . "https://elpa.gnu.org/packages/")))
-
-(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
-
-(package-initialize)
-
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-
-(while (not (package-installed-p 'use-package))
-  (sleep-for 1))
-
-(require 'use-package)
-
-(use-package use-package
-  :custom
-  ((use-package-always-ensure t)
-   (use-package-compute-statistics t)))
-
-(use-package quelpa-use-package
-  :custom
-  ((quelpa-checkout-melpa-p nil)))
-
-;; Modules
 (add-to-list 'load-path jk/modules-path)
 
-(dolist (m jk/active-modules)
+(dolist (m jk/modules)
   (require m)
   )
 
@@ -81,4 +60,3 @@
                      )))
 
 (provide 'init)
-

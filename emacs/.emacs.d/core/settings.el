@@ -1,4 +1,4 @@
-;; base.el
+;; Settings
 
 (use-package emacs
   :custom
@@ -55,6 +55,7 @@
   (set-terminal-coding-system 'utf-8)
   (set-keyboard-coding-system 'utf-8)
   (set-language-environment   'utf-8)
+  (auto-compression-mode 1)
   )
 
-(provide 'base)
+(provide 'settings)

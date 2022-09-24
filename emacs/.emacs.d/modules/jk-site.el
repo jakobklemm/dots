@@ -1,4 +1,4 @@
-;; site.el
+;; Personal website using org-publish
 
 (require 'ox-publish)
 (use-package htmlize)
@@ -90,4 +90,4 @@
    (org-list-to-subtree list)
    )
 
-(provide 'site)
+(provide 'jk-site)
