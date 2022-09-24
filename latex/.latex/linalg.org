@@ -1,0 +1,4 @@
+#+EMAIL: contact@jeykey.net
+#+LATEX_CLASS: linalg
+#+LANGUAGE: EN
+#+LATEX_HEADER: \input{~/.latex/linalg_header.tex}

@@ -93,3 +93,5 @@ org-roam.db
 bookmarks
 url/
 *.lock
+session.*
+	

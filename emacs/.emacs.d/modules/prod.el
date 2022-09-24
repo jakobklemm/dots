@@ -167,7 +167,6 @@ Reason:
 				  :immediate-finish t
 				  :unnarrowed t
 				  )
-
 				 ("c" "Capture" plain
 				  "%?"
 				  :if-new (file+head "%<%Y%m%d>-${slug}.org"

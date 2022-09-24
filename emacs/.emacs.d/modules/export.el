@@ -29,18 +29,74 @@
 (add-to-list 'org-latex-packages-alist '("" "minted"))
 (setq org-latex-listings 'minted)
 
-(require 'org)
+(use-package ob-rust)
+(use-package ob-go)
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((emacs-lisp . t)
+   (latex . t)
+   (rust . t)
+   ))
 
-;; (setq org-latex-pdf-process '("texi2dvi -p -b -V %f"))
-;; (setq org-latex-to-pdf-process '("xelatex %f && bibtex %f && xelatex %f && xelatex %f"))
-;; (setq org-latex-to-pdf-process (list "latexmk -pdf -bibtex %f"))
+(setq bibtex-dialect 'biblatex)
+
+(setq bib-files-directory (directory-files
+                           (concat (getenv "HOME") "/org/database/references/") t
+                           "^[A-Z|a-z].+.bib$")
+      pdf-files-directory (concat (getenv "HOME") "/files/references/"))
+
+(use-package org-ref)
+
+(use-package helm-bibtex
+    :config
+    (setq bibtex-completion-bibliography bib-files-directory
+          bibtex-completion-library-path pdf-files-directory
+          bibtex-completion-pdf-field "File"
+          bibtex-completion-notes-path org-directory
+          bibtex-completion-additional-search-fields '(keywords))
+  )
+
+(use-package citar
+  :bind (("C-c b" . citar-insert-citation)
+         :map minibuffer-local-map
+         ("M-b" . citar-insert-preset))
+  :custom
+  (citar-bibliography '("~/org/database/references/references.bib")))
+
+(setq citar-symbols
+      `((file ,(all-the-icons-faicon "file-o" :face 'all-the-icons-green :v-adjust -0.1) . " ")
+        (note ,(all-the-icons-material "speaker_notes" :face 'all-the-icons-blue :v-adjust -0.3) . " ")
+        (link ,(all-the-icons-octicon "link" :face 'all-the-icons-orange :v-adjust 0.01) . " ")))
+(setq citar-symbol-separator "  ")
+
+(setq org-ref-default-citation-link "citep")
+
+(use-package org-roam-bibtex)
+
 (setq org-latex-pdf-process
-      '("latexmk -pdflatex='pdflatex -interaction nonstopmode' -pdf -bibtex -f %f"))
+      '("pdflatex -interaction nonstopmode -output-directory %o %f"
+        "bibtex %b"
+        "pdflatex -interaction nonstopmode -output-directory %o %f"
+        "pdflatex -interaction nonstopmode -output-directory %o %f"))
 
 (setq org-src-fontify-natively t)
 
 ;; Open directly PDFs in browser.
-(setcdr (assoc "\\.pdf\\'" org-file-apps) "brave %s")
+(setcdr (assoc "\\.pdf\\'" org-file-apps) "firefox %s")
+
+(defvar org-export-output-directory-prefix ".export/"
+  "Prefix of directory used for org-mode export")
+
+(defadvice org-export-output-file-name (before org-add-export-dir activate)
+  "Modifies org-export to place exported files in a different directory"
+  (when (not pub-dir)
+    (setq pub-dir org-export-output-directory-prefix)
+    (when (not (file-directory-p pub-dir))
+      (make-directory pub-dir))))
+
+(require 'org)
+
+(setq org-src-fontify-natively t)
 
 (add-to-list 'org-latex-classes
              '("structured"
@@ -78,6 +134,30 @@
                ("\\paragraph{%s}" . "\\paragraph*{%s}")
                ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
+(add-to-list 'org-latex-classes
+             '("linalg"
+               "\\documentclass[11pt]{article}
+\\input{~/.latex/linalg_header.tex}
+\\usepackage[utf8]{inputenc}
+\\usepackage[]{babel}
+\\usepackage[T1]{fontenc}
+\\usepackage{fixltx2e}
+\\usepackage{graphicx}
+\\usepackage{longtable}
+\\usepackage{float}
+\\usepackage{wrapfig}
+\\usepackage{rotating}
+\\usepackage[normalem]{ulem}
+\\usepackage{amsmath}
+\\usepackage{textcomp}
+\\usepackage{marvosym}
+\\usepackage{wasysym}
+\\usepackage{amssymb}
+\\usepackage{hyperref}
+\\usepackage{mathpazo}
+\\usepackage{color}
+\\usepackage{enumerate}
+"))
 
 (defun jk/title-title ()
   (car (org-roam--extract-titles-title))
@@ -108,14 +188,11 @@
 		       "IMAGE"
 		       ".png}};
    \\end{tikzpicture}
-
 	     \\vspace{2.2cm}
-
 	     \\Huge
 	     \\textbf{"
 		       "TITILE"
 		       "}
-
 	     \\vspace{3.0cm}
 	     \\LARGE"
 		       "SUBTITLE"
@@ -126,7 +203,6 @@
 
 	     "\\
 	     \\vfill
-
 	     \\Large
 	     Baden, Schweiz\\
 	     \\today
