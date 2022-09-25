@@ -87,4 +87,6 @@
     )
   )
 
+(use-package orderless)
+
 (provide 'jk-ivy)

@@ -22,7 +22,15 @@
   "Path to the custom modules of the config."
   )
 
-(defvar jk/core-modules '(packages settings font colors modeline util windows input)
+(defvar jk/core-modules '(packages
+                          settings
+                          font
+                          colors
+                          modeline
+                          util
+                          windows
+                          input
+                          )
   "List of all currently active modules, get loaded at startup."
   )
 
@@ -30,7 +38,20 @@
   "Path to the custom modules of the config."
   )
 
-(defvar jk/modules '(jk-site jk-ivy jk-evil jk-leader)
+(defvar jk/modules '(jk-site
+                     jk-ivy
+                     jk-evil
+                     jk-leader
+                     jk-git
+                     jk-programming
+                     jk-lsp
+                     jk-rust
+                     jk-spelling
+                     jk-org
+                     jk-ox
+                     jk-latex
+                     jk-roam
+                     )
   "List of all currently active modules, get loaded at startup."
   )
 
