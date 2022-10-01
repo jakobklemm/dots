@@ -2,9 +2,9 @@
 # name: thearmabois
 # key: thearmabois
 # --
-#+TITLE: $0
+#+TITLE: $1
 #+AUTHOR: Jeykey
-#+DATE: $1
+#+DATE: $0
 #+SETUPFILE: ~/.latex/tab.org
 #+LATEX: \tabturn{$2}
 #+LATEX: \tabtitle

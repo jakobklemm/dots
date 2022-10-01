@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: assignment
+# key: assignment
+# --
+#+TITLE: $1
+#+AUTHOR: Jakob Klemm
+#+DATE: $2
+#+SETUPFILE: ~/.latex/assignment.org
+#+LATEX: #+LATEX: \$3Header{$0}{Jakob Klemm}{22-921-241}
