@@ -1,10 +1,12 @@
 ;; early-init.el
 
+(setq jk/original-gc gc-cons-threshold)
+
 (setq gc-cons-threshold (* 1024 1024 1024))
 
 (set-window-scroll-bars (minibuffer-window) nil nil)
 
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
+;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 (setq warning-suppress-types '(((package reinitialization))))
 
@@ -16,14 +18,14 @@
 (setq site-run-file nil)
 
 
-(unless (display-graphic-p)
-  (setq default-frame-alist '((fullscreen . maximized)
-			      (menu-bar-lines . 0)
-			      (tool-bar-lines . 0)
-			      (vertical-scroll-bars . nil))
-	initial-frame-alist '((fullscreen . maximized)
-			      (menu-bar-lines . 0)
-			      (tool-bar-lines . 0)
-			      (vertical-scroll-bars . nil))))
+;; (unless (display-graphic-p)
+;;   (setq default-frame-alist '((fullscreen . maximized)
+;; 			      (menu-bar-lines . 0)
+;; 			      (tool-bar-lines . 0)
+;; 			      (vertical-scroll-bars . nil))
+;; 	initial-frame-alist '((fullscreen . maximized)
+;; 			      (menu-bar-lines . 0)
+;; 			      (tool-bar-lines . 0)
+;; 			      (vertical-scroll-bars . nil))))
 
 (provide 'early-init)

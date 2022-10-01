@@ -26,18 +26,18 @@
            (org-reveal-note-key-char nil)))
 
 (setq org-latex-pdf-process
-      '("pdflatex -interaction nonstopmode -output-directory %o %f"
-        "bibtex %b"
-        "pdflatex -interaction nonstopmode -output-directory %o %f"
-        "pdflatex -interaction nonstopmode -output-directory %o %f"))
+      '("xelatex -interaction nonstopmode -output-directory %o %f"
+       "bibtex %b"
+        "xelatex -interaction nonstopmode -output-directory %o %f"
+        "xelatex -interaction nonstopmode -output-directory %o %f"))
 
 (setq org-src-fontify-natively t)
-(setq org-latex-listings 't)
+(setq org-latex-listings t)
 
-;; Open directly PDFs in browser.
+;; Open exports in browser
 (setcdr (assoc "\\.pdf\\'" org-file-apps) "firefox %s")
 
-(defvar org-export-output-directory-prefix "export/"
+(defvar org-export-output-directory-prefix "exports/"
   "Prefix of directory used for org-mode export")
 
 (defadvice org-export-output-file-name (before org-add-export-dir activate)

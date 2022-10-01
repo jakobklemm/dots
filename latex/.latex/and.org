@@ -1,9 +1,0 @@
-#+EMAIL: kontakt@jeykey.net
-#+LATEX_CLASS: and
-#+LANGUAGE: EN
-#+LATEX_HEADER: \input{~/.latex/core.tex}
-#+LATEX_HEADER: \input{~/.latex/and.tex}
-#+LATEX_HEADER: \usepackage[AUTO]{inputenc}
-#+LATEX_HEADER: \usepackage{graphicx}
-#+LATEX_HEADER: \usepackage{amsmath, amsthm, amssymb}
-#+LATEX_HEADER: \usepackage[table, xcdraw]{xcolor}

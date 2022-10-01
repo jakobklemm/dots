@@ -3,33 +3,19 @@
 (use-package org
   :hook
   (org-mode . org-toggle-inline-images)
-  (org-mode . org-indent-mode)
   (text-mode . flyspell-mode)
   (org-mode . flyspell-mode)
   :custom
   ((org-directory "~/org/")
    (org-agenda-files '("~/org/active/"))
-   (org-image-actual-width '(600))
    (org-ellipsis " ▼ ")
-   (org-adapt-indentation nil)
-   (org-fontify-quote-and-verse-blocks t)
-   (org-startup-folded t)
-   (org-src-tab-acts-natively t)
    (org-hide-emphasis-markers t)
    (org-src-window-setup 'current-window)
    (org-return-follows-link t)
    (org-confirm-babel-evaluate nil)
-   (org-use-speed-commands t)
-   (org-catch-invisible-edits 'show)
+   (org-catch-invisible-edits 'smart)
    )
   :config
-  (custom-set-faces
-   '(org-level-1 ((t (:inherit outline-1 :height 1.60))))
-   '(org-level-2 ((t (:inherit outline-2 :height 1.40))))
-   '(org-level-3 ((t (:inherit outline-3 :height 1.20))))
-   '(org-level-4 ((t (:inherit outline-4 :height 1.0))))
-   '(org-level-5 ((t (:inherit outline-5 :height 1.0))))
-   )
   (setq-default org-display-inline-images t)
   (setq-default org-startup-with-inline-images t)
   (require 'tempo)
@@ -40,6 +26,19 @@
   :config
   (global-org-modern-mode)
   )
+
+(use-package org-transclusion)
+
+;; ;; https://stackoverflow.com/questions/13340616/assign-ids-to-every-entry-in-org-mode
+;; (defun my/org-add-ids-to-headlines-in-file ()
+;;   "Add ID properties to all headlines in the current file which
+;; do not already have one."
+;;   (interactive)
+;;   (org-map-entries 'org-id-get-create))
+
+;; (add-hook 'org-mode-hook
+;;           (lambda ()
+;;             (add-hook 'before-save-hook 'my/org-add-ids-to-headlines-in-file nil 'local)))
 
 (use-package org-appear
   :hook (org-mode . org-appear-mode)

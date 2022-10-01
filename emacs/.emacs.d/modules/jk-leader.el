@@ -91,6 +91,10 @@
  ;; Capture
  "cc" 'org-capture
  "cr" 'org-roam-capture
+
+ ;; Test: Transclusion
+ "va" 'org-transclusion-add
+ "vm" 'org-transclusion-mode
  )
 
 (provide 'jk-leader)

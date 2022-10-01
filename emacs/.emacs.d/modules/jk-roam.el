@@ -40,7 +40,7 @@
   )
 
 (setq org-roam-node-display-template
-      (concat "${tags:20}: ${title:*}"))
+      (concat "${tags:30}: ${title:*}"))
 
 (use-package org-roam-ui
   :after org-roam
@@ -56,6 +56,8 @@
   (setq org-roam-timestamps-remember-timestamps t)
   (setq org-roam-timestamps-minimum-gap 3600)
   )
+
+(use-package org-ref)
 
 (use-package org-roam-bibtex
   :after org-roam

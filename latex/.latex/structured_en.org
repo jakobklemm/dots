@@ -1,5 +1,0 @@
-#+EMAIL: contact@jeykey.net
-#+LATEX_CLASS: structured
-#+LANGUAGE: EN
-#+LATEX_HEADER: \input{~/.latex/setup.tex}
-#+LATEX_HEADER: \input{~/.latex/tab.tex}

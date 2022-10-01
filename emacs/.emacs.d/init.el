@@ -12,7 +12,7 @@
   )
 
 ;; https://github.com/mishamyrt/Lilex
-(defcustom jk/font "Lilex"
+(defcustom jk/font "JetBrains Mono"
   "What font to use, might get overwritten for special (local) cases."
   :type 'string
   :group 'jk/config
@@ -39,7 +39,7 @@
   )
 
 (defvar jk/modules '(jk-site
-                     jk-ivy
+                     jk-vertico
                      jk-evil
                      jk-leader
                      jk-git
@@ -50,7 +50,9 @@
                      jk-org
                      jk-ox
                      jk-latex
+                     jk-bibtex
                      jk-roam
+                     jk-margins
                      )
   "List of all currently active modules, get loaded at startup."
   )
@@ -72,6 +74,8 @@
 
 (setq custom-file (concat user-emacs-directory "custom.el"))
 (load custom-file 'noerror)
+
+(setq gc-cons-threshold jk/original-gc)
 
 ;; Metrics
 (add-hook 'emacs-startup-hook

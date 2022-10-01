@@ -1,0 +1,25 @@
+#+EMAIL: thearmabois@jeykey.net
+#+LATEX_CLASS: article
+#+OPTIONS: toc:nil
+
+#+LATEX_HEADER: \input{~/.latex/base.tex}
+#+LATEX_HEADER: \input{~/.latex/commands.tex}
+
+#+LATEX_HEADER: \usepackage[backend=bibtex,style=authoryear,natbib=true]{biblatex}
+#+LATEX_HEADER: \addbibresource{~/.tools/reference.bib}
+
+#+LATEX_HEADER: \usepackage[all, center, firstpage=false]{background}
+#+LATEX_HEADER: \backgroundsetup{contents=TAB SECRET}
+#+LATEX_HEADER: \SetBgAngle{30}
+#+LATEX_HEADER: \SetBgScale{8}
+#+LATEX_HEADER: \SetBgOpacity{1}
+
+#+LATEX_HEADER: \usepackage{fancyhdr}
+#+LATEX_HEADER: \pagestyle{fancy}
+#+LATEX_HEADER: \fancyhead{}
+#+LATEX_HEADER: \fancyhead[R]{TAB SECRET}
+#+LATEX_HEADER: % \fancyhead[L]{\turn}
+#+LATEX_HEADER: \newcommand{\tabturn}[1]{\fancyhead[L]{#1}}
+
+#+LATEX_HEADER: \setlength{\parindent}{0pt}
+

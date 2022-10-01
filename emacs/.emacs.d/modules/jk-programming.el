@@ -33,7 +33,6 @@
   )
 
 (use-package smartparens
-  :defer t
   :hook
   (after-init . smartparens-global-mode)
   :config

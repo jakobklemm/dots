@@ -16,6 +16,13 @@
   (evil-collection-init)
   )
 
+(use-package evil-org
+  :after org
+  :hook (org-mode . (lambda () evil-org-mode))
+  :config
+  (require 'evil-org-agenda)
+  (evil-org-agenda-set-keys))
+
 (use-package which-key
   :init (which-key-mode)
   :defer t
