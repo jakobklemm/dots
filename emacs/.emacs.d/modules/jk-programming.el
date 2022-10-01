@@ -61,7 +61,12 @@
           conf-mode
           snippet-mode) . yas-minor-mode-on)
   :init
-  (setq yas-snippet-dir (concat user-emacs-directory "snippets/"))
+  (setq yas-snippet-dirs
+      '("~/.emacs.d/snippets/"
+        "~/.tools/snippets/"
+        ))
+
+(yas-global-mode 1) 
   )
 
 (use-package ivy-yasnippet)
