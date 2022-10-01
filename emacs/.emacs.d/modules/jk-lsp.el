@@ -12,37 +12,16 @@
   :hook (company-mode . company-box-mode)
   )
 
-(use-package lsp-mode
-  :defer t
-  :commands (lsp lsp-deferred)
+(use-package eglot
   :custom
-  ((lsp-keymap-prefix "C-c l")
-   (lsp-headerline-breadcrumb-enable nil)
-   (lsp-signature-auto-activate nil)
-   (lsp-idle-delay 0.6)
-   (lsp-rust-analyzer-server-display-inlay-hints t)
-   (lsp-rust-analyzer-inlay-hints-mode t))
-  :hook
-  (elixir-mode . lsp)
-  (rustic-mode . lsp)
-  :config
-  (lsp-enable-which-key-integration t)
+  (eglot-send-changes-idle-time 0)
   )
 
-(use-package lsp-ui
-  :ensure t
-  :commands lsp-ui-mode
-  :custom
-  ((lsp-ui-doc-max-height 256)
-   (lsp-ui-doc-max-width 64)
-   (lsp-ui-doc-position 'bottom-and-right)
-   (lsp-ui-doc-show-with-mouse t)
-   (lsp-ui-doc-show-with-cursor t)
-   (lsp-ui-doc-delay 1)
-   )
+(use-package flycheck-inline
   :config
-  (lsp-ui-doc-enable t)
-  (lsp-ui-mode)
+  (with-eval-after-load 'flycheck
+    (add-hook 'flycheck-mode-hook #'flycheck-inline-mode))
   )
+
 
 (provide 'jk-lsp)

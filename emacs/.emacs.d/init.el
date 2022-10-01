@@ -39,7 +39,7 @@
   )
 
 (defvar jk/modules '(jk-site
-                     jk-vertico
+                     jk-ivy
                      jk-evil
                      jk-leader
                      jk-git
@@ -50,7 +50,6 @@
                      jk-org
                      jk-ox
                      jk-latex
-                     jk-bibtex
                      jk-roam
                      jk-margins
                      )

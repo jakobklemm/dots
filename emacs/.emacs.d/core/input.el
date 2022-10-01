@@ -36,6 +36,7 @@
  "C-x 3" 'hrs/split-window-right-and-switch
  "C-x 2" 'hrs/split-window-below-and-switch
  "C-c C-f" 'format-all-buffer
+ "C-c C-o" 'general-override-local-mode
  )
 
 (provide 'input)

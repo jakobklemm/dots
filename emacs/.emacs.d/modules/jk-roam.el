@@ -59,11 +59,6 @@
 
 (use-package org-ref)
 
-(use-package org-roam-bibtex
-  :after org-roam
-  :config
-  (require 'org-ref))
-
 (use-package org-caldav
   :custom
   ((org-caldav-url "https://cloud.jeykey.net/remote.php/dav/calendars/jeykey/")

@@ -11,9 +11,25 @@
 (c-set-offset 'access-label 0)
 (c-set-offset (quote cpp-macro) 0 nil)
 
+(use-package format-all
+  :bind ("C-c C-f" . format-all-buffer)
+  )
+
 (use-package flycheck
   :config
   (add-hook 'after-init-hook #'global-flycheck-mode)
+  )
+
+(use-package flycheck-pos-tip
+  :after flycheck
+  :config
+  (flycheck-pos-tip-mode t)
+  )
+
+(use-package flycheck-plantuml
+  :after flycheck
+  :config
+  (flycheck-plantuml-setup)
   )
 
 (use-package flycheck-rust
@@ -28,10 +44,6 @@
     (add-hook 'flycheck-mode-hook #'flycheck-inline-mode))
   )
 
-(use-package format-all
-  :bind ("C-c C-f" . format-all-buffer)
-  )
-
 (use-package smartparens
   :hook
   (after-init . smartparens-global-mode)
@@ -43,12 +55,17 @@
   (sp-pair "$" "$" :actions '(wrap))
   )
 
-(use-package separedit
-  :defer t
-  :config
-  (define-key prog-mode-map        (kbd "C-c '") #'separedit)
-  (define-key minibuffer-local-map (kbd "C-c '") #'separedit)
-  (define-key help-mode-map        (kbd "C-c '") #'separedit)
+(use-package yasnippet
+  :hook ((text-mode
+          prog-mode
+          conf-mode
+          snippet-mode) . yas-minor-mode-on)
+  :init
+  (setq yas-snippet-dir (concat user-emacs-directory "snippets/"))
   )
+
+(use-package ivy-yasnippet)
+
+(use-package yasnippet-snippets)
 
 (provide 'jk-programming)

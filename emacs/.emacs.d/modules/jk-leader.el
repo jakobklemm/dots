@@ -17,9 +17,8 @@
  "bk" '(kill-current-buffer :which-key "kill-buffer")
 
  ;; Search
- "ss" '(consult-line :which-key "search-line")
+ "ss" '(swiper :which-key "search-line")
  "sr" '(ripgrep-regexp :which-key "search-rg")
- "si" '(consult-imenu :which-key "search-org")
 
  ;; Windows
  "ww" '(hrs/split-window-below-and-switch :which-key "window-below")
@@ -31,20 +30,10 @@
  ;; Emacs
  "qq" '(save-buffers-kill-emacs :which-key "kill-emacs")
 
- ;; Programming
- "ps" '(lsp-ui-doc-show :which-key "doc-show")
- "pf" '(format-all-buffer :which-key "format")
-
  ;; Git
  "gg" 'magit-status
  "gi" 'magit-init
  "gp" 'magit-pull
-
- ;; References
- "ri" '(citar-insert-citation :which-key "insert citation")
- "rr" '(citar-insert-reference :which-key "insert reference")
- "ro" '(citar-open-entry :which-key "open bibtex")
- "rl" '(citar-open :which-key "open link")
 
  ;; org-mode
  "or" 'org-refile
@@ -93,7 +82,7 @@
  "cr" 'org-roam-capture
 
  ;; Test: Transclusion
- "va" 'org-transclusion-add
+ "va" 'org-transclusion-add-all
  "vm" 'org-transclusion-mode
  )
 

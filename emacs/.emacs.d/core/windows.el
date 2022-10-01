@@ -11,7 +11,7 @@
   (split-window-below)
   (balance-windows)
   (other-window 1)
-  (consult-buffer)
+  (ivy-switch-buffer)
   )
 
 (defun hrs/split-window-right-and-switch ()
@@ -20,7 +20,7 @@
   (split-window-right)
   (balance-windows)
   (other-window 1)
-  (consult-buffer)
+  (ivy-switch-buffer)
   )
 
 (provide 'windows)

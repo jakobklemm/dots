@@ -18,14 +18,14 @@
 (setq site-run-file nil)
 
 
-;; (unless (display-graphic-p)
-;;   (setq default-frame-alist '((fullscreen . maximized)
-;; 			      (menu-bar-lines . 0)
-;; 			      (tool-bar-lines . 0)
-;; 			      (vertical-scroll-bars . nil))
-;; 	initial-frame-alist '((fullscreen . maximized)
-;; 			      (menu-bar-lines . 0)
-;; 			      (tool-bar-lines . 0)
-;; 			      (vertical-scroll-bars . nil))))
+(unless (display-graphic-p)
+  (setq default-frame-alist '((fullscreen . maximized)
+			      (menu-bar-lines . 0)
+			      (tool-bar-lines . 0)
+			      (vertical-scroll-bars . nil))
+	initial-frame-alist '((fullscreen . maximized)
+			      (menu-bar-lines . 0)
+			      (tool-bar-lines . 0)
+			      (vertical-scroll-bars . nil))))
 
 (provide 'early-init)

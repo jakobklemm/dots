@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: thearmabois
+# key: thearmabois
+# --
+#+TITLE: $0
+#+AUTHOR: Jeykey
+#+DATE: $1
+#+SETUPFILE: ~/.latex/tab.org
+#+LATEX: \tabturn{$2}
+#+LATEX: \tabtitle
