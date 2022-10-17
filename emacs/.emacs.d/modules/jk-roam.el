@@ -39,8 +39,17 @@
   (org-roam-db-autosync-enable)
   )
 
+(cl-defmethod org-roam-node-type ((node org-roam-node))
+  "Return the TYPE of NODE."
+  (condition-case nil
+      (file-name-nondirectory
+       (directory-file-name
+        (file-name-directory
+         (file-relative-name (org-roam-node-file node) org-roam-directory))))
+    (error "")))
+
 (setq org-roam-node-display-template
-      (concat "${tags:30}: ${title:*}"))
+      (concat "${type:10} - ${tags:30}: ${title:*}"))
 
 (use-package org-roam-ui
   :after org-roam

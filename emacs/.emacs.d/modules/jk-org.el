@@ -45,7 +45,7 @@
   :custom
   ((org-hide-emphasis-markers t)
    (org-appear-autoemphasis t)
-   (org-appear-autolinks nil)
+   (org-appear-autolinks t)
    (org-appear-autosubmarkers t))
   )
 

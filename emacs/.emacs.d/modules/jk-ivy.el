@@ -43,6 +43,9 @@
   )
 
 (use-package ivy-prescient
+  :init (setq prescient-filter-method '(literal fuzzy regexp initialism)
+              ;https://github.com/raxod502/prescient.el#ivy-specific
+              ivy-prescient-enable-filtering nil)
   :config
   (ivy-prescient-mode t)
   )

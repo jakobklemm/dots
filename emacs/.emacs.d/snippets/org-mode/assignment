@@ -6,4 +6,4 @@
 #+AUTHOR: Jakob Klemm
 #+DATE: $2
 #+SETUPFILE: ~/.latex/assignment.org
-#+LATEX: #+LATEX: \$3Header{$0}{Jakob Klemm}{22-921-241}
+#+LATEX: \linAlgHeader{X}{Jakob Klemm}{22-921-241}

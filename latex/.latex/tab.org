@@ -10,7 +10,7 @@
 
 #+LATEX_HEADER: \usepackage[all, center, firstpage=false]{background}
 #+LATEX_HEADER: \backgroundsetup{contents=TAB SECRET}
-#+LATEX_HEADER: \SetBgAngle{30}
+#+LATEX_HEADER: \SetBgAngle{45}
 #+LATEX_HEADER: \SetBgScale{8}
 #+LATEX_HEADER: \SetBgOpacity{1}
 
