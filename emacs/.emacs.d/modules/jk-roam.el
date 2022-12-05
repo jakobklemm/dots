@@ -16,6 +16,15 @@
 				  :immediate-finish t
 				  :unnarrowed t
 				  )
+                 ("e" "ETH" plain
+				  "%?"
+				  :if-new (file+head "eth/%<%Y%m%d>-${slug}.org"
+						     "#+TITLE: ${title}\n#+FILETAGS: \n#+DATE: "
+						     )
+				  :immediate-finish t
+				  :unnarrowed t
+				  )
+
 				 ("r" "Reference" plain
 				  "%?"
 				  :if-new (file+head "references/%<%Y%m%d>.org"

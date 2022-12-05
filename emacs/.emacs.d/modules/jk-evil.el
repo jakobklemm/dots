@@ -31,6 +31,20 @@
    "'" 'evil-first-non-blank
    "k" 'evil-end-of-line
    )
+
+  (general-define-key
+   :keymaps 'ivy-mode-map
+
+   "M-j" 'ivy-next-line
+   "M-k" 'ivy-previous-line
+   )
+
+  (general-define-key
+   :keymaps 'company-mode-map
+
+   "M-j" 'company-select-next-or-abort
+   "M-k" 'company-select-previous-or-abort
+   )
   )
 
 (defun jk/define-binds-qwertz ()

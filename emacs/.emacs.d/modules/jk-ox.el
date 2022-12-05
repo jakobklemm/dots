@@ -35,7 +35,7 @@
 (setq org-latex-listings t)
 
 ;; Open exports in browser
-(setcdr (assoc "\\.pdf\\'" org-file-apps) "firefox %s")
+(setcdr (assoc "\\.pdf\\'" org-file-apps) "brave %s")
 
 (defvar org-export-output-directory-prefix "exports/"
   "Prefix of directory used for org-mode export")
