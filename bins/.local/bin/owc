@@ -1,0 +1,8 @@
+#!/bin/bash
+
+last=$(tail -n 1 ~/org/words.org | awk '{print $2}' | cut -f1)
+curr=$(find ~/org/database/ -type f -name "*.org" -exec cat {} + | wc -w | cut -f1)
+today=$(date +"%D")
+diff=$(($curr - $last))
+echo "$today $curr" >> ~/org/words.org
+echo "Todays word count: $diff"
