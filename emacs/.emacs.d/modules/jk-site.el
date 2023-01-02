@@ -20,7 +20,7 @@
              :publishing-directory "~/Documents/jeykey.net/public/"
              :publishing-function 'org-html-publish-to-html
              )
-       (list "blog"
+       (list "posts"
 	     :recursive t
              :base-directory "~/Documents/jeykey.net/content/posts/"
              :with-author nil
@@ -36,14 +36,14 @@
              :sitemap-filename "overview.html"
              :sitemap-date-format "%d.%m.%Y"
              :sitemap-format-entry 'jk/build-entry
-	     :sitemap-function 'jk/build-sitemap
+	         :sitemap-function 'jk/build-sitemap
              :publishing-directory "~/Documents/jeykey.net/public/posts/"
              :publishing-function 'org-html-publish-to-html
 	     )
        (list "static"
-             :base-directory "~/Documents/jeykey.net/content/static/"
+             :base-directory "~/Documents/posts/static/public/"
              :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf\\|asc"
-             :publishing-directory "~/Documents/jeykey.net/public/static/"
+             :publishing-directory "~/Documents/jeykey.net/content/static/"
              :publishing-function 'org-publish-attachment
              :recursive t)
        (list "style"

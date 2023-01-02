@@ -7,7 +7,7 @@
 
 (defcustom jk/org-base-dir "~/org/"
   "Base path for org-mode to find files."
-  :type 'sting
+  :type 'string
   :group 'jk/config
   )
 

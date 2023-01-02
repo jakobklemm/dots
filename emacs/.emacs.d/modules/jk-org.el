@@ -54,7 +54,7 @@
 (use-package org-fragtog
   :hook (org-mode . org-fragtog-mode)
   :config
-  (plist-put org-format-latex-options :scale 1.5)
+  (plist-put org-format-latex-options :scale 1.6)
   :custom
   ((org-latex-preview-ltxpng-directory "~/.ltxpng/")))
 

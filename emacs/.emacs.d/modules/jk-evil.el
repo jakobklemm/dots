@@ -37,6 +37,8 @@
 
    "M-j" 'ivy-next-line
    "M-k" 'ivy-previous-line
+
+   "C-s" 'ivy-immediate-done
    )
 
   (general-define-key

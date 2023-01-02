@@ -11,7 +11,7 @@
 				 ("d" "Direct" plain
 				  "%?"
 				  :if-new (file+head "main/%<%Y%m%d>-${slug}.org"
-						     "#+TITLE: ${title}\n#+FILETAGS: \n#+DATE: "
+						     "#+TITLE: ${title}\n#+FILETAGS: \n#+DATE:"
 						     )
 				  :immediate-finish t
 				  :unnarrowed t
@@ -24,7 +24,22 @@
 				  :immediate-finish t
 				  :unnarrowed t
 				  )
-
+                 ("d" "Docs" plain
+				  "%?"
+				  :if-new (file+head "docs/%<%Y%m%d>-${slug}.org"
+						     "#+TITLE: ${title}\n#+FILETAGS: \n#+DATE: "
+						     )
+				  :immediate-finish t
+				  :unnarrowed t
+				  )
+                 ("o" "Output" plain
+				  "%?"
+				  :if-new (file+head "out/%<%Y%m%d>-${slug}.org"
+						     "#+TITLE: ${title}\n#+FILETAGS: \n#+DATE: "
+						     )
+				  :immediate-finish t
+				  :unnarrowed t
+				  )
 				 ("r" "Reference" plain
 				  "%?"
 				  :if-new (file+head "references/%<%Y%m%d>.org"

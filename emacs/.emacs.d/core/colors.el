@@ -40,8 +40,8 @@ Version 2017-03-12"
   ((org-mode . rainbow-delimiters-mode)
    (prog-mode . rainbow-delimiters-mode)))
 
-(use-package doom-themes
+(use-package kaolin-themes
   :config
-  (load-theme 'doom-nord-aurora t))
+  (load-theme 'kaolin-ocean t))
 
 (provide 'colors)
