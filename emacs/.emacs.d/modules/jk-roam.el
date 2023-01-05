@@ -16,7 +16,7 @@
 				  :immediate-finish t
 				  :unnarrowed t
 				  )
-                 ("e" "ETH" plain
+				 ("e" "ETH" plain
 				  "%?"
 				  :if-new (file+head "eth/%<%Y%m%d>-${slug}.org"
 						     "#+TITLE: ${title}\n#+FILETAGS: \n#+DATE: "
@@ -24,7 +24,7 @@
 				  :immediate-finish t
 				  :unnarrowed t
 				  )
-                 ("d" "Docs" plain
+				 ("d" "Docs" plain
 				  "%?"
 				  :if-new (file+head "docs/%<%Y%m%d>-${slug}.org"
 						     "#+TITLE: ${title}\n#+FILETAGS: \n#+DATE: "
@@ -32,7 +32,7 @@
 				  :immediate-finish t
 				  :unnarrowed t
 				  )
-                 ("o" "Output" plain
+				 ("o" "Output" plain
 				  "%?"
 				  :if-new (file+head "out/%<%Y%m%d>-${slug}.org"
 						     "#+TITLE: ${title}\n#+FILETAGS: \n#+DATE: "
@@ -75,49 +75,29 @@
 (setq org-roam-node-display-template
       (concat "${type:10} - ${tags:30}: ${title:*}"))
 
+(require 'jk-roam-learn)
+
+(setq jk/roam-registered-tags '("discmath" "and" "linalg" "eprog"))
+
 (defun jk/get-specific-random-discmath ()
-    "get discmath node"
-    (interactive)
-    (org-roam-node-random nil 'jk/org-roam-is-discmath)
-    )
+  "get discmath node"
+  (interactive)
+  (jk/roam-learn-random-by-tag "discmath"))
 
 (defun jk/get-specific-random-and ()
-    "get and node"
-    (interactive)
-    (org-roam-node-random nil 'jk/org-roam-is-and)
-    )
+  "get and node"
+  (interactive)
+  (jk/roam-learn-random-by-tag "and"))
 
 (defun jk/get-specific-random-linalg ()
-    "get linalg node"
-    (interactive)
-    (org-roam-node-random nil 'jk/org-roam-is-linalg)
-    )
+  "get linalg node"
+  (interactive)
+  (jk/roam-learn-random-by-tag "linalg"))
 
 (defun jk/get-specific-random-eprog ()
-    "get discmath node"
-    (interactive)
-    (org-roam-node-random nil 'jk/org-roam-is-eprog)
-    )
-
-(defun jk/org-roam-is-discmath (node)
-  "Is the node tagged as discmath"
-  (member "discmath" (org-roam-node-tags node))
-  )
-
-(defun jk/org-roam-is-and (node)
-  "Is the node tagged as discmath"
-  (member "and" (org-roam-node-tags node))
-  )
-
-(defun jk/org-roam-is-linalg (node)
-  "Is the node tagged as discmath"
-  (member "linalg" (org-roam-node-tags node))
-  )
-
-(defun jk/org-roam-is-eprog (node)
-  "Is the node tagged as discmath"
-  (member "eprog" (org-roam-node-tags node))
-  )
+  "get discmath node"
+  (interactive)
+  (jk/roam-learn-random-by-tag "eprog"))
 
 (use-package org-roam-ui
   :after org-roam
