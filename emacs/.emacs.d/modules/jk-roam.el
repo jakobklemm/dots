@@ -75,6 +75,50 @@
 (setq org-roam-node-display-template
       (concat "${type:10} - ${tags:30}: ${title:*}"))
 
+(defun jk/get-specific-random-discmath ()
+    "get discmath node"
+    (interactive)
+    (org-roam-node-random nil 'jk/org-roam-is-discmath)
+    )
+
+(defun jk/get-specific-random-and ()
+    "get and node"
+    (interactive)
+    (org-roam-node-random nil 'jk/org-roam-is-and)
+    )
+
+(defun jk/get-specific-random-linalg ()
+    "get linalg node"
+    (interactive)
+    (org-roam-node-random nil 'jk/org-roam-is-linalg)
+    )
+
+(defun jk/get-specific-random-eprog ()
+    "get discmath node"
+    (interactive)
+    (org-roam-node-random nil 'jk/org-roam-is-eprog)
+    )
+
+(defun jk/org-roam-is-discmath (node)
+  "Is the node tagged as discmath"
+  (member "discmath" (org-roam-node-tags node))
+  )
+
+(defun jk/org-roam-is-and (node)
+  "Is the node tagged as discmath"
+  (member "and" (org-roam-node-tags node))
+  )
+
+(defun jk/org-roam-is-linalg (node)
+  "Is the node tagged as discmath"
+  (member "linalg" (org-roam-node-tags node))
+  )
+
+(defun jk/org-roam-is-eprog (node)
+  "Is the node tagged as discmath"
+  (member "eprog" (org-roam-node-tags node))
+  )
+
 (use-package org-roam-ui
   :after org-roam
   :custom
