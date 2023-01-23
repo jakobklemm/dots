@@ -8,16 +8,16 @@
    )
   :bind
   (:map rustic-mode-map
-        ("M-j" . lsp-ui-imenu)
-        ("M-?" . lsp-find-references)
         ("C-c C-c l" . flycheck-list-errors)
-        ("C-c C-c a" . lsp-execute-code-action)
-        ("C-c C-c r" . lsp-rename)
-        ("C-c C-c q" . lsp-workspace-restart)
-        ("C-c C-c Q" . lsp-workspace-shutdown)
-        ("C-c C-c s" . lsp-rust-analyzer-status))
+        )
   :hook
   ((rustic-mode-hook . lsp)))
+
+(use-package flycheck-rust
+  :config
+  (with-eval-after-load 'rust-mode
+    (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
+  )
 
 (use-package rust-auto-use
   :hook

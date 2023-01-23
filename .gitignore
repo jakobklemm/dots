@@ -95,3 +95,4 @@ url/
 *.lock
 session.*
 	
+/emacs/.emacs.d/amx-items

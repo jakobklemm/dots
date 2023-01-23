@@ -75,28 +75,6 @@
 (setq org-roam-node-display-template
       (concat "${type:10} - ${tags:30}: ${title:*}"))
 
-(setq jk/roam-registered-tags '("discmath" "and" "linalg" "eprog"))
-
-(defun jk/get-specific-random-discmath ()
-  "get discmath node"
-  (interactive)
-  (jk/roam-learn-random-by-tag "discmath"))
-
-(defun jk/get-specific-random-and ()
-  "get and node"
-  (interactive)
-  (jk/roam-learn-random-by-tag "and"))
-
-(defun jk/get-specific-random-linalg ()
-  "get linalg node"
-  (interactive)
-  (jk/roam-learn-random-by-tag "linalg"))
-
-(defun jk/get-specific-random-eprog ()
-  "get discmath node"
-  (interactive)
-  (jk/roam-learn-random-by-tag "eprog"))
-
 (use-package org-roam-ui
   :after org-roam
   :custom

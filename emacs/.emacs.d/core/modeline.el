@@ -17,15 +17,15 @@
   (feebleline-mode 1))
 
 (defun jk/line-time ()
-  "Returns the current system time for the modeline."
+  "Return the current system time for the modeline."
   (format-time-string "%H:%M:%S"))
 
 (defun jk/line-date ()
-  "Returns the current date for the modeline."
+  "Return the current date for the modeline."
   (format-time-string "%d.%m.%Y"))
 
 (defun jk/line-workspace ()
-  "Returns the current workspace for the modeline."
+  "Return the current workspace for the modeline."
   (if (string= (system-name) "voyager")
       ""
     (string-trim (shell-command-to-string "~/.local/bin/workspace"))))
@@ -40,3 +40,4 @@
     "-"))
 
 (provide 'modeline)
+;;; modeline.el ends here

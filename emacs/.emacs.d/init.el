@@ -31,28 +31,28 @@
                           windows
                           input
                           )
-  "List of all currently active modules, get loaded at startup."
+  "List of all currently active core functions, get loaded at startup."
   )
 
 (defconst jk/modules-path (concat user-emacs-directory "modules/")
   "Path to the custom modules of the config."
   )
 
-(defvar jk/modules '(jk-site
+(defvar jk/modules '(
+		     ;; jk-site
                      jk-ivy
                      jk-evil
                      jk-leader
                      jk-git
                      jk-programming
-                     jk-lsp
                      jk-rust
                      jk-spelling
                      jk-org
                      jk-ox
                      jk-latex
                      jk-roam
-                     jk-roam-learn
-                     jk-margins
+                     ;; jk-roam-learn
+                     ;; jk-margins
                      )
   "List of all currently active modules, get loaded at startup."
   )

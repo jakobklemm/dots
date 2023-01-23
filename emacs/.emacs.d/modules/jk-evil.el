@@ -35,17 +35,17 @@
   (general-define-key
    :keymaps 'ivy-mode-map
 
-   "M-j" 'ivy-next-line
-   "M-k" 'ivy-previous-line
+   "C-h" 'ivy-next-line
+   "C-t" 'ivy-previous-line
 
    "C-s" 'ivy-immediate-done
    )
 
   (general-define-key
-   :keymaps 'company-mode-map
+   :keymaps '(company-mode-map company-active-map)
 
-   "M-j" 'company-select-next-or-abort
-   "M-k" 'company-select-previous-or-abort
+   "C-h" 'company-select-next
+   "C-t" 'company-select-previous
    )
   )
 

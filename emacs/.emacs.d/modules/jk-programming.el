@@ -1,4 +1,4 @@
-;; Provide
+;; Programming
 
 (setq-default indent-tabs-mode nil)
 (setq-default indent-line-function 'insert-tab)
@@ -32,12 +32,6 @@
   (flycheck-plantuml-setup)
   )
 
-(use-package flycheck-rust
-  :config
-  (with-eval-after-load 'rust-mode
-    (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
-  )
-
 (use-package flycheck-inline
   :config
   (with-eval-after-load 'flycheck
@@ -65,12 +59,23 @@
       '("~/.emacs.d/snippets/"
         "~/.tools/snippets/"
         ))
-
-(yas-global-mode 1) 
+  :config
+  (yas-global-mode 1) 
   )
 
 (use-package ivy-yasnippet)
 
-(use-package yasnippet-snippets)
+(use-package yasnippet-use)
+
+(use-package eglot
+  :custom
+  (eglot-send-changes-idle-time 0)
+  )
+
+(use-package flycheck-inline
+  :config
+  (with-eval-after-load 'flycheck
+    (add-hook 'flycheck-mode-hook #'flycheck-inline-mode))
+  )
 
 (provide 'jk-programming)
