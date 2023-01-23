@@ -51,6 +51,7 @@
                      jk-ox
                      jk-latex
                      jk-roam
+                     jk-roam-learn
                      jk-margins
                      )
   "List of all currently active modules, get loaded at startup."
