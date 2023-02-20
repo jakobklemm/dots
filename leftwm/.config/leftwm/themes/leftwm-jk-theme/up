@@ -1,6 +1,6 @@
 #!/bin/sh
 
-/bin/bash ~/.screenlayout/layout.sh
+/bin/bash ~/.screenlayout/triple.sh
 
 export SCRIPTPATH
 SCRIPTPATH="$( cd "$(dirname "$0")" || exit; pwd -P )"
@@ -15,6 +15,6 @@ ln -s "$SCRIPTPATH"/down /tmp/leftwm-theme-down
 # Boot picom or compton if it exists
 picom --experimental-backends > /dev/null &
 
-leftwm command "LoadTheme $SCRIPTPATH/theme.toml"
+leftwm command "LoadTheme $SCRIPTPATH/theme.ron"
 
 feh --bg-scale -z ~/Pictures/wallpapers/
