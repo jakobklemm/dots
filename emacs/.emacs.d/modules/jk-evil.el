@@ -79,7 +79,7 @@
    )
   )
 
-(if (string= (system-name) "voyager")
+(if (string= (system-name) "endeavour")
     (jk/define-binds-qwertz)
   (jk/define-binds-dvorak)
   )

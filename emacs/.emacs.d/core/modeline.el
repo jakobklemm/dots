@@ -26,7 +26,7 @@
 
 (defun jk/line-workspace ()
   "Return the current workspace for the modeline."
-  (if (string= (system-name) "voyager")
+  (if (string= (system-name) "endeavour")
       ""
     (string-trim (shell-command-to-string "~/.local/bin/workspace"))))
 

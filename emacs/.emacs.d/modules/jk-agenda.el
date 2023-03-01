@@ -17,4 +17,4 @@
    )
   )
 
-(provide 'agenda)
+(provide 'jk-agenda)

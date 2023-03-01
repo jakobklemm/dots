@@ -119,13 +119,4 @@
 
 (require 'org-mouse)
 
-(use-package org-incoming
-  :custom
-  (
-   org-incoming-dirs '(
-                       (:source "~/files/source/" :target "~/org/database/references/" :use-roam 't :pdf-subdir "references")
-                       )
-   )
-  )
-
 (provide 'jk-org)

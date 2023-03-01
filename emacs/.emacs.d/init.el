@@ -55,6 +55,7 @@
                      ;; jk-margins
                      jk-site
                      jk-agenda
+                     jk-tms
                      )
   "List of all currently active modules, get loaded at startup."
   )
