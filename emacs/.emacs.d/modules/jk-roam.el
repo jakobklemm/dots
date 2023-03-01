@@ -24,7 +24,7 @@
 				  :immediate-finish t
 				  :unnarrowed t
 				  )
-                 ("d" "Docs" plain
+                 ("t" "Tech" plain
 				  "%?"
 				  :if-new (file+head "docs/%<%Y%m%d>-${slug}.org"
 						     "#+TITLE: ${title}\n#+FILETAGS: \n#+DATE: "

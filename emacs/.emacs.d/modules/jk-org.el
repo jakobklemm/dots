@@ -7,13 +7,14 @@
   (org-mode . flyspell-mode)
   :custom
   ((org-directory "~/org/")
-   (org-agenda-files '("~/org/active/"))
+   (org-agenda-files '("~/org/"))
    (org-ellipsis " ▼ ")
    (org-hide-emphasis-markers t)
    (org-src-window-setup 'current-window)
    (org-return-follows-link t)
    (org-confirm-babel-evaluate nil)
    (org-catch-invisible-edits 'smart)
+   (org-archive-location "~/org/archive/2023.org::* From %s")
    )
   :config
   (setq-default org-display-inline-images t)
@@ -26,6 +27,43 @@
   :config
   (global-org-modern-mode)
   )
+
+(add-hook 'org-capture-mode-hook 'evil-insert-state)
+(setq org-capture-templates
+      `(
+	    ("t" "Task" entry (function inbox-file)
+	     "* TODO %?
+:PROPERTIES:
+:DATE: %t
+:SOURCE: %l
+:END:
+"
+	     )
+        )
+      )
+
+(defun inbox-file ()
+  (find-file "~/org/active.org")
+  )
+
+(setq org-todo-keywords
+      '(
+	    (sequence "TODO(t)" "NEXT(n)" "BLOCKED(b)" "NOTE(n)" "|" "DONE(d)" "SEP(s)")
+	    )
+      org-todo-keyword-faces
+      '(("TODO" . (:foreground "#af1212" :weight bold))
+	    ("NEXT" . (:foreground "#a8fa80" :weight bold))
+	    ("BLOCKED" . (:foreground "#b213c4" :weight bold))
+	    ("SEP" . (:foreground "#30bb03" :weight bold))
+	    ("NOTE" . (:foreground "#eaa222" :weight bold))
+	    ("DONE" . (:foreground "#ffffff" :weight bold))
+	    )
+      )
+
+(setq org-log-done 'time
+      org-log-redeadline 'time
+      org-log-refile 'time
+      )
 
 (use-package org-transclusion)
 
@@ -54,14 +92,21 @@
 (use-package org-fragtog
   :hook (org-mode . org-fragtog-mode)
   :config
-  ;; (plist-put org-format-latex-options :scale 1.6)
+  (plist-put org-format-latex-options :scale 1.5)
   :custom
   (
    (org-latex-preview-ltxpng-directory "~/.ltxpng/")
    )
   )
 
-(setq org-preview-latex-default-process 'imagemagick)
+;; https://github.com/Civitasv/runemacs
+(defun civ/org-mode-visual-fill ()
+  (setq visual-fill-column-width 100
+        visual-fill-column-center-text t)
+  (visual-fill-column-mode 1))
+
+(use-package visual-fill-column
+  :hook (org-mode . civ/org-mode-visual-fill))
 
 (use-package ob-rust)
 (use-package ob-go)
@@ -73,5 +118,14 @@
    ))
 
 (require 'org-mouse)
+
+(use-package org-incoming
+  :custom
+  (
+   org-incoming-dirs '(
+                       (:source "~/files/source/" :target "~/org/database/references/" :use-roam 't :pdf-subdir "references")
+                       )
+   )
+  )
 
 (provide 'jk-org)

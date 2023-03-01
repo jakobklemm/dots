@@ -17,9 +17,6 @@
 
 (setq site-run-file nil)
 
-
-
-
 (unless (display-graphic-p)
   (setq default-frame-alist '((fullscreen . maximized)
 			      (menu-bar-lines . 0)

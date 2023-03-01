@@ -12,7 +12,7 @@
 
 (use-package langtool
   :init
-  (setq langtool-http-server-host "172.16.3.15"
+  (setq langtool-http-server-host "172.16.96.3"
 	langtool-http-server-port 8010)
   )
 

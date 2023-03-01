@@ -12,7 +12,7 @@
   )
 
 ;; https://github.com/mishamyrt/Lilex
-(defcustom jk/font "JetBrains Mono"
+(defcustom jk/font "Lilex"
   "What font to use, might get overwritten for special (local) cases."
   :type 'string
   :group 'jk/config
@@ -53,6 +53,8 @@
                      jk-roam
                      ;; jk-roam-learn
                      ;; jk-margins
+                     jk-site
+                     jk-agenda
                      )
   "List of all currently active modules, get loaded at startup."
   )

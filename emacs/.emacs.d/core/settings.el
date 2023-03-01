@@ -56,6 +56,7 @@
   (set-keyboard-coding-system 'utf-8)
   (set-language-environment   'utf-8)
   (auto-compression-mode 1)
+  (redisplay-dont-pause t)
   )
 
 (provide 'settings)
