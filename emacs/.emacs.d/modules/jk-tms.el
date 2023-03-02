@@ -12,9 +12,20 @@
   :custom
   (
    org-incoming-dirs '(
-                       (:source "~/files/source/" :target "~/org/database/references/" :use-roam 't :pdf-subdir "references" :annotation-template "~/org/templates/incoming.org" )
+                       (:source "~/files/source/" :target "~/org/database/references/" :use-roam 't :pdf-subdir "references" :annotation-template "
+#+TITLE: ${title}
+#+DATE: ${date}
+#+FILETAGS: 
+
+Link: [[${link}]]
+
+* Contains
+
+${extracted}
+"
+                                )
                        )
-   )
+                     )
   )
 
 (defun jk/add-to-daily ()
