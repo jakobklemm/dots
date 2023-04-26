@@ -102,4 +102,10 @@
    )
   )
 
+(use-package org-roam-learn
+  :quelpa (org-roam-learn :fetcher github
+                          :repo "domse007/org-roam-learn")
+  :config
+  (org-roam-learn-init))
+
 (provide 'jk-roam)

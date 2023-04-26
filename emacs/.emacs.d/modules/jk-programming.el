@@ -65,9 +65,10 @@
 
 (use-package ivy-yasnippet)
 
-(use-package yasnippet-use)
+;; (use-package yasnippet-use)
 
 (use-package eglot
+  :disabled t
   :custom
   (eglot-send-changes-idle-time 0)
   )
