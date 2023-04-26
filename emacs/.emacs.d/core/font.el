@@ -2,7 +2,7 @@
 
 ;; https://github.com/hrs/dotfiles
 (setq hrs/default-fixed-font jk/font)
-(setq hrs/default-fixed-font-size 110)
+(setq hrs/default-fixed-font-size 120)
 (setq hrs/current-fixed-font-size hrs/default-fixed-font-size)
 (set-face-attribute 'default nil
                     :family hrs/default-fixed-font

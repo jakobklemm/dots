@@ -23,14 +23,10 @@
   )
 
 (defvar jk/core-modules '(packages
-                          settings
-                          font
-                          colors
-                          modeline
-                          util
-                          windows
-                          input
-                          )
+			  setup
+			  design
+			  font
+			  )
   "List of all currently active core functions, get loaded at startup."
   )
 
@@ -39,23 +35,6 @@
   )
 
 (defvar jk/modules '(
-		     ;; jk-site
-                     jk-ivy
-                     jk-evil
-                     jk-leader
-                     jk-git
-                     jk-programming
-                     jk-rust
-                     jk-spelling
-                     jk-org
-                     jk-ox
-                     jk-latex
-                     jk-roam
-                     ;; jk-roam-learn
-                     ;; jk-margins
-                     jk-site
-                     jk-agenda
-                     jk-tms
                      )
   "List of all currently active modules, get loaded at startup."
   )

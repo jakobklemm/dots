@@ -1,8 +1,10 @@
-;; Settings
+;; Setup
 
 (use-package emacs
+  :defer t
   :custom
   (
+   ;; temp files, backups
    (recentf-save-file "~/.emacs.d/etc/recentf")
    (backup-directory-alist
     `((".*" . ,temporary-file-directory)))
@@ -10,16 +12,21 @@
     `((".*" ,temporary-file-direct)))
    (save-place-file "~/.emacs.d/etc/places")
    (backups-inhibted t)
+
+   ;; editor settings
    (auto-fill-mode t)
    (delete-selection-mode t)
    (require-final-newline t)
    (show-paren-delay 0.0)
+   (indent-tabs-mode t)
+   (indent-line-function 'insert-tab)
+   (fill-column 80)
+   (display-line-numbers-type 'relative)
+   
+   ;; quality of life changes
    (confirm-kill-emacs 'y-or-n-p)
    (ring-belll-function 'ignore)
    (delete-by-moving-to-trash t)
-   (indent-tabs-mode t)
-   (indent-line-function 'insert-tab)
-   ;; (scroll-conservatively 100)
    (vc-follow-symlinks t)
    (byte-compile-warnings '(cl-functions))
    (sentence-end-double-space nil)
@@ -30,9 +37,7 @@
    (history-delete-duplicates t)
    (mouse-yank-at-point t)
    (comp-async-report-warnings-errors nil)
-   (display-line-numbers-type 'relative)
    (initial-scratch-message nil)
-   (fill-column 80)
    (confirm-nonexistent-file-or-buffer nil)
    )
   :hook
@@ -59,4 +64,4 @@
   (redisplay-dont-pause t)
   )
 
-(provide 'settings)
+(provide 'setup)
