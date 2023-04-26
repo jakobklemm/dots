@@ -26,6 +26,7 @@
 			  setup
 			  design
 			  font
+			  windows
 			  )
   "List of all currently active core functions, get loaded at startup."
   )

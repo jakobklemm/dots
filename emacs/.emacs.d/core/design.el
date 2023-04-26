@@ -15,12 +15,16 @@
   ((org-mode . rainbow-delimiters-mode)
    (prog-mode . rainbow-delimiters-mode)))
 
-(use-package beacon
+(use-package pulsar
   :custom
-  ((beacon-blink-when-window-scrolls nil)
+  ((pulsar-pulse t)
+   (pulsar-face 'pulsar-magenta)
    )
-  :hook
-  ((after-init . beacon-mode))
+  :config
+  (pulsar-global-mode 1)
   )
+
+(use-package all-the-icons
+  :if (window-system))
 
 (provide 'design)
