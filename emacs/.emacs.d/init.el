@@ -39,6 +39,8 @@
 		     jk-git
 		     jk-navigation
 		     jk-selection
+		     jk-binds
+		     jk-editor
                      )
   "List of all currently active modules, get loaded at startup."
   )
@@ -49,6 +51,7 @@
 
 (defvar jk/modes '(
 		   jk-org
+		   jk-rust
                    )
   "List of all currently active modes, get loaded at startup."
   )

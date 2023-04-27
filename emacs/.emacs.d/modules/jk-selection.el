@@ -1,7 +1,6 @@
 ;; Selection & Completion
 
 ;; https://kristofferbalintona.me/posts/202202211546/
-
 (use-package vertico
   :straight
   ;; Special recipe to load extensions conveniently
@@ -48,23 +47,24 @@
                  cand)))
   )
 
-
 (use-package marginalia
   :custom
   (marginalia-max-relative-age 0)
-  (marginalia-align 'right)
+  (marginalia-align 'left)
   :init
-  (marginalia-mode))
+  (marginalia-mode)
+  )
 	
 (use-package orderless
   :custom
   (completion-styles '(orderless))
-  (completion-category-defaults nil)    ; I want to be in control!
+  (completion-category-defaults nil)
   (completion-category-overrides
-   '((file (styles basic-remote ; For `tramp' hostname completion with `vertico'
-                   orderless
-                   ))
-     ))
+   '((file (styles orderless
+                   )
+	   )
+     )
+   )
 
   (orderless-component-separator 'orderless-escapable-split-on-space)
   (orderless-matching-styles
@@ -138,29 +138,22 @@ parses its input."
   )
 
 (use-package embark
-  :ensure t
   :bind
   (("C-." . embark-act)         ;; pick some comfortable binding
    ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
   :init
-  ;; Optionally replace the key help with a completing-read interface
   (setq prefix-help-command #'embark-prefix-help-command)
-  ;; Show the Embark target at point via Eldoc.  You may adjust the Eldoc
-  ;; strategy, if you want to see the documentation from multiple providers.
   (add-hook 'eldoc-documentation-functions #'embark-eldoc-first-target)
-  ;; (setq eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
-  :config
-  ;; Hide the mode line of the Embark live/completions buffers
-  (add-to-list 'display-buffer-alist
-               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
-                 nil
-                 (window-parameters (mode-line-format . none)))))
+  )
 
-;; Consult users will also want the embark-consult package.
 (use-package embark-consult
-  :ensure t ; only need to install it, embark loads it after consult if found
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
+
+(use-package consult
+  :bind
+  (("C-s" . consult-line))
+  )
 
 (use-package all-the-icons-completion
   :after (marginalia all-the-icons)
