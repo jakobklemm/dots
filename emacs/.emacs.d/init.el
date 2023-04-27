@@ -38,6 +38,7 @@
 (defvar jk/modules '(
 		     jk-git
 		     jk-navigation
+		     jk-selection
                      )
   "List of all currently active modules, get loaded at startup."
   )
@@ -48,7 +49,7 @@
 
 (defvar jk/modes '(
 		   jk-org
-                     )
+                   )
   "List of all currently active modes, get loaded at startup."
   )
 
