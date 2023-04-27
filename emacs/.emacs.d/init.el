@@ -36,8 +36,20 @@
   )
 
 (defvar jk/modules '(
+		     jk-git
+		     jk-navigation
                      )
   "List of all currently active modules, get loaded at startup."
+  )
+
+(defconst jk/modes-path (concat user-emacs-directory "modes/")
+  "Path to the custom modes of the config."
+  )
+
+(defvar jk/modes '(
+		   jk-org
+                     )
+  "List of all currently active modes, get loaded at startup."
   )
 
 (setq user-full-name "Jakob Klemm"
@@ -52,6 +64,12 @@
 (add-to-list 'load-path jk/modules-path)
 
 (dolist (m jk/modules)
+  (require m)
+  )
+
+(add-to-list 'load-path jk/modes-path)
+
+(dolist (m jk/modes)
   (require m)
   )
 
