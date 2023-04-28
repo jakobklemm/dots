@@ -52,6 +52,7 @@
 (defvar jk/modes '(
 		   jk-org
 		   jk-rust
+		   jk-lua
                    )
   "List of all currently active modes, get loaded at startup."
   )
