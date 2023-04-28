@@ -41,6 +41,7 @@
 		     jk-selection
 		     jk-binds
 		     jk-editor
+		     jk-writing
                      )
   "List of all currently active modules, get loaded at startup."
   )

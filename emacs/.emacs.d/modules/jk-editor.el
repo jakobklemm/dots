@@ -151,4 +151,6 @@
   (global-flycheck-mode t)
   )
 
+(electric-pair-mode t)
+
 (provide 'jk-editor)
