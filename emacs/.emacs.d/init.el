@@ -42,6 +42,7 @@
 		     jk-binds
 		     jk-editor
 		     jk-writing
+		     jk-site
                      )
   "List of all currently active modules, get loaded at startup."
   )
@@ -54,6 +55,7 @@
 		   jk-org
 		   jk-rust
 		   jk-lua
+		   jk-python
                    )
   "List of all currently active modes, get loaded at startup."
   )

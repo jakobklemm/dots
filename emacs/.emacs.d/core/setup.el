@@ -64,4 +64,6 @@
   ;; (redisplay-dont-pause t)
   )
 
+(use-package no-littering)
+
 (provide 'setup)
