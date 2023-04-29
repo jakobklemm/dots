@@ -108,12 +108,17 @@
 (use-package format-all
   )
 
+(defun jk/do-something ()
+  (interactive)
+  (message "test")
+  )
+
 ;; Works
-(global-set-key (kbd "C-c f") 'format-all-buffer)
+(global-set-key (kbd "C-c f") 'jk/do-something)
 ;; Doesn't Work
-(global-set-key (kbd "C-c C-f") 'format-all-buffer)
+(global-set-key (kbd "C-c C-f") 'jk/do-something)
 ;; Works
-(global-set-key (kbd "C-c C-x C-f") 'format-all-buffer)
+(global-set-key (kbd "C-c C-x C-f") 'jk/do-something)
 
 (use-package yasnippet
   :config

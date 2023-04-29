@@ -74,6 +74,21 @@ end
 time([[try_loadstring definition]], false)
 time([[Defining packer_plugins]], true)
 _G.packer_plugins = {
+  catppuccin = {
+    loaded = true,
+    path = "/home/jeykey/.local/share/nvim/site/pack/packer/start/catppuccin",
+    url = "https://github.com/catppuccin/nvim"
+  },
+  harpoon = {
+    loaded = true,
+    path = "/home/jeykey/.local/share/nvim/site/pack/packer/start/harpoon",
+    url = "https://github.com/theprimeagen/harpoon"
+  },
+  ["nvim-treesitter"] = {
+    loaded = true,
+    path = "/home/jeykey/.local/share/nvim/site/pack/packer/start/nvim-treesitter",
+    url = "https://github.com/nvim-treesitter/nvim-treesitter"
+  },
   ["packer.nvim"] = {
     loaded = true,
     path = "/home/jeykey/.local/share/nvim/site/pack/packer/start/packer.nvim",
@@ -88,6 +103,16 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/jeykey/.local/share/nvim/site/pack/packer/start/telescope.nvim",
     url = "https://github.com/nvim-telescope/telescope.nvim"
+  },
+  undotree = {
+    loaded = true,
+    path = "/home/jeykey/.local/share/nvim/site/pack/packer/start/undotree",
+    url = "https://github.com/mbbill/undotree"
+  },
+  ["vim-fugitive"] = {
+    loaded = true,
+    path = "/home/jeykey/.local/share/nvim/site/pack/packer/start/vim-fugitive",
+    url = "https://github.com/tpope/vim-fugitive"
   }
 }
 
