@@ -89,10 +89,18 @@
    '("<escape>" . ignore)))
 
 (use-package meow
-  :config
-  (meow-setup)
-  (meow-global-mode 1)
+  ;; :config
+  ;; (meow-setup)
+  ;; (meow-global-mode 1)
   )
+
+(general-swap-key 'normal 'override
+  "h" "n"
+  )
+
+;; (evil-mode 1)
+;; (define-key key-translation-map "j" "f")
+;; (define-key key-translation-map "f" "j")
 
 (use-package which-key
   :init (which-key-mode)
