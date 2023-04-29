@@ -29,22 +29,22 @@
                                       (right-fringe . 3))))
 
 ;; (use-package lsp-mode
-  ;; :custom
-  ;; (lsp-completion-provider :none)
-  ;; (lsp--auto-configure t)
-  ;; (lsp-headerline-breadcrumb-enable t)
-  ;; (lsp-modeline-code-actions-enable t)
-  ;; (lsp-eldoc-render-all t)
-  ;; (lsp-idle-delay 0.6)
-  ;; ;; (lsp-headerline-breadcrumb-segments '(project file symbols))
-  ;; (lsp-rust-analyzer-cargo-watch-command "clippy")
-  ;; (lsp-rust-analyzer-server-display-inlay-hints t)
-  ;; (lsp-rust-analyzer-display-lifetime-elision-hints-enable "skip_trivial")
-  ;; (lsp-rust-analyzer-display-chaining-hints t)
-  ;; (lsp-rust-analyzer-display-lifetime-elision-hints-use-parameter-names t)
-  ;; (lsp-rust-analyzer-display-closure-return-type-hints t)
-  ;; (lsp-rust-analyzer-display-parameter-hints t)
-  ;; (lsp-rust-analyzer-display-reborrow-hints t)
+;; :custom
+;; (lsp-completion-provider :none)
+;; (lsp--auto-configure t)
+;; (lsp-headerline-breadcrumb-enable t)
+;; (lsp-modeline-code-actions-enable t)
+;; (lsp-eldoc-render-all t)
+;; (lsp-idle-delay 0.6)
+;; ;; (lsp-headerline-breadcrumb-segments '(project file symbols))
+;; (lsp-rust-analyzer-cargo-watch-command "clippy")
+;; (lsp-rust-analyzer-server-display-inlay-hints t)
+;; (lsp-rust-analyzer-display-lifetime-elision-hints-enable "skip_trivial")
+;; (lsp-rust-analyzer-display-chaining-hints t)
+;; (lsp-rust-analyzer-display-lifetime-elision-hints-use-parameter-names t)
+;; (lsp-rust-analyzer-display-closure-return-type-hints t)
+;; (lsp-rust-analyzer-display-parameter-hints t)
+;; (lsp-rust-analyzer-display-reborrow-hints t)
 ;;   )
 
 (use-package lsp-mode
@@ -83,16 +83,16 @@
   :custom
   (
    (lsp-ui-sideline-enable nil)
-   
+
    (lsp-ui-enable t)
    (lsp-ui-doc-enable t)
    (lsp-ui-doc-position 'top)
    (lsp-ui-doc-delay 1.0)
    (lsp-ui-peek-always-show t)
-   
+
    (lsp-ui-doc-max-height 48)
    (lsp-ui-doc-max-width 48)
-   
+
    (lsp-ui-doc-show-with-mouse t)
    (lsp-ui-doc-show-with-cursor t)
    ))
@@ -106,9 +106,14 @@
   )
 
 (use-package format-all
-  :bind
-  (("C-c f" . format-all-buffer))
   )
+
+;; Works
+(global-set-key (kbd "C-c f") 'format-all-buffer)
+;; Doesn't Work
+(global-set-key (kbd "C-c C-f") 'format-all-buffer)
+;; Works
+(global-set-key (kbd "C-c C-x C-f") 'format-all-buffer)
 
 (use-package yasnippet
   :config

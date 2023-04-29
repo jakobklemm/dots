@@ -141,4 +141,6 @@
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   )
 
+(pixel-scroll-mode t)
+
 (provide 'jk-navigation)

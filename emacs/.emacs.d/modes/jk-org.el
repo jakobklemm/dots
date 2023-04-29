@@ -50,7 +50,6 @@
   ((org-latex-preview-ltxpng-directory "~/.ltxpng/")))
 
 (use-package ob-rust)
-(use-package ob-python)
 (use-package ob-go)
 (use-package ob-elixir)
 
@@ -61,7 +60,6 @@
    (rust . t)
    (go . t)
    (elixir . t)
-   (python . t)
    ))
 
 
