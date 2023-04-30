@@ -19,8 +19,7 @@ return require('packer').startup(function(use)
 
    use { 'tpope/vim-fugitive' }
 
-   use { 'lewis6991/gitsigns.nvim'
-   }
+   use { 'lewis6991/gitsigns.nvim' }
 
    use {
 	   'VonHeikemen/lsp-zero.nvim',
@@ -51,5 +50,7 @@ return require('packer').startup(function(use)
    use { 'windwp/nvim-autopairs' }
 
    use { 'lukas-reineke/indent-blankline.nvim' }
+
+   use { 'numToStr/Comment.nvim' }
 
 end)
