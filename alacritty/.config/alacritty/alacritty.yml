@@ -19,49 +19,84 @@ scrolling:
 
 draw_bold_text_with_bright_colors: true
 
-schemes:
-  themer-dark: &dark
+colors:
     primary:
-      background: '#23272a'
-      foreground: '#9f9595'
+        background: "#1E1E2E" # base
+        foreground: "#CDD6F4" # text
+        # Bright and dim foreground colors
+        dim_foreground: "#CDD6F4" # text
+        bright_foreground: "#CDD6F4" # text
 
+    # Cursor colors
     cursor:
-      text: '#23272a'
-      cursor: '#8253a2'
+        text: "#1E1E2E" # base
+        cursor: "#F5E0DC" # rosewater
+    vi_mode_cursor:
+        text: "#1E1E2E" # base
+        cursor: "#B4BEFE" # lavender
 
+    # Search colors
+    search:
+        matches:
+            foreground: "#1E1E2E" # base
+            background: "#A6ADC8" # subtext0
+        focused_match:
+            foreground: "#1E1E2E" # base
+            background: "#A6E3A1" # green
+        footer_bar:
+            foreground: "#1E1E2E" # base
+            background: "#A6ADC8" # subtext0
+
+    # Keyboard regex hints
+    hints:
+        start:
+            foreground: "#1E1E2E" # base
+            background: "#F9E2AF" # yellow
+        end:
+            foreground: "#1E1E2E" # base
+            background: "#A6ADC8" # subtext0
+
+    # Selection colors
     selection:
-      text: '#23272a'
-      background: '#6072c7'
+        text: "#1E1E2E" # base
+        background: "#F5E0DC" # rosewater
 
+    # Normal colors
     normal:
-      black: '#4c4c4e'
-      red: '#d54330'
-      green: '#5fb462'
-      yellow: '#cbd95e'
-      blue: '#6072c7'
-      magenta: '#8a2e2e'
-      cyan: '#42a2a9'
-      white: '#9f9595'
+        black: "#45475A" # surface1
+        red: "#F38BA8" # red
+        green: "#A6E3A1" # green
+        yellow: "#F9E2AF" # yellow
+        blue: "#89B4FA" # blue
+        magenta: "#F5C2E7" # pink
+        cyan: "#94E2D5" # teal
+        white: "#BAC2DE" # subtext1
 
+    # Bright colors
     bright:
-      black: '#615e60'
-      red: '#CE5748'
-      green: '#70B170'
-      yellow: '#C6CF6D'
-      blue: '#717DC1'
-      magenta: '#924646'
-      cyan: '#59A3A9'
-      white: '#b4a7a7'
+        black: "#585B70" # surface2
+        red: "#F38BA8" # red
+        green: "#A6E3A1" # green
+        yellow: "#F9E2AF" # yellow
+        blue: "#89B4FA" # blue
+        magenta: "#F5C2E7" # pink
+        cyan: "#94E2D5" # teal
+        white: "#A6ADC8" # subtext0
 
+    # Dim colors
     dim:
-      black: '#38393c'
-      red: '#B13D2F'
-      green: '#539857'
-      yellow: '#A9B554'
-      blue: '#5463A8'
-      magenta: '#752D2D'
-      cyan: '#3C8990'
-      white: '#8b8283'
+        black: "#45475A" # surface1
+        red: "#F38BA8" # red
+        green: "#A6E3A1" # green
+        yellow: "#F9E2AF" # yellow
+        blue: "#89B4FA" # blue
+        magenta: "#F5C2E7" # pink
+        cyan: "#94E2D5" # teal
+        white: "#BAC2DE" # subtext1
+
+    indexed_colors:
+        - { index: 16, color: "#FAB387" }
+        - { index: 17, color: "#F5E0DC" }
   
 shell:
   program: /bin/fish

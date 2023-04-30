@@ -19,6 +19,9 @@ return require('packer').startup(function(use)
 
    use { 'tpope/vim-fugitive' }
 
+   use { 'lewis6991/gitsigns.nvim'
+   }
+
    use {
 	   'VonHeikemen/lsp-zero.nvim',
 	   branch = 'v2.x',
@@ -45,6 +48,8 @@ return require('packer').startup(function(use)
         requires = { 'nvim-tree/nvim-web-devicons', opt = true }
    }
 
-   use { 'windwp/nvim-autopairsr' }
+   use { 'windwp/nvim-autopairs' }
 
-end)  
+   use { 'lukas-reineke/indent-blankline.nvim' }
+
+end)
