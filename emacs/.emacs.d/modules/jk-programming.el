@@ -1,4 +1,4 @@
-;; Magit
+;; Programming
 
 (use-package magit
   :config
@@ -20,4 +20,4 @@
 (with-eval-after-load 'magit-mode
   (add-hook 'after-save-hook 'magit-after-save-refresh-status t))
 
-(provide 'jk-git)
+(provide 'jk-programming)

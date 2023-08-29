@@ -1,9 +1,0 @@
-# -*- mode: snippet -*-
-# name: assignment
-# key: assignment
-# --
-#+TITLE: $1
-#+AUTHOR: Jakob Klemm
-#+DATE: $2
-#+SETUPFILE: ~/.latex/assignment.org
-#+LATEX: \linAlgHeader{X}{Jakob Klemm}{22-921-241}

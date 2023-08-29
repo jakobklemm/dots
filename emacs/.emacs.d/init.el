@@ -12,7 +12,7 @@
   )
 
 ;; https://github.com/mishamyrt/Lilex
-(defcustom jk/font "Lilex"
+(defcustom jk/font "Fira Code"
   "What font to use, might get overwritten for special (local) cases."
   :type 'string
   :group 'jk/config
@@ -36,28 +36,12 @@
   )
 
 (defvar jk/modules '(
-		     jk-git
+		     jk-programming
 		     jk-navigation
-		     jk-selection
 		     jk-binds
-		     jk-editor
-		     jk-writing
-		     jk-site
+		     jk-org
                      )
   "List of all currently active modules, get loaded at startup."
-  )
-
-(defconst jk/modes-path (concat user-emacs-directory "modes/")
-  "Path to the custom modes of the config."
-  )
-
-(defvar jk/modes '(
-		   jk-org
-		   jk-rust
-		   jk-lua
-		   jk-python
-                   )
-  "List of all currently active modes, get loaded at startup."
   )
 
 (setq user-full-name "Jakob Klemm"

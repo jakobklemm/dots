@@ -1,4 +1,4 @@
-;; org-mode
+;; Orgmode
 
 (use-package org
   :hook
@@ -7,27 +7,34 @@
   (org-mode . flyspell-mode)
   :custom
   ((org-directory "~/org/")
-   (org-agenda-files '("~/org/active/"))
+   (org-agenda-files '("~/org/"))
    (org-ellipsis " ▼ ")
    (org-hide-emphasis-markers t)
    (org-src-window-setup 'current-window)
    (org-return-follows-link t)
    (org-confirm-babel-evaluate nil)
    (org-catch-invisible-edits 'smart)
+   (org-archive-location "~/org/archive/2023.org::* From %s")
    )
   :config
   (setq-default org-display-inline-images t)
   (setq-default org-startup-with-inline-images t)
+  (require 'tempo)
+  (require 'org-tempo)
+  (require 'org-mouse)
   )
-
-(require 'tempo)
-(require 'org-tempo)
-(require 'org-mouse)
 
 (use-package org-modern
   :config
   (global-org-modern-mode)
   )
+
+(setq org-log-done 'time
+      org-log-redeadline 'time
+      org-log-refile 'time
+      )
+
+(use-package org-transclusion)
 
 (use-package org-appear
   :hook (org-mode . org-appear-mode)
@@ -38,30 +45,35 @@
    (org-appear-autosubmarkers t))
   )
 
-(use-package org-transclusion)
-
 (setq-default org-startup-with-latex-preview t)
 
 (use-package org-fragtog
   :hook (org-mode . org-fragtog-mode)
   :config
-  (plist-put org-format-latex-options :scale 1.6)
+  (plist-put org-format-latex-options :scale 1.5)
   :custom
-  ((org-latex-preview-ltxpng-directory "~/.ltxpng/")))
+  (
+   (org-latex-preview-ltxpng-directory "~/.ltxpng/")
+   )
+  )
+
+;; https://github.com/Civitasv/runemacs
+(defun civ/org-mode-visual-fill ()
+  (setq visual-fill-column-width 100
+        visual-fill-column-center-text t)
+  (visual-fill-column-mode 1))
+
+(use-package visual-fill-column
+  :hook (org-mode . civ/org-mode-visual-fill))
 
 (use-package ob-rust)
 (use-package ob-go)
-(use-package ob-elixir)
-
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((emacs-lisp . t)
    (latex . t)
    (rust . t)
-   (go . t)
-   (elixir . t)
    ))
-
 
 (use-package org-roam
   :custom
@@ -153,54 +165,28 @@
   (setq org-roam-timestamps-minimum-gap 3600)
   )
 
-(use-package org-ref)
+(setenv
+ "DICPATH"
+ "/home/jeykey/.tools/dict/")
 
+(setq ispell-program-name "hunspell"
+      ispell-local-dictionary "en_US"
+      ispell-local-dictionary-alist
+      '(("en_US" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_US") nil utf-8)
+        ("de_DE" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "de_DE" "-a" "-i" "UTF-8") nil utf-8)))
 
-(eval-after-load "org" '(require 'ox-odt nil t))
-
-(use-package htmlize)
-
-(use-package ox-pandoc
+(use-package langtool
+  :init
+  (setq langtool-http-server-host "172.16.96.3"
+	langtool-http-server-port 8010)
   )
 
-(use-package ox-hugo
+(use-package langtool-ignore-fonts
   :config
-  (setq org-hugo-auto-set-lastmod t)
+  (add-hook 'LaTeX-mode-hook 'langtool-ignore-fonts-minor-mode)
+  (add-hook 'org-mode-hook 'langtool-ignore-fonts-minor-mode)
+  (add-hook 'markdown-mode-hook 'langtool-ignore-fonts-minor-mode)
+  (langtool-ignore-fonts-add 'markdown-mode '(markdown-code-face))
   )
-
-(use-package plantuml-mode
-  :config
-  (setq org-plantuml-jar-path (expand-file-name "~/.tools/plantuml.jar"))
-  (add-to-list 'org-src-lang-modes '("plantuml" . plantuml))
-  (org-babel-do-load-languages 'org-babel-load-languages '((plantuml . t)))
-  )
-
-(use-package ox-reveal
-  :custom ((org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")
-           (org-reveal-mathjax t)
-           (org-reveal-ignore-speaker-notes nil)
-           (org-reveal-note-key-char nil)))
-
-(setq org-latex-pdf-process
-      '("xelatex -interaction nonstopmode -output-directory %o %f"
-       "bibtex %b"
-        "xelatex -interaction nonstopmode -output-directory %o %f"
-        "xelatex -interaction nonstopmode -output-directory %o %f"))
-
-(setq org-src-fontify-natively t)
-(setq org-latex-listings t)
-
-;; Open exports in browser
-(setcdr (assoc "\\.pdf\\'" org-file-apps) "firefox %s")
-
-(defvar org-export-output-directory-prefix "exports/"
-  "Prefix of directory used for org-mode export")
-
-(defadvice org-export-output-file-name (before org-add-export-dir activate)
-  "Modifies org-export to place exported files in a different directory"
-  (when (not pub-dir)
-    (setq pub-dir org-export-output-directory-prefix)
-    (when (not (file-directory-p pub-dir))
-      (make-directory pub-dir))))
 
 (provide 'jk-org)
