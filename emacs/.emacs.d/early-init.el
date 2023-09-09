@@ -1,32 +1,24 @@
-;; early-init.el
+;; Early init stuff
 
-(setq jk/original-gc gc-cons-threshold)
+(defconst jk/original-gc gc-cons-threshold)
+(defconst jk/original-percent gc-cons-percentage)
 
 (setq gc-cons-threshold (* 1024 1024 1024))
+(setq gc-cons-percentage 0.6)
 
-(set-window-scroll-bars (minibuffer-window) nil nil)
-
-;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
-
-(setq warning-suppress-types '(((package reinitialization))))
-
-(setq package-enable-at-startup nil)
-
-(defvar file-name-handler-alist-original file-name-handler-alist)
-(setq file-name-handler-alist nil)
-
-(setq site-run-file nil)
 
 (unless (display-graphic-p)
   (setq default-frame-alist '((fullscreen . maximized)
 			      (menu-bar-lines . 0)
 			      (tool-bar-lines . 0)
 			      (vertical-scroll-bars . nil)
-                  (drag-internal-border . 1)
-                  (internal-border-width . 1))
+			      (drag-internal-border . 1)
+			      (internal-border-width . 1))
 	initial-frame-alist '((fullscreen . maximized)
 			      (menu-bar-lines . 0)
 			      (tool-bar-lines . 0)
-			      (vertical-scroll-bars . nil))))
+			      (vertical-scroll-bars . nil)
+			      (background-color . "#000000")
+			      )))
 
 (provide 'early-init)

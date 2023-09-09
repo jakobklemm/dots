@@ -1,6 +1,5 @@
-;; Packages
+;; Packges
 
-;; Package setup
 (require 'package)
 
 (when (version< "29.0.50" emacs-version)
@@ -12,16 +11,9 @@
                          ("org" . "https://orgmode.org/elpa/")
                          ("elpa" . "https://elpa.gnu.org/packages/")))
 
-(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+;; (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 
 (package-initialize)
-
-(unless (package-installed-p 'use-package)
-  ;; (package-refresh-contents)
-  (package-install 'use-package))
-
-(while (not (package-installed-p 'use-package))
-  (sleep-for 1))
 
 (require 'use-package)
 
@@ -33,5 +25,6 @@
 (use-package quelpa-use-package
   :custom
   ((quelpa-checkout-melpa-p nil)))
+
 
 (provide 'packages)

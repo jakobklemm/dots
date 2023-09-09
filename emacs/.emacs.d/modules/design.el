@@ -1,7 +1,27 @@
-;; Fonts
+;; Design
+
+(use-package doom-themes
+  :config
+  (load-theme 'doom-palenight t)
+  )
+
+(use-package catppuccin-theme
+  :config
+  ;; (setq catppuccin-flavor 'mocha) ;; or 'latte, 'macchiato, or 'mocha
+  ;; (catppuccin-reload)
+  )
+
+(use-package doom-modeline
+  :config
+  (doom-modeline-mode)
+  )
+
+
+(use-package minions
+  :hook (doom-modeline-mode . minions-mode))
 
 ;; https://github.com/hrs/dotfiles
-(setq hrs/default-fixed-font jk/font)
+(setq hrs/default-fixed-font "JetBrains Mono")
 (setq hrs/default-fixed-font-size 120)
 (setq hrs/current-fixed-font-size hrs/default-fixed-font-size)
 (set-face-attribute 'default nil
@@ -49,4 +69,13 @@
 
 (hrs/reset-font-size)
 
-(provide 'font)
+(use-package rainbow-delimiters
+  :hook
+  ((org-mode . rainbow-delimiters-mode)
+   (prog-mode . rainbow-delimiters-mode)))
+
+
+(use-package all-the-icons
+  :if (window-system))
+
+(provide 'design)

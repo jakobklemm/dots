@@ -1,4 +1,4 @@
-;; Setup
+;; Defaults
 
 (use-package emacs
   :defer t
@@ -51,10 +51,6 @@
   (set-language-environment "UTF-8")
   (global-hl-line-mode t)
   (global-display-line-numbers-mode t)
-  (scroll-bar-mode -1)
-  (tool-bar-mode -1)
-  (tooltip-mode -1)
-  (menu-bar-mode -1)
   (prefer-coding-system       'utf-8)
   (set-default-coding-systems 'utf-8)
   (set-terminal-coding-system 'utf-8)
@@ -66,4 +62,6 @@
 
 (use-package no-littering)
 
-(provide 'setup)
+(use-package format-all)
+
+(provide 'defaults)
