@@ -131,7 +131,7 @@ folder, otherwise delete a word"
 (use-package consult
   :config
   (global-set-key (kbd "C-s") 'consult-line)
-  (global-set-key (kbd "C-S") 'consult-line-multi)
+  (global-set-key (kbd "C-S-s") 'consult-line-multi)
   (global-set-key (kbd "M-s") 'consult-grep)
   (global-set-key (kbd "M-S") 'consult-ripgrep)
   )
