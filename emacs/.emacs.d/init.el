@@ -30,4 +30,3 @@
             (message "Emacs ready in %s."
 		     (emacs-init-time)
                      )))
-

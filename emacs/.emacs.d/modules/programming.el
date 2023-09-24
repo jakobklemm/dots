@@ -6,15 +6,16 @@
   (global-tree-sitter-mode)
   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
 
-(use-package rust-ts-mode
-  :hook
-  ((rust-ts-mode . prettify-symbols-mode))
+(use-package rust-mode
+  :config
+  (add-hook 'rust-mode-hook
+          (lambda () (setq indent-tabs-mode nil)))
   )
 
 (use-package rust-auto-use
-  :hook
-  
   )
+
+(use-package markdown-mode)
 
 (use-package toml-mode)
 

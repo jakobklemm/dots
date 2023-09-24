@@ -81,6 +81,7 @@
 
 (use-package langtool
   :init
+  :disabled t
   (setq langtool-http-server-host "172.16.96.3"
 	langtool-http-server-port 8010)
   )
@@ -196,8 +197,7 @@
 
 (use-package htmlize)
 
-(use-package ox-pandoc
-  )
+(use-package ox-pandoc)
 
 (use-package plantuml-mode
   :config
@@ -212,11 +212,21 @@
            (org-reveal-ignore-speaker-notes nil)
            (org-reveal-note-key-char nil)))
 
-(setq org-latex-pdf-process
-      '("xelatex -interaction nonstopmode -output-directory %o %f"
-       "bibtex %b"
-        "xelatex -interaction nonstopmode -output-directory %o %f"
-        "xelatex -interaction nonstopmode -output-directory %o %f"))
+(setq org-latex-create-formula-image-program 'dvipng)
+(setq org-latex-listings 'minted)
+(require 'ox-latex)
+(add-to-list 'org-latex-packages-alist '("" "minted"))
+(add-to-list 'org-latex-packages-alist '("" "listings"))
+(add-to-list 'org-latex-packages-alist '("" "color"))
+(setq org-format-latex-options (plist-put org-format-latex-options :scale 1.8))
+
+;; (setq org-latex-pdf-process
+;;       '("xelatex -interaction nonstopmode -output-directory %o %f"
+;;        "bibtex %b"
+;;         "xelatex -interaction nonstopmode -output-directory %o %f"
+;;         "xelatex -interaction nonstopmode -output-directory %o %f"))
+
+(setq org-latex-pdf-process '("LC_ALL=en_US.UTF-8 latexmk -f -pdf -%latex -shell-escape -interaction=nonstopmode -output-directory=%o %f"))
 
 (setq org-src-fontify-natively t)
 (setq org-latex-listings t)
