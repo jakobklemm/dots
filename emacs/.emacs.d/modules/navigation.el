@@ -136,4 +136,7 @@ folder, otherwise delete a word"
   (global-set-key (kbd "M-S") 'consult-ripgrep)
   )
 
+(setq scroll-conservatively 10)
+(setq scroll-margin 7)
+
 (provide 'navigation)

@@ -5,7 +5,7 @@
   (setq evil-respect-visual-line t)
   (setq evil-want-keybinding nil)
   :custom
-  ((evil-want-integration nil)
+  ((evil-want-integration t)
    (evil-operator-state-cursor nil)
    (evil-jump-cross-buffers t)
    (evil-split-window-below t)
@@ -19,6 +19,12 @@
   (evil-set-leader 'visual (kbd "SPC"))
 
   (evil-mode)
+  )
+
+(use-package evil-collection
+  :after evil
+  :config
+  (evil-collection-init)
   )
 
 (provide 'binds)
