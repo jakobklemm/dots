@@ -46,7 +46,7 @@
   :init
   (show-paren-mode t)
   (defalias 'yes-or-no-p 'y-or-n-p)
-  (desktop-save-mode t)
+  ;; (desktop-save-mode t)
   (save-place-mode t)
   (set-language-environment "UTF-8")
   (global-hl-line-mode t)
@@ -63,5 +63,10 @@
 (use-package no-littering)
 
 (use-package format-all)
+
+(use-package dashboard
+  :ensure t
+  :config
+  (dashboard-setup-startup-hook))
 
 (provide 'defaults)

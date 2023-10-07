@@ -7,7 +7,7 @@
   (org-mode . flyspell-mode)
   :custom
   ((org-directory "~/org/")
-   (org-agenda-files '("~/org/"))
+   ;; (org-agenda-files '("~/org/"))
    (org-ellipsis " ▼ ")
    (org-hide-emphasis-markers t)
    (org-src-window-setup 'current-window)

@@ -108,7 +108,6 @@ folder, otherwise delete a word"
 (global-set-key (kbd "C-x 2") 'hrs/split-window-below-and-switch)
 (global-set-key (kbd "C-x 3") 'hrs/split-window-right-and-switch)
 
-
 (use-package popper
   :bind (("C-,"   . popper-toggle-latest)
          ("M-,"   . popper-cycle)

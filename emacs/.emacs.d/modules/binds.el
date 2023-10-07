@@ -21,4 +21,33 @@
   (evil-mode)
   )
 
+(use-package general)
+
+(use-package evil-collection
+  :after evil
+  :config
+  (evil-collection-init)
+  )
+
+(use-package evil-org
+  :after org
+  :hook (org-mode . (lambda () evil-org-mode))
+  :config
+  (require 'evil-org-agenda)
+  (evil-org-agenda-set-keys))
+
+(use-package which-key
+  :init (which-key-mode)
+  :defer t
+  :diminish which-key-mode
+  :custom
+  ((which-key-idle-delay 0.5))
+  )
+
+(general-define-key
+ "C-x j" 'kill-buffer-and-window
+ "C-c C-f" 'format-all-buffer
+ "C-c C-o" 'general-override-local-mode
+ )
+
 (provide 'binds)

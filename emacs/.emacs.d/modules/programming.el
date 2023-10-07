@@ -19,6 +19,8 @@
 
 (use-package toml-mode)
 
+(use-package yaml-mode)
+
 (use-package flycheck-rust
   :defer t
   :after flycheck)
@@ -44,5 +46,11 @@
 
 (with-eval-after-load 'magit-mode
   (add-hook 'after-save-hook 'magit-after-save-refresh-status t))
+
+(use-package projectile
+  :config
+  (projectile-mode +1)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  )
 
 (provide 'programming)

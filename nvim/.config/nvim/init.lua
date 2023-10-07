@@ -1,1 +1,14 @@
-require("jakobklemm")
+require("options")
+
+require("plugins.lazy")
+require("plugins.telescope")
+require("plugins.color")
+require("plugins.gitsigns")
+require("plugins.modeline")
+require("plugins.lsp")
+require("plugins.trouble")
+require("plugins.goto")
+require("plugins.dap")
+require("plugins.rust")
+
+require("keymaps")
