@@ -1,35 +1,15 @@
+require("options")
 
--- Leader 
-vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
+require("plugins.lazy")
+require("plugins.telescope")
+require("plugins.color")
+require("plugins.gitsigns")
+require("plugins.modeline")
+require("plugins.lsp")
+require("plugins.trouble")
+require("plugins.goto")
+require("plugins.dap")
+require("plugins.rust")
+require("plugins.notify")
 
--- Packages
-local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
-if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system {
-    'git',
-    'clone',
-    '--filter=blob:none',
-    'https://github.com/folke/lazy.nvim.git',
-    '--branch=stable', -- latest stable release
-    lazypath,
-  }
-end
-vim.opt.rtp:prepend(lazypath)
-
-require('lazy').setup({
-	{
-		"catppuccin/nvim",
-		name = "catppuccin",
-		priority = 1000,
-	},
-
-  	{
-    		'nvim-treesitter/nvim-treesitter',
-    		dependencies = {
-      			'nvim-treesitter/nvim-treesitter-textobjects',
-    		},
-    		build = ':TSUpdate',
-  	},
-
-}, {})
+require("keymaps")

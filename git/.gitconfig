@@ -3,7 +3,10 @@
 [user]
 	email = github@jeykey.net
 	name = Jakob Klemm
+	signingkey = D91BAB52F26F2A75
 [init]
 	defaultBranch = master
 [credentials]
 	helper = store
+[commit]
+	gpgsign = true
