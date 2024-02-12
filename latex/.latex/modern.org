@@ -1,0 +1,6 @@
+#+EMAIL: contact@jeykey.net
+#+LATEX_CLASS: article
+#+OPTIONS: toc:nil
+
+#+LATEX_HEADER: \usepackage{fontspec}
+#+LATEX_HEADER: \setmainfont{Bitstream Vera Serif}
