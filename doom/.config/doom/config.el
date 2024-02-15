@@ -297,6 +297,8 @@
 (setq org-time-stamp-custom-formats
       '("<%Y-%m-%d>" . "<%d/%m/%y %a %H:%M>"))
 
+(setq org-latex-active-timestamp-format "\\texttt{%s}")
+
 (defun org-export-filter-timestamp-remove-brackets (timestamp backend info)
   "removes relevant brackets from a timestamp"
   (cond
@@ -403,9 +405,9 @@
 \\pagestyle{fancy}
 \\fancyhead{}
 \\fancyfoot{}
-\\fancyhead[R]{\\thepage}
-\\fancyhead[L]{\\textit{\\thedate}}
-\\fancyhead[C]{\\thetitle}
+\\fancyhead[R]{\\texttt{\\thepage}}
+\\fancyhead[L]{\\thedate}
+\\fancyhead[C]{\\texttt{\\thetitle}}
 \\input{~/.latex/setup.tex}
 \\bibliography{~/Documents/refs.bib}
 \\thispagestyle{empty}
