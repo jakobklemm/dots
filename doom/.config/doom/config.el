@@ -59,9 +59,9 @@
   (vertico-posframe-mode 1)
   )
 
-  ;; Configure `LANG`, otherwise ispell.el cannot find a 'default
-  ;; dictionary' even though multiple dictionaries will be configured
-  ;; in next line.
+;; Configure `LANG`, otherwise ispell.el cannot find a 'default
+;; dictionary' even though multiple dictionaries will be configured
+;; in next line.
 ;; (setenv "LANG" "en_US.UTF-8")
 ;; (setq ispell-program-name "hunspell")
 ;;   ;; Configure German, Swiss German, and two variants of English.
@@ -73,7 +73,6 @@
 ;;   ;; For saving words to the personal dictionary, don't infer it from
 ;;   ;; the locale, otherwise it would save to ~/.hunspell_de_DE.
 ;; (setq ispell-personal-dictionary "~/.hunspell_personal")
-
 ;; ;; The personal dictionary file has to exist, otherwise hunspell will
 ;; ;; silently not use it.
 ;; (unless (file-exists-p ispell-personal-dictionary)
@@ -181,8 +180,6 @@
   :after org
   :hook (org-mode . org-fragtog-mode)
   )
-
-;; TODO: Bibliography
 
 (use-package org-roam
   :init
@@ -295,6 +292,22 @@
 
 ;; Exporting
 
+(setq-default org-display-custom-times t)
+;;; Before you ask: No, removing the <> here doesn't work.
+(setq org-time-stamp-custom-formats
+      '("<%Y-%m-%d>" . "<%d/%m/%y %a %H:%M>"))
+
+(defun org-export-filter-timestamp-remove-brackets (timestamp backend info)
+  "removes relevant brackets from a timestamp"
+  (cond
+   ((org-export-derived-backend-p backend 'latex)
+    (replace-regexp-in-string "[<>]\\|[][]" "" timestamp))
+   ((org-export-derived-backend-p backend 'html)
+    (replace-regexp-in-string "&[lg]t;\\|[][]" "" timestamp))))
+(eval-after-load 'ox '(add-to-list
+                       'org-export-filter-timestamp-functions
+                       'org-export-filter-timestamp-remove-brackets))
+
 (defvar org-export-output-directory-prefix "exports/"
   "Prefix of directory used for org-mode export")
 
@@ -304,7 +317,6 @@
     (setq pub-dir org-export-output-directory-prefix)
     (when (not (file-directory-p pub-dir))
       (make-directory pub-dir))))
-
 
 ;; https://tecosaur.github.io/emacs-config/config.html#general-settings
 (setq org-export-headline-levels 5)
@@ -325,3 +337,249 @@
     (if (eq 'engraved (plist-get info :latex-listings))
         (format "\\begin{Code}[alt]\n%s\n\\end{Code}" output-block)
       output-block)))
+
+(setq org-latex-compiler "xelatex")
+
+(setq org-latex-default-packages-alist
+      '(("" "graphicx" t)
+        ("" "grffile" t)
+        ("" "longtable" nil)
+        ("" "wrapfig" nil)
+        ("" "rotating" nil)
+        ("normalem" "ulem" t)
+        ("" "amsmath" t)
+        ("" "textcomp" t)
+        ("" "amssymb" t)
+        ("" "capt-of" nil)
+        ("" "hyperref" nil)))
+
+;; Makes export respect new lines, but also auto-fill 80 width
+;; (setq org-export-preserve-breaks t)
+
+(use-package! org-special-block-extras
+  :hook
+  (org-mode . org-special-block-extras-mode)
+  )
+
+(add-to-list 'company-backends 'company-math-symbols-unicode)
+
+(setq org-export-with-broken-links 'mark)
+
+(setq org-latex-classes
+'(("article"
+"\\RequirePackage{fix-cm}
+\\PassOptionsToPackage{svgnames}{xcolor}
+\\documentclass[11pt]{article}
+\\usepackage[T1]{fontenc}
+\\usepackage{unicode-math}
+\\usepackage{fontsetup}
+\\setmainfont{Inter}
+\\usepackage{pdfpages}
+\\usepackage{babel}
+\\usepackage{sectsty}
+\\usepackage{enumitem}
+\\usepackage{titling}
+\\usepackage[
+ a4paper,
+ left=25mm,
+ right=25mm,
+ top=25mm,
+ bottom=25mm
+]{geometry}
+\\usepackage{parskip}
+\\makeatletter
+\\renewcommand{\\maketitle}{%
+  \\begingroup\\parindent0pt
+  \\sffamily
+  \\Huge{\\bfseries\\@title}\\par\\bigskip
+  \\LARGE{\\bfseries\\@author}\\par\\medskip
+  \\normalsize\\@date\\par\\bigskip
+  \\endgroup\\@afterindentfalse\\@afterheading}
+\\makeatother
+%% Math
+\\usepackage{amsmath,amscd,amssymb}
+\\usepackage{subfiles,comment,units,subfig,fontawesome,graphicx,verbatim,nicefrac,ifthen,booktabs}
+\\usepackage{fancyhdr}
+\\pagestyle{fancy}
+\\fancyhead{}
+\\fancyfoot{}
+\\fancyhead[R]{\\thepage}
+\\fancyhead[L]{\\textit{\\thedate}}
+\\fancyhead[C]{\\thetitle}
+\\input{~/.latex/setup.tex}
+\\bibliography{~/Documents/refs.bib}
+\\thispagestyle{empty}
+[DEFAULT-PACKAGES]
+\\hypersetup{linkcolor=violet,urlcolor=violet,
+             citecolor=DarkRed,colorlinks=true, filecolor=magenta}
+\\AtBeginDocument{\\renewcommand{\\UrlFont}{\\ttfamily}}
+[PACKAGES]
+[EXTRA]"
+("\\section{%s}" . "\\section*{%s}")
+("\\subsection{%s}" . "\\subsection*{%s}")
+("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+("\\paragraph{%s}" . "\\paragraph*{%s}")
+("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+
+("report" "\\documentclass[11pt]{report}"
+("\\part{%s}" . "\\part*{%s}")
+("\\chapter{%s}" . "\\chapter*{%s}")
+("\\section{%s}" . "\\section*{%s}")
+("\\subsection{%s}" . "\\subsection*{%s}")
+("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
+
+("book" "\\documentclass[11pt]{book}"
+("\\part{%s}" . "\\part*{%s}")
+("\\chapter{%s}" . "\\chapter*{%s}")
+("\\section{%s}" . "\\section*{%s}")
+("\\subsection{%s}" . "\\subsection*{%s}")
+("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
+
+(setq org-format-latex-header
+"\\documentclass{article}
+\\usepackage[usenames]{color}
+\\usepackage[T1]{fontenc}
+\\usepackage{unicode-math}
+\\usepackage{babel}
+\\usepackage{sectsty}
+\\usepackage{enumitem}
+%% Math
+\\usepackage{amsmath,amscd,amssymb}
+\\usepackage{subfiles,comment,units,subfig,fontawesome,graphicx,verbatim,nicefrac,ifthen,booktabs}
+\\input{~/.latex/setup.tex}
+[DEFAULT-PACKAGES]
+[PACKAGES]
+\\pagestyle{empty}             % do not remove
+% The settings below are copied from fullpage.sty
+\\setlength{\\textwidth}{\\paperwidth}
+\\addtolength{\\textwidth}{-3cm}
+\\setlength{\\oddsidemargin}{1.5cm}
+\\addtolength{\\oddsidemargin}{-2.54cm}
+\\setlength{\\evensidemargin}{\\oddsidemargin}
+\\setlength{\\textheight}{\\paperheight}
+\\addtolength{\\textheight}{-\\headheight}
+\\addtolength{\\textheight}{-\\headsep}
+\\addtolength{\\textheight}{-\\footskip}
+\\addtolength{\\textheight}{-3cm}
+\\setlength{\\topmargin}{1.5cm}
+\\addtolength{\\topmargin}{-2.54cm}"
+)
+
+(after! citar
+  (setq! citar-bibliography '("~/Documents/refs.bib"))
+  (setq! citar-library-paths '("~/files/references/"))
+  (setq! citar-notes-paths '("~/files/notes/"))
+  (setq! org-cite-global-bibliography '("~/Documents/refs.bib"))
+  )
+
+(setq org-cite-csl-styles-dir "~/Zotero/styles")
+(setq org-cite-csl--fallback-style-file "~/Zotero/styles/ieee.csl")
+
+(use-package! citar-org-roam
+  :after (citar org-roam)
+  :config (citar-org-roam-mode)
+  )
+
+(defun jk/print-bib ()
+  (interactive)
+  (insert "#+PRINT_BIBLIOGRAPHY: \n")
+  )
+
+;; Custom binds
+(map! :leader
+      :prefix "c"
+      "o" #'citar-open
+      "i" #'citar-insert-citation
+      "p" #'jk/print-bib
+      )
+
+;; Page
+(require 'ox-publish)
+(use-package! htmlize)
+
+(setq org-publish-project-alist
+      (list
+       (list "site"
+             :recursive nil
+             :base-directory "~/Documents/jeykey.net/content/"
+             :with-author nil
+             :with-creator nil
+             :with-date t
+             :with-toc nil
+             :with-section-numbers nil
+             :time-stamp-file t
+             :section-numbers nil
+             :auto-sitemap nil
+             :sitemap-format-entry 'jk/build-entry
+             :publishing-directory "~/Documents/jeykey.net/public/"
+             :publishing-function 'org-html-publish-to-html
+             )
+       (list "posts"
+	     :recursive t
+             :base-directory "~/Documents/jeykey.net/content/posts/"
+             :with-author nil
+             :with-creator nil
+             :with-date t
+             :with-toc nil
+             :with-section-numbers nil
+             :time-stamp-file t
+             :section-numbers nil
+             :auto-sitemap t
+             :sitemap-sort-files 'anti-chronologically
+             :sitemap-title "Overview"
+             :sitemap-filename "overview.html"
+             :sitemap-date-format "%d.%m.%Y"
+             :sitemap-format-entry 'jk/build-entry
+	         :sitemap-function 'jk/build-sitemap
+             :publishing-directory "~/Documents/jeykey.net/public/posts/"
+             :publishing-function 'org-html-publish-to-html
+	     )
+       (list "static"
+             :base-directory "~/Documents/jeykey.net/content/static/"
+             :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf\\|asc"
+             :publishing-directory "~/Documents/jeykey.net/public/static/"
+             :publishing-function 'org-publish-attachment
+             :recursive t)
+       (list "style"
+             :base-directory "~/Documents/jeykey.net/style/"
+             :base-extension "css\\|js"
+             :publishing-directory "~/Documents/jeykey.net/public/style/"
+             :publishing-function 'org-publish-attachment
+             :recursive t)
+       ))
+
+(defun jk/build-entry (a b c)
+  "Defines format of sitemap entries."
+  (format "- %s: [[file:%s][%s]]" (format-time-string "%d.%m.%Y" (org-publish-find-date a c)) a (org-publish-find-title a c))
+  )
+
+(setq org-html-validation-link nil
+      org-html-head-include-scripts nil
+      org-html-head-include-default-style nil
+      org-src-fontify-natively t
+      org-src-tab-acts-natively t
+      org-html-head "
+<meta name=\"author\" content=\"Jakob Klemm\">
+<link rel=\"stylesheet\" href=\"/style/style.css\" />
+<h1><a href=\"/\">Jakob Klemm</a></h1>
+<div class=\"hdr\">
+<a href=\"/posts/overview.html\">Overview</a>
+<a href=\"/about.html\">About</a>
+<a href=\"https://github.com/jakobklemm/\">Github</a>
+<a href=\"mailto:github@jeykey.net\">Contact</a>
+</div>
+")
+
+(defun jk/publish-site ()
+  (interactive)
+  (delete-directory "~/Documents/jeykey.net/public/" t)
+  (org-publish-remove-all-timestamps)
+  (org-publish-all t)
+  )
+
+;; https://djliden.github.io/posts/20211203-this-site.html
+(defun jk/build-sitemap (title list)
+   "Sitemap generation function."
+   (concat "#+OPTIONS: toc:nil")
+   (org-list-to-subtree list)
+   )

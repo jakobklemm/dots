@@ -1,0 +1,101 @@
+%% More setup stuff
+
+%% Boxes
+%% https://azurios.gitlab.io/posts/boxes/
+\usepackage[most]{tcolorbox}
+
+\newtcolorbox{defbox}[1]{
+before skip=7.5pt,
+enhanced,
+fonttitle=\sffamily\bfseries\large,
+coltitle=orange,
+title=Definition: #1,
+title code={
+\path[fill=orange!20] (title.south west) rectangle (frame.north east);
+\path[draw=orange,solid,line width=0.45mm]
+([xshift=5mm]title.south west) -- ([xshift=-5mm]title.south east);
+},
+boxrule=0pt,frame hidden,
+toprule=2mm,
+borderline west={4pt}{0pt}{orange},
+colback=orange!20,
+}
+
+\newtcolorbox{infobox}[1]{
+before skip=7.5pt,
+enhanced,
+fonttitle=\sffamily\bfseries\large,
+coltitle=green,
+title=Info: #1,
+title code={
+\path[fill=green!20] (title.south west) rectangle (frame.north east);
+\path[draw=green,solid,line width=0.45mm]
+([xshift=5mm]title.south west) -- ([xshift=-5mm]title.south east);
+},
+boxrule=0pt,frame hidden,
+toprule=2mm,
+borderline west={4pt}{0pt}{green},
+colback=green!20,
+}
+
+\newtcolorbox{bspbox}[1]{
+before skip=7.5pt,
+enhanced,
+fonttitle=\sffamily\bfseries\large,
+coltitle=red,
+title=Beispiel: #1,
+title code={
+\path[fill=red!20] (title.south west) rectangle (frame.north east);
+\path[draw=red,solid,line width=0.45mm]
+([xshift=5mm]title.south west) -- ([xshift=-5mm]title.south east);
+},
+boxrule=0pt,frame hidden,
+toprule=2mm,
+borderline west={4pt}{0pt}{red},
+colback=red!20,
+}
+
+\newtcolorbox{bspboxen}[1]{
+before skip=7.5pt,
+enhanced,
+fonttitle=\sffamily\bfseries\large,
+coltitle=red,
+title=Example: #1,
+title code={
+\path[fill=red!20] (title.south west) rectangle (frame.north east);
+\path[draw=red,solid,line width=0.45mm]
+([xshift=5mm]title.south west) -- ([xshift=-5mm]title.south east);
+},
+boxrule=0pt,frame hidden,
+toprule=2mm,
+borderline west={4pt}{0pt}{red},
+colback=red!20,
+}
+
+\newtcolorbox{genbox}[2]{
+before skip=7.5pt,
+enhanced,
+fonttitle=\sffamily\bfseries\large,
+coltitle=#2,
+title=#1,
+title code={
+\path[fill=#2!20] (title.south west) rectangle (frame.north east);
+\path[draw=#2,solid,line width=0.45mm]
+([xshift=5mm]title.south west) -- ([xshift=-5mm]title.south east);
+},
+boxrule=0pt,frame hidden,
+toprule=2mm,
+borderline west={4pt}{0pt}{#2},
+colback=#2!20,
+}
+
+\newcommand{\bb}{\mathbb}
+
+\newcommand{\secret}{
+\usepackage{transparent}
+\usepackage[printwatermark]{xwatermark}
+\newwatermark*[allpages,angle=45,color=red,scale=3.5,textalign=center,height=\paperheight,width=\paperwidth,xpos=0,ypos=0
+]{\bfseries\sffamily TAB SECRET}
+  % \usepackage[all, center, firstpage=false]{background}
+  % \backgroundsetup{contents=TAB SECRET}
+}
