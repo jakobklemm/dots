@@ -1,7 +1,7 @@
 [credential]
 	helper = store
 [user]
-	email = jabok@jeykey.net
+	email = jakobjeykey.net
 	name = Jakob Klemm
 	signingkey = D91BAB52F26F2A75
 [init]
