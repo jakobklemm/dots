@@ -40,7 +40,9 @@
 
 ;; Windows (https://tecosaur.github.io/emacs-config/config.html#windows)
 (setq evil-vsplit-window-right t
-      evil-split-window-below t)
+      evil-split-window-below t
+      evil-move-beyond-eol t
+      )
 
 (after! company
   (setq company-idle-delay 0.5
@@ -54,8 +56,8 @@
 (use-package! vertico-posframe
   :config
   (setq vertico-posframe-parameters
-      '((left-fringe . 8)
-        (right-fringe . 8)))
+        '((left-fringe . 8)
+          (right-fringe . 8)))
   (vertico-posframe-mode 1)
   )
 
@@ -75,7 +77,7 @@
 
 (add-hook 'Info-selection-hook 'info-colors-fontify-node)
 
-(setq +zen-text-scale 1.2)
+(setq +zen-text-scale 1.0)
 (setq +zen-mixed-pitch-modes '())
 
 (use-package! popper
@@ -94,6 +96,8 @@
   (popper-mode +1)
   (popper-echo-mode +1)
   )
+
+(setq epa-file-encrypt-to '("jakob@jeykey.net"))
 
 (setq org-agenda-files (list org-directory)                  ; Seems like the obvious place.
       org-use-property-inheritance t                         ; It's convenient to have properties inherited.
@@ -271,6 +275,14 @@
 
 (setcdr (assoc "\\.pdf\\'" org-file-apps) "firefox %s")
 
+;; Plantuml
+
+(setq org-plantuml-jar-path "/home/jeykey/.tools/plantuml.jar")
+(setq org-plantuml-exec-mode 'jar)
+(setq plantuml-default-exec-mode 'jar)
+(setq plantuml-jar-path "/home/jeykey/.tools/plantuml.jar")
+(setq org-startup-with-inline-images t)
+
 ;; Exporting
 
 (setq-default org-display-custom-times t)
@@ -346,11 +358,12 @@
 
 (add-to-list 'company-backends 'company-math-symbols-unicode)
 
-(setq org-export-with-broken-links 'mark)
+;; (setq org-export-with-broken-links 'mark)
+(setq org-export-with-broken-links t)
 
 (setq org-latex-classes
-'(("article"
-"\\RequirePackage{fix-cm}
+      '(("article"
+         "\\RequirePackage{fix-cm}
 \\PassOptionsToPackage{svgnames}{xcolor}
 \\documentclass[11pt]{article}
 \\usepackage[T1]{fontenc}
@@ -398,28 +411,28 @@
 \\AtBeginDocument{\\renewcommand{\\UrlFont}{\\ttfamily}}
 [PACKAGES]
 [EXTRA]"
-("\\section{%s}" . "\\section*{%s}")
-("\\subsection{%s}" . "\\subsection*{%s}")
-("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-("\\paragraph{%s}" . "\\paragraph*{%s}")
-("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+         ("\\section{%s}" . "\\section*{%s}")
+         ("\\subsection{%s}" . "\\subsection*{%s}")
+         ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+         ("\\paragraph{%s}" . "\\paragraph*{%s}")
+         ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
 
-("report" "\\documentclass[11pt]{report}"
-("\\part{%s}" . "\\part*{%s}")
-("\\chapter{%s}" . "\\chapter*{%s}")
-("\\section{%s}" . "\\section*{%s}")
-("\\subsection{%s}" . "\\subsection*{%s}")
-("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
+        ("report" "\\documentclass[11pt]{report}"
+         ("\\part{%s}" . "\\part*{%s}")
+         ("\\chapter{%s}" . "\\chapter*{%s}")
+         ("\\section{%s}" . "\\section*{%s}")
+         ("\\subsection{%s}" . "\\subsection*{%s}")
+         ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
 
-("book" "\\documentclass[11pt]{book}"
-("\\part{%s}" . "\\part*{%s}")
-("\\chapter{%s}" . "\\chapter*{%s}")
-("\\section{%s}" . "\\section*{%s}")
-("\\subsection{%s}" . "\\subsection*{%s}")
-("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
+        ("book" "\\documentclass[11pt]{book}"
+         ("\\part{%s}" . "\\part*{%s}")
+         ("\\chapter{%s}" . "\\chapter*{%s}")
+         ("\\section{%s}" . "\\section*{%s}")
+         ("\\subsection{%s}" . "\\subsection*{%s}")
+         ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
 
 (setq org-format-latex-header
-"\\documentclass{article}
+      "\\documentclass{article}
 \\usepackage[usenames]{color}
 \\usepackage[T1]{fontenc}
 \\usepackage{unicode-math}
@@ -446,7 +459,7 @@
 \\addtolength{\\textheight}{-3cm}
 \\setlength{\\topmargin}{1.5cm}
 \\addtolength{\\topmargin}{-2.54cm}"
-)
+      )
 
 (after! citar
   (setq! citar-bibliography '("~/Documents/refs.bib"))
@@ -513,7 +526,7 @@
              :sitemap-filename "overview.html"
              :sitemap-date-format "%d.%m.%Y"
              :sitemap-format-entry 'jk/build-entry
-	         :sitemap-function 'jk/build-sitemap
+	     :sitemap-function 'jk/build-sitemap
              :publishing-directory "~/Documents/jeykey.net/public/posts/"
              :publishing-function 'org-html-publish-to-html
 	     )
@@ -562,7 +575,7 @@
 
 ;; https://djliden.github.io/posts/20211203-this-site.html
 (defun jk/build-sitemap (title list)
-   "Sitemap generation function."
-   (concat "#+OPTIONS: toc:nil")
-   (org-list-to-subtree list)
-   )
+  "Sitemap generation function."
+  (concat "#+OPTIONS: toc:nil")
+  (org-list-to-subtree list)
+  )
