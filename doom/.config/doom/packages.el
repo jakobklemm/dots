@@ -28,3 +28,4 @@
 
 (package! org-special-block-extras)
 
+(package! anki-editor)

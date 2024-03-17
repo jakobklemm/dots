@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# Function to count words in a file
+count_words() {
+    if [[ -f "$1" ]]; then
+        if [[ $(file "$1" | grep "encrypted") ]]; then
+            # File is encrypted, use GPG to decrypt it first and then count words
+            words=$(gpg --batch --yes --decrypt < "$1" | wc -w | cut -f1)
+        else
+            # File is not encrypted, so just count words
+            words=$(cat "$1" | wc -w | cut -f1)
+        fi
+        echo "$words"
+    else
+        echo "0"
+    fi
+}
+
+# export -f count_words
+
+# Get the total word count over all .org files in ~/org/database/ directory
+# total_word_count=$(find ~/org/database/ -type f -name "*.org" -print0 | xargs -0 -n1 count_words)
+
+export i="0"
+
+while read file; do 
+  output=$(count_words "$file")
+  i=$((i + output))
+  echo "$i - $file"
+done <<<$(find ~/org/database/ -type f -name "*.org*" )
+
+last=$(tail -n 1 ~/org/words.org | awk '{print $2}' | cut -f1)
+echo "last: $last"
+echo "curr: $i"
+today=$(date +"%D")
+diff=$(($i - $last))
+echo "PREVIEW: $diff"
