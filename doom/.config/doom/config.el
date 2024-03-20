@@ -192,7 +192,7 @@
                                  ("e" "ETH" plain
                                   "%?"
                                   :if-new (file+head "eth/%<%Y%m%d>-${slug}.org"
-                                                     "#+TITLE: ${title}\n#+FILETAGS: \n#+DATE: %<%Y-%m-%d %a>"
+                                                     "#+TITLE: ${title}\n#+FILETAGS: \n#+DATE: %<%Y-%m-%d %a>\n\nSource: \n\n\n* Anki   :noexport:\n** _\n"
                                                      )
                                   :immediate-finish t
                                   :unnarrowed t

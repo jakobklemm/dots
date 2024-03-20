@@ -1,0 +1,56 @@
+[colors]
+draw_bold_text_with_bright_colors = true
+
+[colors.bright]
+black = "#393939"
+blue = "#33b1ff"
+cyan = "#3ddbd9"
+green = "#42be65"
+magenta = "#ff7eb6"
+red = "#ee5396"
+white = "#ffffff"
+yellow = "#ffe97b"
+
+[colors.normal]
+black = "#262626"
+blue = "#33b1ff"
+cyan = "#3ddbd9"
+green = "#42be65"
+magenta = "#ff7eb6"
+red = "#ee5396"
+white = "#dde1e6"
+yellow = "#ffe97b"
+
+[colors.primary]
+background = "#161616"
+foreground = "#ffffff"
+
+[colors.search.matches]
+background = "#ee5396"
+foreground = "CellBackground"
+
+[env]
+TERM = "xterm-256color"
+
+[font.normal]
+family = "Monaspace Krypton"
+
+[scrolling]
+history = 5000
+
+[shell]
+args = ["-l"]
+program = "/bin/fish"
+
+[window]
+dynamic_padding = false
+opacity = 0.9999
+title = "Alacritty"
+
+[window.class]
+general = "Alacritty"
+instance = "Alacritty"
+
+[window.padding]
+x = 6
+y = 6

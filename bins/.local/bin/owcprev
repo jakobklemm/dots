@@ -29,9 +29,19 @@ while read file; do
   echo "$i - $file"
 done <<<$(find ~/org/database/ -type f -name "*.org*" )
 
+nodes_prev=$(tail -n 1 ~/org/words.org | awk '{print $3}' | cut -f1)
+nodes_curr=$(sqlite3 ~/Documents/org-roam.db "SELECT COUNT(*) FROM nodes;")
+
+echo "nodes last: $nodes_prev"
+echo "nodes curr: $nodes_curr"
+
 last=$(tail -n 1 ~/org/words.org | awk '{print $2}' | cut -f1)
 echo "last: $last"
 echo "curr: $i"
 today=$(date +"%D")
 diff=$(($i - $last))
-echo "PREVIEW: $diff"
+ndiff=$(($nodes_curr - $nodes_prev))
+echo "words diff: $diff"
+echo "nodes diff: $ndiff"
+echo "PREVIEW: $diff $ndiff"
+
