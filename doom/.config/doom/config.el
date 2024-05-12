@@ -59,6 +59,10 @@
   (vertico-posframe-mode 1)
   )
 
+(setq read-file-name-completion-ignore-case t
+      read-buffer-completion-ignore-case t
+      completion-ignore-case t)
+
 (setq langtool-http-server-host "172.16.110.22"
       langtool-http-server-port 8010)
 
@@ -215,7 +219,7 @@
                                   )
                                  ("r" "Reference" plain
                                   "%?"
-                                  :if-new (file+head "references/%<%Y%m%d>.org"
+                                  :if-new (file+head "references/%<%Y%m%d>-${slug}.org"
                                                      "#+TITLE: ${title}\n#+FILETAGS: :reference:\n"
                                                      )
                                   :immediate-finish t
@@ -267,9 +271,10 @@
   :config
   (setq org-roam-timestamps-remember-timestamps t)
   (setq org-roam-timestamps-minimum-gap 3600)
+  (org-roam-timestamps-mode t)
   )
 
-(setcdr (assoc "\\.pdf\\'" org-file-apps) "firefox %s")
+(setcdr (assoc "\\.pdf\\'" org-file-apps) "flatpak run org.mozilla.firefox %s")
 
 ;; Exporting
 
@@ -603,4 +608,130 @@
     (anki-editor-reset-cloze-number))
   ;; Initialize
   (anki-editor-reset-cloze-number)
+  )
+
+(setq org-screenshot-image-directory "~/files/database/org/")
+
+;; org-roam-meili
+(defun my-org-copy-subtree-contents ()
+  "Get the content text of the subtree at point and add it to the `kill-ring'.
+Excludes the heading and any child subtrees."
+  (interactive)
+  (if (org-before-first-heading-p)
+      (message "Not in or on an org heading")
+    (save-excursion
+      ;; If inside heading contents, move the point back to the heading
+      ;; otherwise `org-agenda-get-some-entry-text' won't work.
+      (unless (org-on-heading-p) (org-previous-visible-heading 1))
+      (let ((contents (substring-no-properties
+                       (org-agenda-get-some-entry-text
+                        (point-marker)
+                        most-positive-fixnum))))
+        (message "Copied: %s" contents)
+        (kill-new contents)))))
+
+(use-package! org-download
+  :config
+  (add-hook 'dired-mode-hook 'org-download-enable)
+  (setq-default org-download-image-dir "~/files/database/auto/")
+  (setq-default org-download-abbreviate-filename-function 'concat)
+  )
+
+(require 'request)
+
+;; Define server URL and headers
+(defvar my-url "https://meili.local.jeykey.net/indexes/org-roam/documents")
+(defvar my-headers '(("Content-Type" . "application/json")))
+
+(defun upld (node)
+  (setq o-n-id (car node))
+  (setq o-n-tx (org-roam-ui--get-text o-n-id))
+  (let ((json-obj (json-encode `(("id" . ,o-n-id)("body" . ,o-n-tx)))))
+    (request my-url
+      :type "POST"
+      :headers my-headers
+      :data (encode-coding-string json-obj 'utf-8)
+      :parser 'json-read
+      )
+    )
+  )
+
+(defun convert-list-of-structs-to-json (struct-list)
+  "Convert a list of structs to JSON objects and return a new list containing all the JSON objects."
+  (mapcar
+   (lambda (struct)
+     (let* ((id (car struct))
+            (node (org-roam-node-from-id id))
+            (title (org-roam-node-title node))
+            (body (org-roam-ui--get-text id))
+            (parsed `(("id" . ,id)("title" . ,title)("body" . ,body)))
+            )
+       parsed
+       ))
+     ;; (let ((json-object (json-encode struct)))
+     ;; json-object))
+   struct-list))
+
+(setq nodes (org-roam-db-query [:select * :from nodes]))
+;; (setq nnodes (convert-list-of-structs-to-json nodes))
+;; (setq nnnodes (json-encode nnodes))
+;; (request my-url
+;;       :type "POST"
+;;       :headers my-headers
+;;       :data (encode-coding-string nnnodes 'utf-8)
+;;       :parser 'json-read
+;;       )
+
+(defun meili-query (str)
+  (let* ((data2  `(("q" . "CIDR")("cropLength" . 8)("attributesToCrop" . ("body"))))
+         (data  `(("q" . "CIDR")))
+         (encoded (json-encode data))
+         (resp (request "https://meili.local.jeykey.net/indexes/org-roam/search"
+                 :type "POST"
+                 :headers my-headers
+                 :data (encode-coding-string encoded 'utf-8)
+                 :parser 'json-read
+                 ;; :parser (lambda () (json-parse-buffer :object-type 'hash-table))
+                 )
+               )
+         ;; (ret (json-parse-string resp :object-type 'hash-table))
+        )
+    (message "ENC: %s" encoded)
+    (message "REP: %s" resp)
+    (let ((data (request-response-data resp)))
+      (message "DATA : %s" data)
+      (let* ((dta (json-parse-string data))
+             (hits (gethash "hits" dta)))
+        (mapcar (lambda (hit)
+                  (let* ((title (gethash "title" hit)))
+                    title
+                    ))
+                hits
+                )
+              )
+            )
+      )
+
+    ;; (let ((data (plist-get (car (cdr resp)) :data)))
+    ;;   (let* ((dta (json-parse-string data))
+    ;;          (hits (gethash "hits" dta)))
+    ;;     (mapcar (lambda (hit)
+    ;;               (let* ((title (gethash "title" hit)))
+    ;;                 title
+    ;;                 ))
+    ;;             hits
+    ;;             )
+    ;;           )
+    ;;         )
+    ;;   )
+  )
+
+(defun complete-meili (str pred flag)
+  ;; (message "%s" str)
+  (meili-query str)
+  )
+
+(defun jk-test-completion ()
+  (interactive)
+  (completing-read "Node: " #'complete-meili)
   )

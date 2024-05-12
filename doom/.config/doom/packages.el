@@ -24,6 +24,8 @@
 (package! citar-org-roam)
 (package! vertico-posframe)
 
+(package! org-download)
+
 (package! engrave-faces :recipe (:local-repo "lisp/engrave-faces"))
 
 (package! org-special-block-extras)

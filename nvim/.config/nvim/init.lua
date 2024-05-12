@@ -8,7 +8,7 @@ require("plugins.modeline")
 require("plugins.lsp")
 require("plugins.trouble")
 require("plugins.goto")
-require("plugins.dap")
+-- require("plugins.dap")
 require("plugins.rust")
 require("plugins.notify")
 

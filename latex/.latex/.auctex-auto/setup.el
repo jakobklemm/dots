@@ -2,11 +2,10 @@
  "setup"
  (lambda ()
    (TeX-add-to-alist 'LaTeX-provided-package-options
-                     '(("tcolorbox" "most") ("xwatermark" "printwatermark")))
+                     '(("tcolorbox" "most") ("background" "all" "center" "firstpage=false")))
    (TeX-run-style-hooks
     "tcolorbox"
-    "transparent"
-    "xwatermark")
+    "background")
    (TeX-add-symbols
     "bb"
     "secret")
