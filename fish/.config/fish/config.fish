@@ -24,6 +24,12 @@ else
 	end
 end
 
+set ZELLIJ_AUTO_ATTACH "true"
+# set ZELLIJ_AUTO_EXIT "true"
+if status is-interactive
+    eval (zellij setup --generate-auto-start fish | string collect)
+end
+
 alias ls='exa -al --color=always --group-directories-first'
 
 alias ..='cd ..'
