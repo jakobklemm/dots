@@ -85,6 +85,7 @@ source $ZSH/oh-my-zsh.sh
 export EDITOR="nvim"
 alias v="nvim"
 alias c="cd"
+alias lg="lazygit"
 
 alias cat="bat"
 alias ls="eza --color=always --long --git --icons=always --no-user --no-permissions"
@@ -121,10 +122,6 @@ _fzf_comprun() {
     *)            fzf --preview "$show_file_or_dir_preview" "$@" ;;
   esac
 }
-
-path+=~/bins/
-
-export PATH
 
 # TODO: ZFS issues -> daemon maybe?
 # . "$HOME/.atuin/bin/env"

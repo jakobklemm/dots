@@ -16,7 +16,7 @@ config.audible_bell = "Disabled"
 
 config.window_background_opacity = 0.99
 
-config.color_scheme = "Catppuccin Macchiato"
+config.color_scheme = "Catppuccin Mocha"
 
 -- and finally, return the configuration to wezterm
 return config
