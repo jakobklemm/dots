@@ -253,7 +253,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
       vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
-      vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
+      vim.keymap.set('n', '<leader>sh', builtin.builtin, { desc = '[S]earch [H]elp Telescope' })
       -- vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
       vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
       -- vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
@@ -268,8 +268,9 @@ require('lazy').setup({
       -- end, { desc = 'Search [G]it [F]iles' })
 
       vim.keymap.set('n', '<leader>.', builtin.git_files, { desc = '[ ] Find Git files [.]' })
-
-      vim.keymap.set('n', '<leader>c', builtin.git_bcommits, { desc = '[ ] Find Git [c] commits' })
+      vim.keymap.set('n', '<leader>sc', builtin.git_bcommits, { desc = '[ ] Find [s] Git [c] commits' })
+      vim.keymap.set('n', '<leader>sb', builtin.git_branches, { desc = '[ ] Find [s] Git [b] branches' })
+      vim.keymap.set('n', '<leader>ss', builtin.git_status, { desc = '[ ] Find [s] Git [s] status' })
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
@@ -655,7 +656,40 @@ require('lazy').setup({
   },
 
   -- Highlight todo, notes, etc in comments
-  { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
+  {
+    'folke/todo-comments.nvim',
+    event = 'VimEnter',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    config = function()
+      require('todo-comments').setup {
+        signs = false,
+        keywords = {
+          FIX = {
+            icon = ' ', -- icon used for the sign, and in search results
+            color = 'error', -- can be a hex color, or a named color (see below)
+            alt = { 'FIXME', 'BUG', 'FIXIT', 'ISSUE' }, -- a set of other keywords that all map to this FIX keywords
+            -- signs = false, -- configure signs for some keywords individually
+          },
+          TODO = { icon = ' ', color = 'info' },
+          HACK = { icon = ' ', color = 'warning', alt = { 'DIRTY' } },
+          WARN = { icon = ' ', color = 'warning', alt = { 'WARNING', 'IMPORTANT' } },
+          PERF = { icon = ' ', alt = { 'OPTIM', 'PERFORMANCE', 'OPTIMIZE', 'SLOW' } },
+          NOTE = { icon = ' ', color = 'hint', alt = { 'INFO' } },
+          TEST = { icon = '⏲ ', color = 'test', alt = { 'TESTING', 'PASSED', 'FAILED' } },
+        },
+      }
+      vim.keymap.set('n', '<leader>st', ':TodoTelescope<CR>', { desc = '[ ] Find [s] [t]odos' })
+      vim.keymap.set('n', '<leader>sq', ':TodoQuickFix<CR>', { desc = '[ ] Find [s] [q]uickfix TODOs' })
+
+      vim.keymap.set('n', ']t', function()
+        require('todo-comments').jump_next()
+      end, { desc = 'Next todo comment' })
+
+      vim.keymap.set('n', '[t', function()
+        require('todo-comments').jump_prev()
+      end, { desc = 'Previous todo comment' })
+    end,
+  },
 
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
