@@ -83,7 +83,8 @@ source $ZSH/oh-my-zsh.sh
 # ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff,bg=cyan,bold,underline"
 
 export EDITOR="nvim"
-alias nvim="v"
+alias v="nvim"
+alias c="cd"
 
 alias cat="bat"
 alias ls="eza --color=always --long --git --icons=always --no-user --no-permissions"
@@ -95,7 +96,7 @@ eval $(thefuck --alias fk)
 
 eval "$(zoxide init zsh)"
 
-# eval "$(zellij setup --generate-auto-start zsh)"
+eval "$(zellij setup --generate-auto-start zsh)"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -125,6 +126,6 @@ path+=~/bins/
 
 export PATH
 
-. "$HOME/.atuin/bin/env"
-
-eval "$(atuin init zsh)"
+# TODO: ZFS issues -> daemon maybe?
+# . "$HOME/.atuin/bin/env"
+# eval "$(atuin init zsh)"
