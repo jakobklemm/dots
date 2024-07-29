@@ -735,3 +735,10 @@ Excludes the heading and any child subtrees."
   (interactive)
   (completing-read "Node: " #'complete-meili)
   )
+
+
+(defun jk/measure ()
+  (interactive)
+  (require 'benchmark)
+  (message "%f" (benchmark-elapse (save-buffer)))
+  )
