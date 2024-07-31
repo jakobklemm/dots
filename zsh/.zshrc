@@ -79,3 +79,5 @@ _fzf_comprun() {
 # TODO: ZFS issues -> daemon maybe?
 # . "$HOME/.atuin/bin/env"
 # eval "$(atuin init zsh)"
+
+[ -f "/home/jeykey/.ghcup/env" ] && . "/home/jeykey/.ghcup/env" # ghcup-env

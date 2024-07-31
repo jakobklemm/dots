@@ -1,9 +1,9 @@
 [credential]
 	helper = store
 [user]
-	email = jakob@jeykey.net
+	email = git@jeykey.net
 	name = Jakob Klemm
-	signingkey = D91BAB52F26F2A75
+	signingkey = A5B4F5A160C17CE6A9C46CDA9A129DFC0754B9AA
 [init]
 	defaultBranch = master
 [credentials]
