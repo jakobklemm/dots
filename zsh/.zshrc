@@ -36,7 +36,9 @@ source $ZSH/oh-my-zsh.sh
 
 export EDITOR="nvim"
 alias v="nvim"
-alias c="cd"
+alias c="cargo"
+alias markdownlint="mdl"
+alias g="git"
 alias lg="lazygit"
 alias top="btop"
 
