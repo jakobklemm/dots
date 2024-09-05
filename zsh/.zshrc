@@ -33,7 +33,7 @@ plugins=(
 
 
 source $ZSH/oh-my-zsh.sh
-
+path+=('~/.local/bin/')
 export EDITOR="nvim"
 alias v="nvim"
 alias c="cargo"
@@ -54,32 +54,35 @@ eval "$(zoxide init zsh)"
 
 eval "$(zellij setup --generate-auto-start zsh)"
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# TODO: FZF broken
+# source <(fzf --zsh)
 
-source ~/.fzf-git/fzf-git.sh
-
-show_file_or_dir_preview="if [ -d {} ]; then eza --tree --color=always {} | head -200; else bat -n --color=always --line-range :500 {}; fi"
-
-export FZF_CTRL_T_OPTS="--preview '$show_file_or_dir_preview'"
-export FZF_ALT_C_OPTS="--preview 'eza --tree --color=always {} | head -200'"
-
-# Advanced customization of fzf options via _fzf_comprun function
-# - The first argument to the function is the name of the command.
-# - You should make sure to pass the rest of the arguments to fzf.
-_fzf_comprun() {
-  local command=$1
-  shift
-
-  case "$command" in
-    cd)           fzf --preview 'eza --tree --color=always {} | head -200' "$@" ;;
-    export|unset) fzf --preview "eval 'echo ${}'"         "$@" ;;
-    ssh)          fzf --preview 'dig {}'                   "$@" ;;
-    *)            fzf --preview "$show_file_or_dir_preview" "$@" ;;
-  esac
-}
-
+# [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+#
+# source ~/.fzf-git/fzf-git.sh
+#
+# show_file_or_dir_preview="if [ -d {} ]; then eza --tree --color=always {} | head -200; else bat -n --color=always --line-range :500 {}; fi"
+#
+# export FZF_CTRL_T_OPTS="--preview '$show_file_or_dir_preview'"
+# export FZF_ALT_C_OPTS="--preview 'eza --tree --color=always {} | head -200'"
+#
+# # Advanced customization of fzf options via _fzf_comprun function
+# # - The first argument to the function is the name of the command.
+# # - You should make sure to pass the rest of the arguments to fzf.
+# _fzf_comprun() {
+#   local command=$1
+#   shift
+#
+#   case "$command" in
+#     cd)           fzf --preview 'eza --tree --color=always {} | head -200' "$@" ;;
+#     export|unset) fzf --preview "eval 'echo ${}'"         "$@" ;;
+#     ssh)          fzf --preview 'dig {}'                   "$@" ;;
+#     *)            fzf --preview "$show_file_or_dir_preview" "$@" ;;
+#   esac
+# }
+#
 # TODO: ZFS issues -> daemon maybe?
-# . "$HOME/.atuin/bin/env"
-# eval "$(atuin init zsh)"
+. "$HOME/.atuin/bin/env"
+eval "$(atuin init zsh)"
 
-[ -f "/home/jeykey/.ghcup/env" ] && . "/home/jeykey/.ghcup/env" # ghcup-env
+# [ -f "/home/jeykey/.ghcup/env" ] && . "/home/jeykey/.ghcup/env" # ghcup-env
