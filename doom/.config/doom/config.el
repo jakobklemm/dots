@@ -156,6 +156,7 @@
         :desc "org-roam-buffer-toggle" "t" #'org-roam-buffer-toggle
         :desc "org-roam-dailies-today" "d" #'org-roam-dailies-goto-today
         :desc "org-roam-dailies-capture" "e" #'org-roam-dailies-capture-today
+        :desc "org-roam-refile" "r" #'org-roam-refile
         )
   :custom
   (
