@@ -200,6 +200,8 @@ require('lazy').setup({
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
       { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
+
+      { 'nvim-telescope/telescope-frecency.nvim' },
     },
     config = function()
       -- Telescope is a fuzzy finder that comes with a lot of different things that
@@ -236,10 +238,19 @@ require('lazy').setup({
             },
           },
         },
-        -- pickers = {}
+        pickers = {
+          find_files = {
+            hidden = true,
+          },
+        },
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
+          },
+          frecency = {
+            auto_validate = true,
+            show_scores = false,
+            matcher = 'fuzzy',
           },
         },
       }
@@ -247,40 +258,26 @@ require('lazy').setup({
       -- Enable Telescope extensions if they are installed
       pcall(require('telescope').load_extension, 'fzf')
       pcall(require('telescope').load_extension, 'ui-select')
+      pcall(require('telescope').load_extension, 'frecency')
 
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
+      -- broken / not finding half the things
+      vim.keymap.set('n', '<leader>.', builtin.find_files, { desc = '[S]earch [F]iles' })
       vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
       vim.keymap.set('n', '<leader>sh', builtin.builtin, { desc = '[S]earch [H]elp Telescope' })
-      -- vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
-      vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
-      -- vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
+      vim.keymap.set('n', '<leader>,', ':Telescope frecency<CR>', { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
-
-      -- vim.keymap.set('n', '<leader>.', function()
-      --   opts = {}
-      --   opts.cwd = vim.fn.systemlist('git rev-parse --show-toplevel')[1]
-      --   require('telescope.builtin').find_files(opts)
-      -- end, { desc = 'Search [G]it [F]iles' })
-
-      vim.keymap.set('n', '<leader>.', builtin.git_files, { desc = '[ ] Find Git files [.]' })
-      vim.keymap.set('n', '<leader>sc', builtin.git_bcommits, { desc = '[ ] Find [s] Git [c] commits' })
-      vim.keymap.set('n', '<leader>sb', builtin.git_branches, { desc = '[ ] Find [s] Git [b] branches' })
-      vim.keymap.set('n', '<leader>ss', builtin.git_status, { desc = '[ ] Find [s] Git [s] status' })
-
-      -- Slightly advanced example of overriding default behavior and theme
-      vim.keymap.set('n', '<leader>/', function()
-        -- You can pass additional configuration to Telescope to change the theme, layout, etc.
-        builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
-          winblend = 10,
-          -- weird
-          previewer = true,
-        })
-      end, { desc = '[/] Fuzzily search in current buffer' })
+      vim.keymap.set('n', '<header>sb', builtin.buffers, { desc = '[ ] Find existing buffers' })
+      vim.keymap.set('n', '<leader>sgg', builtin.git_files, { desc = '[ ] Find Git files [.]' })
+      vim.keymap.set('n', '<leader>sgc', builtin.git_commits, { desc = '[ ] Find [s] Git [c] commits' })
+      vim.keymap.set('n', '<leader>sgb', builtin.git_branches, { desc = '[ ] Find [s] Git [b] branches' })
+      vim.keymap.set('n', '<leader>sgs', builtin.git_status, { desc = '[ ] Find [s] Git [s] status' })
+      vim.keymap.set('n', '<leader>/', builtin.current_buffer_fuzzy_find, { desc = '[/] Fuzzily search in current buffer' })
 
       -- It's also possible to pass additional configuration options.
       --  See `:help telescope.builtin.live_grep()` for information about particular keys
@@ -832,87 +829,18 @@ require('lazy').setup({
     opts = {},
   },
 
-  -- TODO: Test?
-  -- {
-  --   'm4xshen/hardtime.nvim',
-  --   dependencies = { 'MunifTanjim/nui.nvim', 'nvim-lua/plenary.nvim' },
-  --   opts = {},
-  --   config = function()
-  --     require('hardtime').setup()
-  --   end,
-  -- },
-
-  -- Ollama test
   {
-    'jackMort/ChatGPT.nvim',
-    event = 'VeryLazy',
+    'andrewferrier/wrapping.nvim',
     config = function()
-      require('chatgpt').setup {
-        api_host_cmd = 'echo https://ollama.local.jeykey.net',
-        api_key_cmd = 'echo ollama',
-        openai_params = {
-          model = 'llama3:8b-instruct-q5_K_S',
-          frequency_penalty = 0,
-          presence_penalty = 0,
-          max_tokens = 1024,
-          temperature = 0.3,
-          top_p = 1,
-          n = 1,
-        },
-        openai_edit_params = {
-          model = 'llama3:8b-instruct-q5_K_S',
-          frequency_penalty = 0,
-          presence_penalty = 0,
-          temperature = 0,
-          top_p = 1,
-          n = 1,
-        },
-      }
+      require('wrapping').setup { notify_on_switch = false }
+      require('wrapping').hard_wrap_mode()
     end,
-    dependencies = {
-      'MunifTanjim/nui.nvim',
-      'nvim-lua/plenary.nvim',
-      'folke/trouble.nvim',
-      'nvim-telescope/telescope.nvim',
-    },
+  },
 
-    -- {
-    --   'epwalsh/obsidian.nvim',
-    --   version = '*', -- recommended, use latest release instead of latest commit
-    --   lazy = true,
-    --   ft = 'markdown',
-    --   -- Replace the above line with this if you only want to load obsidian.nvim for markdown files in your vault:
-    --   -- event = {
-    --   --   -- If you want to use the home shortcut '~' here you need to call 'vim.fn.expand'.
-    --   --   -- E.g. "BufReadPre " .. vim.fn.expand "~" .. "/my-vault/*.md"
-    --   --   -- refer to `:h file-pattern` for more examples
-    --   --   "BufReadPre path/to/my-vault/*.md",
-    --   --   "BufNewFile path/to/my-vault/*.md",
-    --   -- },
-    --   dependencies = {
-    --     -- Required.
-    --     'nvim-lua/plenary.nvim',
-    --
-    --     -- see below for full list of optional dependencies 👇
-    --   },
-    --   opts = {
-    --     workspaces = {
-    --       {
-    --         name = 'Database',
-    --         path = '~/vaults/Database',
-    --       },
-    --     },
-    --
-    --     -- see below for full list of options 👇
-    --   },
-    -- },
-
-    {
-      'andrewferrier/wrapping.nvim',
-      config = function()
-        require('wrapping').setup()
-      end,
-    },
+  {
+    'MeanderingProgrammer/render-markdown.nvim',
+    opts = {},
+    dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.nvim' },
   },
 
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
