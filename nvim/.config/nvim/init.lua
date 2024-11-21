@@ -457,6 +457,7 @@ require('lazy').setup({
             },
           },
         },
+        -- 'ocaml-lsp-server@1.10.0',
       }
 
       -- Ensure the servers and tools above are installed
@@ -472,6 +473,8 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
+
+        -- 'ocamllsp@1.10.0',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -839,8 +842,32 @@ require('lazy').setup({
 
   {
     'MeanderingProgrammer/render-markdown.nvim',
-    opts = {},
+    opts = {
+      indent = {
+        enabled = true,
+      },
+      render_modes = { 'n', 'c', 'i', 'o' },
+    },
     dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.nvim' },
+  },
+
+  '3rd/image.nvim',
+
+  {
+    'epwalsh/obsidian.nvim',
+    lazy = true,
+    ft = 'markdown',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+    },
+    opts = {
+      workspaces = {
+        {
+          name = 'database',
+          path = '~/vaults/database',
+        },
+      },
+    },
   },
 
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the

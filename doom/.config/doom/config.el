@@ -139,11 +139,16 @@
   :hook (org-mode . org-fragtog-mode)
   )
 
-(use-package! org-download
-  :config
-  (add-hook 'dired-mode-hook 'org-download-enable)
-  (setq-default org-download-image-dir "~/files/screenshots/")
-  (setq-default org-download-abbreviate-filename-function 'concat)
+(after! org-download
+  (setq
+   org-download-image-dir "~/files/screenshots/"
+   org-download-method 'directory
+   org-download-heading-lvl 2
+   org-download-abbreviate-filename-function 'expand-file-name
+   org-download-screenshot-method "gnome-screenshot -a -f %s"
+   org-download-timestamp "%Y-%m-%d_%H-%M-%S"
+   org-download-display-inline-images t
+   )
   )
 
 (use-package! org-roam
@@ -187,92 +192,16 @@
 
 (setq org-roam-capture-templates '(
                                    ;; 'Literature' notes
-                                   ("s" "Store")
-                                   ("sa" "Article" plain
+                                   ("s" "Store" plain
                                     "%?"
-                                    :if-new (file+head "store/article/%<%Y%m%d>-${slug}.org"
-                                                       "#+TITLE: ${title}\n#+FILETAGS: :lecture:\n#+DATE: %<%Y-%m-%d %a>\n\nSource: \n\n\n* Anki :noexport:\n** _\n"
+                                    :if-new (file+head "store/%<%Y%m%d>-${slug}.org"
+                                                       "#+TITLE: ${title}\n#+FILETAGS: :store:\n#+DATE: %<%Y-%m-%d %a>\n\nSource: \n\n\n* Anki :noexport:\n** _\n"
                                                        )
                                     :immediate-finish t
                                     :unnarrowed t
 
                                     )
-                                   ("sb" "Book" plain
-                                    "%?"
-                                    :if-new (file+head "store/book/%<%Y%m%d>-${slug}.org"
-                                                       "#+TITLE: ${title}\n#+FILETAGS: :book:\n#+DATE: %<%Y-%m-%d %a>\n\nSource: \n\n\n* Anki :noexport:\n** _\n"
-                                                       )
-                                    :immediate-finish t
-                                    :unnarrowed t
-
-                                    )
-                                   ("sl" "Lecture" plain
-                                    "%?"
-                                    :if-new (file+head "store/lecture/%<%Y%m%d>-${slug}.org"
-                                                       "#+TITLE: ${title}\n#+FILETAGS: :lecture:\n#+DATE: %<%Y-%m-%d %a>\n\nSource: \n\n\n* Anki :noexport:\n** _\n"
-                                                       )
-                                    :immediate-finish t
-                                    :unnarrowed t
-                                    )
-                                   ("sv" "Video" plain
-                                    "%?"
-                                    :if-new (file+head "store/video/%<%Y%m%d>-${slug}.org"
-                                                       "#+TITLE: ${title}\n#+FILETAGS: :video:\n#+DATE: %<%Y-%m-%d %a>\n\nSource: \n\n\n* Anki :noexport:\n** _\n"
-                                                       )
-                                    :immediate-finish t
-                                    :unnarrowed t
-                                    )
-                                   ("so" "Other" plain
-                                    "%?"
-                                    :if-new (file+head "store/other/%<%Y%m%d>-${slug}.org"
-                                                       "#+TITLE: ${title}\n#+FILETAGS: :other:\n#+DATE: %<%Y-%m-%d %a>\n\nSource: \n\n\n* Anki :noexport:\n** _\n"
-                                                       )
-                                    :immediate-finish t
-                                    :unnarrowed t
-                                    )
-                                   ;; German
-                                   ("g" "German")
-                                   ("ga" "Article" plain
-                                    "%?"
-                                    :if-new (file+head "store/article/%<%Y%m%d>-${slug}.org"
-                                                       "#+TITLE: ${title}\n#+FILETAGS: :article:\n#+DATE: %<%Y-%m-%d %a>\n\nSource: \n\n\n* Anki :noexport:\n** _\n\n* Local Variables :noexport: \n# Local Variables:\n# jinx-languages: \"de_CH\"\n# End:\n"
-                                                       )
-                                    :immediate-finish t
-                                    :unnarrowed t
-                                    )
-                                   ("gb" "Book" plain
-                                    "%?"
-                                    :if-new (file+head "store/book/%<%Y%m%d>-${slug}.org"
-                                                       "#+TITLE: ${title}\n#+FILETAGS: :book:\n#+DATE: %<%Y-%m-%d %a>\n\nSource: \n\n\n* Anki :noexport:\n** _\n\n* Local Variables :noexport: \n# Local Variables:\n# jinx-languages: \"de_CH\"\n# End:\n"
-                                                       )
-                                    :immediate-finish t
-                                    :unnarrowed t
-                                    )
-                                   ("gl" "Lecture" plain
-                                    "%?"
-                                    :if-new (file+head "store/lecture/%<%Y%m%d>-${slug}.org"
-                                                       "#+TITLE: ${title}\n#+FILETAGS: :lecture:\n#+DATE: %<%Y-%m-%d %a>\n\nSource: \n\n\n* Anki :noexport:\n** _\n\n* Local Variables :noexport: \n# Local Variables:\n# jinx-languages: \"de_CH\"\n# End:\n"
-                                                       )
-                                    :immediate-finish t
-                                    :unnarrowed t
-                                    )
-                                   ("gv" "Video" plain
-                                    "%?"
-                                    :if-new (file+head "store/video/%<%Y%m%d>-${slug}.org"
-                                                       "#+TITLE: ${title}\n#+FILETAGS: :video:\n#+DATE: %<%Y-%m-%d %a>\n\nSource: \n\n\n* Anki :noexport:\n** _\n\n* Local Variables :noexport: \n# Local Variables:\n# jinx-languages: \"de_CH\"\n# End:\n"
-                                                       )
-                                    :immediate-finish t
-                                    :unnarrowed t
-                                    )
-                                   ("go" "Other" plain
-                                    "%?"
-                                    :if-new (file+head "store/other/%<%Y%m%d>-${slug}.org"
-                                                       "#+TITLE: ${title}\n#+FILETAGS: :other:\n#+DATE: %<%Y-%m-%d %a>\n\nSource: \n\n\n* Anki :noexport:\n** _\n\n* Local Variables :noexport: \n# Local Variables:\n# jinx-languages: \"de_CH\"\n# End:\n"
-                                                       )
-                                    :immediate-finish t
-                                    :unnarrowed t
-                                    )
-                                   ("gd" "Devel" plain
+                                   ("d" "Devel" plain
                                     "%?"
                                     :if-new (file+head "devel/%<%Y%m%d>-${slug}.org"
                                                        "#+TITLE: ${title}\n#+FILETAGS: :devel:\n#+DATE: %<%Y-%m-%d %a>\n\nSource: \n\n* Local Variables :noexport: \n# Local Variables:\n# jinx-languages: \"de_CH\"\n# End:\n"
@@ -285,14 +214,6 @@
                                     "%?"
                                     :if-new (file+head "index/${slug}.org"
                                                        "#+TITLE: ${title}\n#+FILETAGS: :index:\n#+DATE: %<%Y-%m-%d %a>\n"
-                                                       )
-                                    :immediate-finish t
-                                    :unnarrowed t
-                                    )
-                                   ("d" "Devel" plain
-                                    "%?"
-                                    :if-new (file+head "store/video/%<%Y%m%d>-${slug}.org"
-                                                       "#+TITLE: ${title}\n#+FILETAGS: :devel:\n#+DATE: %<%Y-%m-%d %a>\n"
                                                        )
                                     :immediate-finish t
                                     :unnarrowed t
@@ -403,3 +324,106 @@ ${extracted}
 (ox-extras-activate '(ignore-headlines))
 (setq org-latex-compiler "xelatex")
 (setq org-export-with-broken-links 'mark)
+
+(setcdr (assoc "\\.pdf\\'" org-file-apps) "flatpak run org.mozilla.firefox %s")
+
+;; \\setmainfont{Inter}
+
+(setq org-latex-classes
+'(("article"
+"\\RequirePackage{fix-cm}
+\\PassOptionsToPackage{svgnames}{xcolor}
+\\documentclass[11pt]{article}
+\\usepackage[T1]{fontenc}
+\\usepackage{unicode-math}
+\\usepackage{fontsetup}
+\\usepackage{pdfpages}
+\\usepackage{babel}
+\\usepackage{sectsty}
+\\usepackage{enumitem}
+\\usepackage{titling}
+\\usepackage[
+ a4paper,
+ left=25mm,
+ right=25mm,
+ top=25mm,
+ bottom=25mm
+]{geometry}
+\\usepackage{parskip}
+\\makeatletter
+\\renewcommand{\\maketitle}{%
+  \\begingroup\\parindent0pt
+  \\sffamily
+  \\Huge{\\bfseries\\@title}\\par\\bigskip
+  \\LARGE{\\bfseries\\@author}\\par\\medskip
+  \\normalsize\\@date\\par\\bigskip
+  \\endgroup\\@afterindentfalse\\@afterheading}
+\\makeatother
+%% Math
+\\usepackage{amsmath,amscd,amssymb}
+\\usepackage{subfiles,comment,units,subfig,fontawesome,graphicx,verbatim,nicefrac,ifthen,booktabs}
+\\usepackage{fancyhdr}
+\\pagestyle{fancy}
+\\fancyhead{}
+\\fancyfoot{}
+\\fancyhead[R]{\\thepage}
+\\fancyhead[L]{\\textit{\\thedate}}
+\\fancyhead[C]{\\thetitle}
+\\input{~/.latex/setup.tex}
+\\bibliography{~/Documents/refs.bib}
+\\thispagestyle{empty}
+[DEFAULT-PACKAGES]
+\\hypersetup{linkcolor=violet,urlcolor=violet,
+             citecolor=DarkRed,colorlinks=true, filecolor=magenta}
+\\AtBeginDocument{\\renewcommand{\\UrlFont}{\\ttfamily}}
+[PACKAGES]
+[EXTRA]"
+("\\section{%s}" . "\\section*{%s}")
+("\\subsection{%s}" . "\\subsection*{%s}")
+("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+("\\paragraph{%s}" . "\\paragraph*{%s}")
+("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+
+("report" "\\documentclass[11pt]{report}"
+("\\part{%s}" . "\\part*{%s}")
+("\\chapter{%s}" . "\\chapter*{%s}")
+("\\section{%s}" . "\\section*{%s}")
+("\\subsection{%s}" . "\\subsection*{%s}")
+("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
+
+("book" "\\documentclass[11pt]{book}"
+("\\part{%s}" . "\\part*{%s}")
+("\\chapter{%s}" . "\\chapter*{%s}")
+("\\section{%s}" . "\\section*{%s}")
+("\\subsection{%s}" . "\\subsection*{%s}")
+("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
+
+(setq org-format-latex-header
+"\\documentclass{article}
+\\usepackage[usenames]{color}
+\\usepackage[T1]{fontenc}
+\\usepackage{unicode-math}
+\\usepackage{babel}
+\\usepackage{sectsty}
+\\usepackage{enumitem}
+%% Math
+\\usepackage{amsmath,amscd,amssymb}
+\\usepackage{subfiles,comment,units,subfig,fontawesome,graphicx,verbatim,nicefrac,ifthen,booktabs}
+\\input{~/.latex/setup.tex}
+[DEFAULT-PACKAGES]
+[PACKAGES]
+\\pagestyle{empty}             % do not remove
+% The settings below are copied from fullpage.sty
+\\setlength{\\textwidth}{\\paperwidth}
+\\addtolength{\\textwidth}{-3cm}
+\\setlength{\\oddsidemargin}{1.5cm}
+\\addtolength{\\oddsidemargin}{-2.54cm}
+\\setlength{\\evensidemargin}{\\oddsidemargin}
+\\setlength{\\textheight}{\\paperheight}
+\\addtolength{\\textheight}{-\\headheight}
+\\addtolength{\\textheight}{-\\headsep}
+\\addtolength{\\textheight}{-\\footskip}
+\\addtolength{\\textheight}{-3cm}
+\\setlength{\\topmargin}{1.5cm}
+\\addtolength{\\topmargin}{-2.54cm}"
+)

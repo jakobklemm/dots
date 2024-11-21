@@ -37,6 +37,7 @@ path+=('~/.local/bin/')
 export EDITOR="nvim"
 alias v="nvim"
 alias c="cargo"
+alias m="make"
 alias markdownlint="mdl"
 alias g="git"
 alias lg="lazygit"
