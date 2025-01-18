@@ -1,0 +1,3 @@
+[submodule "nvim/.config/nvim/BlackLotus"]
+	path = nvim/.config/nvim/BlackLotus
+	url = https://github.com/PoisonIsBestType/BlackLotus

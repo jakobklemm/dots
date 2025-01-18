@@ -98,3 +98,4 @@ session.*
 
 org-caldav-*
 bin/
+nvim/.config/nvim/lazy-lock.json
