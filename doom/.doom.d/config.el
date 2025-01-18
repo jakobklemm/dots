@@ -1,6 +1,5 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
-;; Default settings (https://tecosaur.github.io/emacs-config/config.html#simple-settings)
 (setq user-full-name "Jakob Klemm"
       user-mail-address "github@jeykey.net"
       doom-font "Monaspace Argon"
@@ -48,60 +47,16 @@
       scroll-preserve-screen-position 'always
       scroll-margin 12
       scroll-preserve-screen-position t
+      doom-modeline-enable-word-count t
       )
 
 (display-time-mode 1)
 (global-subword-mode 1)
+
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 
-(after! company
-  (setq company-idle-delay 0.5
-        company-minimum-prefix-length 2)
-  (setq company-show-quick-access t)
-  (add-hook 'evil-normal-state-entry-hook #'company-abort))
-
-(use-package! popper
-  :bind (("C-,"   . popper-toggle)
-         ("M-,"   . popper-cycle)
-         ("C-M-," . popper-toggle-type))
-  :init
-  (setq popper-reference-buffers
-        '("\\*Messages\\*"
-          "^\\*Warnings\\*"
-          "Output\\*$"
-          "\\*Async Shell Command\\*"
-          "\\*Shell Command Output\\*"
-          help-mode
-          "^\\*helpful .*\\*"
-          compilation-mode))
-  (popper-mode +1)
-  (popper-echo-mode +1)
-  )
-
-(use-package! org-appear
-  :hook (org-mode . org-appear-mode)
-  :custom
-  ((org-hide-emphasis-markers t)
-   (org-appear-autoemphasis t)
-   (org-appear-autolinks t)
-   (org-appear-autoentities t)
-   (org-appear-autoentities t)
-   (org-appear-trigger 'always)
-   (org-appear-autosubmarkers t))
-  )
-
-(use-package! jinx
-  :bind
-  (
-   ("M-p" . jinx-correct-word)
-   ("C-n" . jinx-next)
-   ("C-M-p" . jinx-languages)
-   )
-  :config
-  (dolist (hook '(text-mode-hook prog-mode-hook conf-mode-hook))
-    (add-hook hook #'jinx-mode))
-  )
+(setq org-id-locations-file "~/.org-id-locations")
 
 (use-package! org-modern
   :hook (org-mode . org-modern-mode)
@@ -128,6 +83,42 @@
         )
   )
 
+(use-package org-appear
+  :init
+  (setq
+   org-hide-emphasis-markers t
+   org-appear-autoemphasis t
+   org-appear-autolinks t
+   org-appear-autosubmarkers t
+   org-appear-autoentities t
+   org-appear-autokeywords t
+   )
+  :config
+  (add-hook 'org-mode-hook 'org-appear-mode)
+  )
+
+(map!
+ :leader
+ "/" #'+default/search-buffer
+ "SPC" #'+vertico/switch-workspace-buffer
+ "r" #'consult-recent-file
+ )
+
+(map!
+ :leader
+ :prefix "f"
+ "g" #'consult-ripgrep
+ )
+
+(use-package! jinx
+  :config
+  (map! :leader
+        :prefix "m"
+        "c" #'jinx-correct-nearest
+        )
+  (add-hook 'emacs-startup-hook #'global-jinx-mode)
+  )
+
 (use-package! svg-tag-mode
   :config
   (set-face-attribute 'svg-tag-default-face nil :family "CommitMono Nerd Font Bold")
@@ -135,19 +126,34 @@
   )
 
 (use-package! org-fragtog
+  :disabled t
   :after org
   :hook (org-mode . org-fragtog-mode)
   )
 
-(after! org-download
+(use-package! org-download
+  :init
   (setq
-   org-download-image-dir "~/files/screenshots/"
+   org-download-image-dir "~/files/database/auto/"
    org-download-method 'directory
-   org-download-heading-lvl 2
-   org-download-abbreviate-filename-function 'expand-file-name
+   org-download-heading-lvl 3
+   org-download-abbreviate-filename-function 'concat
    org-download-screenshot-method "gnome-screenshot -a -f %s"
-   org-download-timestamp "%Y-%m-%d_%H-%M-%S"
+   org-download-timestamp "%Y-%m-%d_%H-%M-%S_"
    org-download-display-inline-images t
+   )
+  :config
+  (map! :leader
+        :prefix "m"
+        "s" #'org-download-screenshot
+        )
+  )
+
+(use-package! anki-editor
+  :config
+  (setq
+   anki-editor-org-tags-as-anki-tags nil
+   anki-editor-ignored-org-tags '()
    )
   )
 
@@ -162,6 +168,7 @@
         :desc "org-roam-dailies-today" "d" #'org-roam-dailies-goto-today
         :desc "org-roam-dailies-capture" "e" #'org-roam-dailies-capture-today
         :desc "org-roam-refile" "r" #'org-roam-refile
+        :desc "add an alias" "a" #'org-roam-alias-add
         )
   :custom
   (
@@ -245,7 +252,7 @@
   :after org-roam
   :custom
   ((org-roam-ui-sync-theme t)
-   (org-roam-ui-follow nil)
+   ;; (org-roam-ui-follow nil)
    (org-roam-ui-update-on-save t)
    (org-roam-ui-open-on-start nil)
    ))
@@ -256,6 +263,7 @@
   (setq org-roam-timestamps-minimum-gap 3600)
   (org-roam-timestamps-mode t)
   )
+
 
 (use-package! good-scroll
   :config
@@ -294,21 +302,75 @@ ${extracted}
                                )))
   )
 
-(setq-default org-display-custom-times t)
-(setq org-time-stamp-custom-formats
-      '("<%Y-%m-%d>" . "<%d/%m/%y %a %H:%M>"))
-(setq org-latex-active-timestamp-format "\\texttt{%s}")
+(setq org-export-with-broken-links 'mark)
+(setcdr (assoc "\\.pdf\\'" org-file-apps) "xdg-open %s")
 
-(defun org-export-filter-timestamp-remove-brackets (timestamp backend info)
-  "removes relevant brackets from a timestamp"
-  (cond
-   ((org-export-derived-backend-p backend 'latex)
-    (replace-regexp-in-string "[<>]\\|[][]" "" timestamp))
-   ((org-export-derived-backend-p backend 'html)
-    (replace-regexp-in-string "&[lg]t;\\|[][]" "" timestamp))))
-(eval-after-load 'ox '(add-to-list
-                       'org-export-filter-timestamp-functions
-                       'org-export-filter-timestamp-remove-brackets))
+;; (plist-put org-latex-preview-appearance-options :scale 42.0)
+
+;; (setq org-latex-pdf-process
+;;   '("lualatex -shell-escape -interaction nonstopmode %f"
+;;     "lualatex -shell-escape -interaction nonstopmode %f"))
+
+;; (setq org-latex-compiler "lualatex")
+
+(setq org-latex-compiler "lualatex")
+
+(use-package! org-latex-preview
+  :config
+  (plist-put org-latex-preview-appearance-options
+             :page-width 0.8)
+
+  (plist-put org-format-latex-options :scale 2)
+  (plist-put org-format-latex-options :zoom 1.5)
+
+  (setq org-latex-preview-process-default 'dvisvgm)
+
+  (add-hook 'org-mode-hook 'org-latex-preview-auto-mode)
+
+
+  (setq org-latex-preview-numbered t)
+  (setq org-latex-preview-live t)
+  (setq org-latex-preview-live-debounce 0.25)
+
+  (defun my/org-latex-preview-uncenter (ov)
+    (overlay-put ov 'before-string nil))
+  (defun my/org-latex-preview-recenter (ov)
+    (overlay-put ov 'before-string (overlay-get ov 'justify)))
+  (defun my/org-latex-preview-center (ov)
+    (save-excursion
+      (goto-char (overlay-start ov))
+      (when-let* ((elem (org-element-context))
+                  ((or (eq (org-element-type elem) 'latex-environment)
+                       (string-match-p "^\\\\\\[" (org-element-property :value elem))))
+                  (img (overlay-get ov 'display))
+                  (prop `(space :align-to (- center (0.55 . ,img))))
+                  (justify (propertize " " 'display prop 'face 'default)))
+        (overlay-put ov 'justify justify)
+        (overlay-put ov 'before-string (overlay-get ov 'justify)))))
+  (define-minor-mode org-latex-preview-center-mode
+    "Center equations previewed with `org-latex-preview'."
+    :global nil
+    (if org-latex-preview-center-mode
+        (progn
+          (add-hook 'org-latex-preview-overlay-open-functions
+                    #'my/org-latex-preview-uncenter nil :local)
+          (add-hook 'org-latex-preview-overlay-close-functions
+                    #'my/org-latex-preview-recenter nil :local)
+          (add-hook 'org-latex-preview-overlay-update-functions
+                    #'my/org-latex-preview-center nil :local))
+      (remove-hook 'org-latex-preview-overlay-close-functions
+                    #'my/org-latex-preview-recenter)
+      (remove-hook 'org-latex-preview-overlay-update-functions
+                    #'my/org-latex-preview-center)
+      (remove-hook 'org-latex-preview-overlay-open-functions
+                    #'my/org-latex-preview-uncenter)))
+  )
+
+(add-hook 'org-mode-hook 'org-latex-preview-auto-mode)
+
+;; \\bibliography{~/Documents/refs.bib}
+;; \\usepackage{subfiles,comment,units,subfig,fontawesome,graphicx,verbatim,nicefrac,ifthen,booktabs}
+;; \\usepackage{fontsetup}
 
 (defvar org-export-output-directory-prefix "exports/"
   "Prefix of directory used for org-mode export")
@@ -320,26 +382,16 @@ ${extracted}
     (when (not (file-directory-p pub-dir))
       (make-directory pub-dir))))
 
-(require 'ox-extra)
-(ox-extras-activate '(ignore-headlines))
-(setq org-latex-compiler "xelatex")
-(setq org-export-with-broken-links 'mark)
-
-(setcdr (assoc "\\.pdf\\'" org-file-apps) "flatpak run org.mozilla.firefox %s")
-
-;; \\setmainfont{Inter}
-
 (setq org-latex-classes
 '(("article"
 "\\RequirePackage{fix-cm}
 \\PassOptionsToPackage{svgnames}{xcolor}
 \\documentclass[11pt]{article}
 \\usepackage[T1]{fontenc}
+\\usepackage{amsmath,amscd,amssymb}
 \\usepackage{unicode-math}
-\\usepackage{fontsetup}
 \\usepackage{pdfpages}
-\\usepackage{babel}
-\\usepackage{sectsty}
+\\usepackage[english, german]{babel}
 \\usepackage{enumitem}
 \\usepackage{titling}
 \\usepackage[
@@ -360,8 +412,7 @@ ${extracted}
   \\endgroup\\@afterindentfalse\\@afterheading}
 \\makeatother
 %% Math
-\\usepackage{amsmath,amscd,amssymb}
-\\usepackage{subfiles,comment,units,subfig,fontawesome,graphicx,verbatim,nicefrac,ifthen,booktabs}
+\\usepackage{subfiles,comment,units,subfig,fontawesome,verbatim,nicefrac,ifthen,booktabs}
 \\usepackage{fancyhdr}
 \\pagestyle{fancy}
 \\fancyhead{}
@@ -370,7 +421,6 @@ ${extracted}
 \\fancyhead[L]{\\textit{\\thedate}}
 \\fancyhead[C]{\\thetitle}
 \\input{~/.latex/setup.tex}
-\\bibliography{~/Documents/refs.bib}
 \\thispagestyle{empty}
 [DEFAULT-PACKAGES]
 \\hypersetup{linkcolor=violet,urlcolor=violet,
@@ -397,33 +447,3 @@ ${extracted}
 ("\\section{%s}" . "\\section*{%s}")
 ("\\subsection{%s}" . "\\subsection*{%s}")
 ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
-
-(setq org-format-latex-header
-"\\documentclass{article}
-\\usepackage[usenames]{color}
-\\usepackage[T1]{fontenc}
-\\usepackage{unicode-math}
-\\usepackage{babel}
-\\usepackage{sectsty}
-\\usepackage{enumitem}
-%% Math
-\\usepackage{amsmath,amscd,amssymb}
-\\usepackage{subfiles,comment,units,subfig,fontawesome,graphicx,verbatim,nicefrac,ifthen,booktabs}
-\\input{~/.latex/setup.tex}
-[DEFAULT-PACKAGES]
-[PACKAGES]
-\\pagestyle{empty}             % do not remove
-% The settings below are copied from fullpage.sty
-\\setlength{\\textwidth}{\\paperwidth}
-\\addtolength{\\textwidth}{-3cm}
-\\setlength{\\oddsidemargin}{1.5cm}
-\\addtolength{\\oddsidemargin}{-2.54cm}
-\\setlength{\\evensidemargin}{\\oddsidemargin}
-\\setlength{\\textheight}{\\paperheight}
-\\addtolength{\\textheight}{-\\headheight}
-\\addtolength{\\textheight}{-\\headsep}
-\\addtolength{\\textheight}{-\\footskip}
-\\addtolength{\\textheight}{-3cm}
-\\setlength{\\topmargin}{1.5cm}
-\\addtolength{\\topmargin}{-2.54cm}"
-)
