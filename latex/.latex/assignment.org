@@ -1,8 +1,0 @@
-#+EMAIL: ethz@jeykey.net
-#+LATEX_CLASS: article
-#+OPTIONS: toc:nil title:nil date:nil author:nil num:nil
-
-#+LATEX_HEADER: \input{~/.latex/base.tex}
-#+LATEX_HEADER: \input{~/.latex/commands.tex}
-#+LATEX_HEADER: \input{~/.latex/math.tex}
-
