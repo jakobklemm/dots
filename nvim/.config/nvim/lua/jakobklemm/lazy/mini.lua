@@ -9,7 +9,20 @@ return {
         require("mini.files").setup()
         require("mini.comment").setup()
         require("mini.move").setup()
-        require("mini.animate").setup()
+        require("mini.animate").setup({
+            cursor = {
+                enable = false,
+            },
+            scroll = {
+                enable = true,
+            },
+            open = {
+                enable = false,
+            },
+            close = {
+                enable = false,
+            },
+        })
 
         vim.keymap.set("n", "<leader>mf", MiniFiles.open, { desc = "mini file browser" })
     end,
