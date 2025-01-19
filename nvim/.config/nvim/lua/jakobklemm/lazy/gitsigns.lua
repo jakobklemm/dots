@@ -28,9 +28,10 @@ return {
                 -- map("n", "<leader>hu", gs.undo_stage_hunk)
                 -- map("n", "<leader>hR", gs.reset_buffer)
                 -- map("n", "<leader>hp", gs.preview_hunk)
-                map("n", "<leader>tb", function()
-                    gs.blame_line({ full = true })
-                end, { desc = "full blame for current line" })
+                -- <leader>go from snacks instead?
+                -- map("n", "<leader>tb", function()
+                --     gs.blame_line({ full = true })
+                -- end, { desc = "full blame for current line" })
                 map("n", "<leader>tB", gs.toggle_current_line_blame, { desc = "toggle git blame preview" })
                 -- map("n", "<leader>hd", gs.diffthis)
                 -- map("n", "<leader>hD", function()
