@@ -2,7 +2,7 @@
 
 (setq user-full-name "Jakob Klemm"
       user-mail-address "github@jeykey.net"
-      doom-font "Monaspace Argon"
+      doom-font "MonaspiceAr Nerd Font Mono"
       doom-theme 'doom-henna
       display-line-numbers-type t
       display-line-numbers-type 'relative
