@@ -126,7 +126,7 @@
   )
 
 (use-package! org-fragtog
-  :disabled t
+  ;; :disabled nil
   :after org
   :hook (org-mode . org-fragtog-mode)
   )
@@ -134,7 +134,7 @@
 (use-package! org-download
   :init
   (setq
-   org-download-image-dir "~/files/database/auto/"
+   org-download-image-dir "~/files/screenshots/"
    org-download-method 'directory
    org-download-heading-lvl 3
    org-download-abbreviate-filename-function 'concat
@@ -314,59 +314,62 @@ ${extracted}
 ;; (setq org-latex-compiler "lualatex")
 
 (setq org-latex-compiler "lualatex")
+(setq org-latex-precompile nil)
+(setq org-latex-preview-process-precompiled nil)
 
-(use-package! org-latex-preview
-  :config
-  (plist-put org-latex-preview-appearance-options
-             :page-width 0.8)
+;; (setq org-latex-preview-process-default 'imagemagick)
+(setq org-preview-latex-default-process 'imagemagick)
+;; (add-hook 'org-mode-hook 'org-latex-preview-auto-mode)
+(setq org-latex-preview-numbered t)
+; (setq org-latex-preview-live t)
+; (setq org-latex-preview-live-debounce 0.25)
 
-  (plist-put org-format-latex-options :scale 2)
-  (plist-put org-format-latex-options :zoom 1.5)
+;; (use-package! org-latex-preview
+;;   :config
+;;   (plist-put org-latex-preview-appearance-options
+;;              :page-width 0.8)
+;;   (plist-put org-format-latex-options :scale 2)
+;;   (plist-put org-format-latex-options :zoom 1.5)
+;;   (setq org-latex-preview-process-default 'dvisvgm)
+;;   (add-hook 'org-mode-hook 'org-latex-preview-auto-mode)
+;;   (setq org-latex-preview-numbered t)
+;;   (setq org-latex-preview-live t)
+;;   (setq org-latex-preview-live-debounce 0.25)
+;;   (defun my/org-latex-preview-uncenter (ov)
+;;     (overlay-put ov 'before-string nil))
+;;   (defun my/org-latex-preview-recenter (ov)
+;;     (overlay-put ov 'before-string (overlay-get ov 'justify)))
+;;   (defun my/org-latex-preview-center (ov)
+;;     (save-excursion
+;;       (goto-char (overlay-start ov))
+;;       (when-let* ((elem (org-element-context))
+;;                   ((or (eq (org-element-type elem) 'latex-environment)
+;;                        (string-match-p "^\\\\\\[" (org-element-property :value elem))))
+;;                   (img (overlay-get ov 'display))
+;;                   (prop `(space :align-to (- center (0.55 . ,img))))
+;;                   (justify (propertize " " 'display prop 'face 'default)))
+;;         (overlay-put ov 'justify justify)
+;;         (overlay-put ov 'before-string (overlay-get ov 'justify)))))
+;;   (define-minor-mode org-latex-preview-center-mode
+;;     "Center equations previewed with `org-latex-preview'."
+;;     :global nil
+;;     (if org-latex-preview-center-mode
+;;         (progn
+;;           (add-hook 'org-latex-preview-overlay-open-functions
+;;                     #'my/org-latex-preview-uncenter nil :local)
+;;           (add-hook 'org-latex-preview-overlay-close-functions
+;;                     #'my/org-latex-preview-recenter nil :local)
+;;           (add-hook 'org-latex-preview-overlay-update-functions
+;;                     #'my/org-latex-preview-center nil :local))
+;;       (remove-hook 'org-latex-preview-overlay-close-functions
+;;                     #'my/org-latex-preview-recenter)
+;;       (remove-hook 'org-latex-preview-overlay-update-functions
+;;                     #'my/org-latex-preview-center)
+;;       (remove-hook 'org-latex-preview-overlay-open-functions
+;;                     #'my/org-latex-preview-uncenter)))
+;;   )
 
-  (setq org-latex-preview-process-default 'dvisvgm)
-
-  (add-hook 'org-mode-hook 'org-latex-preview-auto-mode)
-
-
-  (setq org-latex-preview-numbered t)
-  (setq org-latex-preview-live t)
-  (setq org-latex-preview-live-debounce 0.25)
-
-  (defun my/org-latex-preview-uncenter (ov)
-    (overlay-put ov 'before-string nil))
-  (defun my/org-latex-preview-recenter (ov)
-    (overlay-put ov 'before-string (overlay-get ov 'justify)))
-  (defun my/org-latex-preview-center (ov)
-    (save-excursion
-      (goto-char (overlay-start ov))
-      (when-let* ((elem (org-element-context))
-                  ((or (eq (org-element-type elem) 'latex-environment)
-                       (string-match-p "^\\\\\\[" (org-element-property :value elem))))
-                  (img (overlay-get ov 'display))
-                  (prop `(space :align-to (- center (0.55 . ,img))))
-                  (justify (propertize " " 'display prop 'face 'default)))
-        (overlay-put ov 'justify justify)
-        (overlay-put ov 'before-string (overlay-get ov 'justify)))))
-  (define-minor-mode org-latex-preview-center-mode
-    "Center equations previewed with `org-latex-preview'."
-    :global nil
-    (if org-latex-preview-center-mode
-        (progn
-          (add-hook 'org-latex-preview-overlay-open-functions
-                    #'my/org-latex-preview-uncenter nil :local)
-          (add-hook 'org-latex-preview-overlay-close-functions
-                    #'my/org-latex-preview-recenter nil :local)
-          (add-hook 'org-latex-preview-overlay-update-functions
-                    #'my/org-latex-preview-center nil :local))
-      (remove-hook 'org-latex-preview-overlay-close-functions
-                    #'my/org-latex-preview-recenter)
-      (remove-hook 'org-latex-preview-overlay-update-functions
-                    #'my/org-latex-preview-center)
-      (remove-hook 'org-latex-preview-overlay-open-functions
-                    #'my/org-latex-preview-uncenter)))
-  )
-
-(add-hook 'org-mode-hook 'org-latex-preview-auto-mode)
+;; (add-hook 'org-mode-hook 'org-latex-preview-auto-mode)
 
 ;; \\bibliography{~/Documents/refs.bib}
 ;; \\usepackage{subfiles,comment,units,subfig,fontawesome,graphicx,verbatim,nicefrac,ifthen,booktabs}

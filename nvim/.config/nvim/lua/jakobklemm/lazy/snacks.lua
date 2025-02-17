@@ -7,12 +7,12 @@ return {
             -- your configuration comes here
             -- or leave it empty to use the default settings
             -- refer to the configuration section below
-            animate = {
-                enabled = true,
-                fps = 165,
-                duration = 50,
-                easing = "cubic",
-            },
+            -- animate = {
+            --     enabled = false,
+            --     fps = 165,
+            --     duration = 50,
+            --     easing = "cubic",
+            -- },
             bigfile = { enabled = true },
             dashboard = { enabled = false },
             indent = { enabled = false },
@@ -24,7 +24,7 @@ return {
                 },
             },
             quickfile = { enabled = true },
-            scroll = { enabled = true },
+            -- scroll = { enabled = true },
             statuscolumn = { enabled = true },
             words = { enabled = false },
             gitbrowse = { notify = true },
