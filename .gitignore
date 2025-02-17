@@ -93,9 +93,8 @@ bookmarks
 url/
 *.lock
 session.*
-	
+
 /emacs/.emacs.d/amx-items
 
 org-caldav-*
-bin/
 nvim/.config/nvim/lazy-lock.json
