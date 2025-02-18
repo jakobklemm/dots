@@ -78,11 +78,11 @@
 (package! org-modern)
 (package! org-appear)
 (package! org-roam)
-(package! pdf-tools)
-(package! anki-editor :recipe (:fork "orgtre"))
-;; (package! anki-editor
-;;   :recipe (:host github :repo "anki-editor/anki-editor")
-;;   )
+;; (package! pdf-tools)
+;; (package! anki-editor :recipe (:fork "orgtre"))
+(package! anki-editor
+  :recipe (:host github :repo "anki-editor/anki-editor")
+  )
 (package! popper)
 (package! org-fragtog)
 (package! org-download)
