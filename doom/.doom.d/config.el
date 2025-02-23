@@ -123,15 +123,10 @@
   :hook (org-mode . svg-tag-mode)
   )
 
-;; (use-package! org-fragtog
-;;   :after org
-;;   :hook (org-mode . org-fragtog-mode)
-;;   )
-
 (use-package! org-download
   :init
   (setq
-   org-download-image-dir "~/files/screenshots/"
+   org-download-image-dir "~/files/database/auto/"
    org-download-method 'directory
    org-download-heading-lvl 3
    org-download-abbreviate-filename-function 'concat
@@ -147,11 +142,11 @@
   )
 
 (use-package! anki-editor
-  :config
-  (setq
-   anki-editor-org-tags-as-anki-tags nil
-   anki-editor-ignored-org-tags '()
-   )
+  ;; :config
+  ;; (setq
+  ;;  anki-editor-org-tags-as-anki-tags nil
+  ;;  anki-editor-ignored-org-tags '("noexport")
+  ;;  )
   )
 
 (use-package! org-roam
@@ -201,11 +196,20 @@
 (setq org-id-link-to-org-use-id 'create-if-interactive)
 
 (setq org-roam-capture-templates '(
-                                   ;; 'Literature' notes
                                    ("s" "Store" plain
                                     "%?"
                                     :if-new (file+head "store/%<%Y%m%d>-${slug}.org"
-                                                       "#+TITLE: ${title}\n#+FILETAGS: :store:\n#+DATE: %<%Y-%m-%d %a>\n\nSource: \n\n\n* Anki :noexport:\n** _\n"
+                                                       "#+TITLE: ${title}
+#+FILETAGS:
+#+SETUPFILE: ~/.latex/store.org
+#+OPTIONS:
+#+DATE: %<%Y-%m-%d %a>
+
+Source:
+
+-----
+
+* Anki :noexport:\n** _\n"
                                                        )
                                     :immediate-finish t
                                     :unnarrowed t
@@ -328,8 +332,8 @@ ${extracted}
 
 (setq org-latex-preview-preamble
       "\\documentclass{article}
-[DEFAULT-PACKAGES]
 \\input{~/.latex/preview.tex}
+[DEFAULT-PACKAGES]
 [PACKAGES]
 "
       )

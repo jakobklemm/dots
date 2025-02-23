@@ -80,9 +80,8 @@
 (package! engrave-faces)
 (package! org-appear)
 (package! org-roam)
+(package! org-roam-ui)
 (package! org-special-block-extras)
-;; (package! pdf-tools)
-;; (package! anki-editor :recipe (:fork "orgtre"))
 (package! anki-editor
   :recipe (:host github :repo "anki-editor/anki-editor")
   )
@@ -90,7 +89,6 @@
 (package! org-download)
 (package! org-superstar)
 (package! org-incoming)
-(package! org-roam-ui)
 (package! org-roam-timestamps)
 (package! jinx)
 (package! good-scroll)
