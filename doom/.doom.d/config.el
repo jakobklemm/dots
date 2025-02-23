@@ -123,11 +123,10 @@
   :hook (org-mode . svg-tag-mode)
   )
 
-(use-package! org-fragtog
-  ;; :disabled nil
-  :after org
-  :hook (org-mode . org-fragtog-mode)
-  )
+;; (use-package! org-fragtog
+;;   :after org
+;;   :hook (org-mode . org-fragtog-mode)
+;;   )
 
 (use-package! org-download
   :init
@@ -291,25 +290,31 @@ ${extracted}
                                )))
   )
 
+;; TODO: Figure this out at some point
+(use-package! org-special-block-extras
+  :hook (org-mode . org-special-block-extras-mode)
+  )
+
 (setq org-export-with-broken-links 'mark)
 (setcdr (assoc "\\.pdf\\'" org-file-apps) "xdg-open %s")
 
-(require 'ox-latex)
+;; Generate all previews in buffer:
+;; "SPC-u SPC-u C-c C-x C-l"
 
-(setq org-latex-compiler "lualatex")
-;; (setq org-latex-precompile nil)
-;; (setq org-latex-preview-process-precompiled nil)
+(with-eval-after-load 'ox-latex
+    (setq org-latex-compiler "lualatex"
+          org-latex-pdf-process (list "latexmk -pdflatex='lualatex -shell-escape -synctex=1' -outdir=exports/ -pdf -f %f")))
+
+(setq org-latex-precompile nil)
+(setq org-latex-preview-process-precompiled nil)
 
 (plist-put org-format-latex-options :scale 1.25)
-;; (plist-put org-format-latex-options :zoom 1.5)
+(plist-put org-format-latex-options :zoom 1.25)
 
 (with-eval-after-load 'org
   (setq org-preview-latex-default-process 'dvisvgm)
   (setf (plist-get (cdr (assq 'dvisvgm org-preview-latex-process-alist)) :latex-compiler)
         '("dvilualatex -interaction nonstopmode -output-directory %o %f")))
-
-;; (setq org-preview-latex-default-process 'dvisvgm)
-(setq org-latex-preview-numbered t)
 
 (defvar org-export-output-directory-prefix "exports/"
   "Prefix of directory used for org-mode export")
@@ -321,74 +326,46 @@ ${extracted}
     (when (not (file-directory-p pub-dir))
       (make-directory pub-dir))))
 
-(with-eval-after-load 'org
-    (add-to-list 'org-latex-packages-alist '("" "mathrsfs" t)))
+(setq org-latex-preview-preamble
+      "\\documentclass{article}
+[DEFAULT-PACKAGES]
+\\input{~/.latex/preview.tex}
+[PACKAGES]
+"
+      )
+
+(use-package! org-latex-preview
+  :config
+  (plist-put org-latex-preview-appearance-options
+             :page-width 0.9)
+
+  (setq org-latex-preview-process-default 'dvisvgm)
+  (add-hook 'org-mode-hook 'org-latex-preview-auto-mode)
+
+  (setq org-latex-preview-auto-ignored-commands
+        '(next-line previous-line mwheel-scroll
+          scroll-up-command scroll-down-command))
+
+  (setq org-latex-preview-numbered t)
+  (setq org-latex-preview-live t)
+  (setq org-latex-preview-live-debounce 0.25)
+  )
 
 (setq org-latex-classes
 '(("article"
-"\\RequirePackage{fix-cm}
-\\PassOptionsToPackage{svgnames}{xcolor}
-\\documentclass[11pt]{article}
-\\usepackage[T1]{fontenc}
-\\usepackage{amsmath,amscd,amssymb}
-\\usepackage{unicode-math}
-\\usepackage{pdfpages}
-\\usepackage[english, german]{babel}
-\\usepackage[AUTO]{inputenc}
-\\usepackage{enumitem}
-\\usepackage{titling}
-\\usepackage[
- a4paper,
- left=25mm,
- right=25mm,
- top=25mm,
- bottom=25mm
-]{geometry}
-\\usepackage{parskip}
-\\makeatletter
-\\renewcommand{\\maketitle}{%
-  \\begingroup\\parindent0pt
-  \\sffamily
-  \\Huge{\\bfseries\\@title}\\par\\bigskip
-  \\LARGE{\\bfseries\\@author}\\par\\medskip
-  \\normalsize\\@date\\par\\bigskip
-  \\endgroup\\@afterindentfalse\\@afterheading}
-\\makeatother
-%% Math
-\\usepackage{mathrsfs}
-\\usepackage[varbb]{newpxmath}
-\\usepackage{subfiles,comment,units,subfig,fontawesome,verbatim,nicefrac,ifthen,booktabs}
-\\usepackage{fancyhdr}
-\\pagestyle{fancy}
-\\fancyhead{}
-\\fancyfoot{}
-\\fancyhead[R]{\\thepage}
-\\fancyhead[L]{\\textit{\\thedate}}
-\\fancyhead[C]{\\thetitle}
-\\input{~/.latex/setup.tex}
-\\thispagestyle{empty}
+"\\input{~/.latex/export.tex}
 [DEFAULT-PACKAGES]
-\\hypersetup{linkcolor=violet,urlcolor=violet,
-             citecolor=DarkRed,colorlinks=true, filecolor=magenta}
-\\AtBeginDocument{\\renewcommand{\\UrlFont}{\\ttfamily}}
 [PACKAGES]
 [EXTRA]"
 ("\\section{%s}" . "\\section*{%s}")
 ("\\subsection{%s}" . "\\subsection*{%s}")
 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
 ("\\paragraph{%s}" . "\\paragraph*{%s}")
-("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+("\\subparagraph{%s}" . "\\subparagraph*{%s}")
+)
+)
+)
 
-("report" "\\documentclass[11pt]{report}"
-("\\part{%s}" . "\\part*{%s}")
-("\\chapter{%s}" . "\\chapter*{%s}")
-("\\section{%s}" . "\\section*{%s}")
-("\\subsection{%s}" . "\\subsection*{%s}")
-("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
-
-("book" "\\documentclass[11pt]{book}"
-("\\part{%s}" . "\\part*{%s}")
-("\\chapter{%s}" . "\\chapter*{%s}")
-("\\section{%s}" . "\\section*{%s}")
-("\\subsection{%s}" . "\\subsection*{%s}")
-("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
+(use-package! engrave-faces
+  :init
+  (setq org-latex-src-block-backend 'engraved))

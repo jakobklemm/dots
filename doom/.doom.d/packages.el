@@ -49,42 +49,44 @@
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;; (unpin! t)
 
-;; (package! org :recipe
-;;   (:host nil :repo "https://git.tecosaur.net/mirrors/org-mode.git" :remote "mirror" :fork
-;;          (:host nil :repo "https://git.tecosaur.net/tec/org-mode.git" :branch "dev" :remote "tecosaur")
-;;          :files
-;;          (:defaults "etc")
-;;          :build t :pre-build
-;;          (with-temp-file "org-version.el"
-;;            (require 'lisp-mnt)
-;;            (let
-;;                ((version
-;;                  (with-temp-buffer
-;;                    (insert-file-contents "lisp/org.el")
-;;                    (lm-header "version")))
-;;                 (git-version
-;;                  (string-trim
-;;                   (with-temp-buffer
-;;                     (call-process "git" nil t nil "rev-parse" "--short" "HEAD")
-;;                     (buffer-string)))))
-;;              (insert
-;;               (format "(defun org-release () \"The release version of Org.\" %S)\n" version)
-;;               (format "(defun org-git-version () \"The truncate git commit hash of Org mode.\" %S)\n" git-version)
-;;               "(provide 'org-version)\n"))))
-;;   :pin nil)
+(package! org :recipe
+  (:host nil :repo "https://git.tecosaur.net/mirrors/org-mode.git" :remote "mirror" :fork
+         (:host nil :repo "https://git.tecosaur.net/tec/org-mode.git" :branch "dev" :remote "tecosaur")
+         :files
+         (:defaults "etc")
+         :build t :pre-build
+         (with-temp-file "org-version.el"
+           (require 'lisp-mnt)
+           (let
+               ((version
+                 (with-temp-buffer
+                   (insert-file-contents "lisp/org.el")
+                   (lm-header "version")))
+                (git-version
+                 (string-trim
+                  (with-temp-buffer
+                    (call-process "git" nil t nil "rev-parse" "--short" "HEAD")
+                    (buffer-string)))))
+             (insert
+              (format "(defun org-release () \"The release version of Org.\" %S)\n" version)
+              (format "(defun org-git-version () \"The truncate git commit hash of Org mode.\" %S)\n" git-version)
+              "(provide 'org-version)\n"))))
+  :pin nil)
 
-;; (unpin! org)
+(unpin! org)
 
+;; (package! org-fragtog)
 (package! org-modern)
+(package! engrave-faces)
 (package! org-appear)
 (package! org-roam)
+(package! org-special-block-extras)
 ;; (package! pdf-tools)
 ;; (package! anki-editor :recipe (:fork "orgtre"))
 (package! anki-editor
   :recipe (:host github :repo "anki-editor/anki-editor")
   )
 (package! popper)
-(package! org-fragtog)
 (package! org-download)
 (package! org-superstar)
 (package! org-incoming)
