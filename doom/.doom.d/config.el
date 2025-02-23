@@ -185,8 +185,14 @@
           (file-name-directory
            (file-relative-name (org-roam-node-file node) org-roam-directory))))
       (error "")))
+
+    (cl-defmethod org-roam-node-timestamp ((node org-roam-node))
+    "Return the time."
+    (org-roam-timestamps-decode (org-roam-node-file-mtime node))
+    )
+
   (setq org-roam-node-display-template
-        (concat "${type:10} - ${tags:30}: ${title:*}"))
+        (concat "${file-title:30} - ${timestamp} - ${type:10} - ${tags:20} - ${aliases:50}: ${title:*}"))
   (org-roam-db-autosync-mode)
   (org-roam-db-autosync-enable)
   (require 'org-roam-dailies)
@@ -294,7 +300,7 @@ ${extracted}
 ;; (setq org-latex-precompile nil)
 ;; (setq org-latex-preview-process-precompiled nil)
 
-(plist-put org-format-latex-options :scale 0.75)
+(plist-put org-format-latex-options :scale 1.25)
 ;; (plist-put org-format-latex-options :zoom 1.5)
 
 (with-eval-after-load 'org
@@ -315,6 +321,9 @@ ${extracted}
     (when (not (file-directory-p pub-dir))
       (make-directory pub-dir))))
 
+(with-eval-after-load 'org
+    (add-to-list 'org-latex-packages-alist '("" "mathrsfs" t)))
+
 (setq org-latex-classes
 '(("article"
 "\\RequirePackage{fix-cm}
@@ -325,6 +334,7 @@ ${extracted}
 \\usepackage{unicode-math}
 \\usepackage{pdfpages}
 \\usepackage[english, german]{babel}
+\\usepackage[AUTO]{inputenc}
 \\usepackage{enumitem}
 \\usepackage{titling}
 \\usepackage[
@@ -345,6 +355,8 @@ ${extracted}
   \\endgroup\\@afterindentfalse\\@afterheading}
 \\makeatother
 %% Math
+\\usepackage{mathrsfs}
+\\usepackage[varbb]{newpxmath}
 \\usepackage{subfiles,comment,units,subfig,fontawesome,verbatim,nicefrac,ifthen,booktabs}
 \\usepackage{fancyhdr}
 \\pagestyle{fancy}
