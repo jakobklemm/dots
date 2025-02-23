@@ -1,0 +1,16 @@
+% LaTeX commands included in both previews & exports
+
+\newcommand{\bb}{\mathbb}
+
+% Usage: #+LATEX_HEADER: \secret[ABC]{}
+\newcommand{\secret}[1][TAB SECRET]{
+\usepackage[all, center, firstpage=false]{background}
+\backgroundsetup{contents=#1}
+}
+
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
+\DeclarePairedDelimiter{\round}{\lfloor}{\rceil}

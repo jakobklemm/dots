@@ -1,0 +1,4 @@
+#+EMAIL: contact@jeykey.net
+#+AUTHOR: Jakob Klemm
+#+OPTIONS: toc:nil date:t author:nil
+#+LANGUAGE: en
