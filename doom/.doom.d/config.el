@@ -128,7 +128,7 @@
   (setq
    org-download-image-dir "~/files/database/auto/"
    org-download-method 'directory
-   org-download-heading-lvl 3
+   org-download-heading-lvl 0
    org-download-abbreviate-filename-function 'concat
    org-download-screenshot-method "gnome-screenshot -a -f %s"
    org-download-timestamp "%Y-%m-%d_%H-%M-%S_"
@@ -161,6 +161,9 @@
         :desc "org-roam-dailies-capture" "e" #'org-roam-dailies-capture-today
         :desc "org-roam-refile" "r" #'org-roam-refile
         :desc "add an alias" "a" #'org-roam-alias-add
+        :desc "sources => refs" "s" #'org-roam-ref-add
+        :desc "refs search" "j" #'org-roam-ref-add
+        :desc "refs delete" "k" #'org-roam-ref-add
         )
   :custom
   (
@@ -186,12 +189,26 @@
     )
 
   (setq org-roam-node-display-template
-        (concat "${file-title:30} - ${timestamp} - ${type:10} - ${tags:20} - ${aliases:50}: ${title:*}"))
+        (concat "${file-title:30} - ${timestamp} - ${type:10} - ${tags:20} - ${aliases:20}: ${title:*}"))
   (org-roam-db-autosync-mode)
   (org-roam-db-autosync-enable)
   (require 'org-roam-dailies)
+  ;; (require 'org-cite)
   ;; (require 'org-roam-export)
   )
+
+(use-package! org-ref
+  :config
+  (setq bibtex-completion-bibliography '(
+                                         "~/files/biblio/refs.bib"
+                                         "~/files/biblio/auto.bib"
+                                         ))
+  )
+
+(use-package! org-roam-bibtex
+  :after org-roam
+  :config
+  (require 'org-ref))
 
 (setq org-id-link-to-org-use-id 'create-if-interactive)
 
@@ -271,6 +288,8 @@ Source:
   (org-roam-timestamps-mode t)
   )
 
+;; TODO: BAD
+(org-roam-db-sync)
 
 (use-package! good-scroll
   :config
@@ -307,7 +326,7 @@ ${extracted}
 
 (with-eval-after-load 'ox-latex
     (setq org-latex-compiler "lualatex"
-          org-latex-pdf-process (list "latexmk -pdflatex='lualatex -shell-escape -synctex=1' -outdir=exports/ -pdf -f %f")))
+          org-latex-pdf-process (list "latexmk -pdflatex='lualatex -shell-escape -interaction nonstopmode -synctex=1' -outdir=exports/ -bibtex -pdf -f %f")))
 
 (setq org-latex-precompile nil)
 (setq org-latex-preview-process-precompiled nil)
@@ -337,6 +356,32 @@ ${extracted}
 [PACKAGES]
 "
       )
+
+(setq org-latex-default-packages-alist nil)
+(setq org-latex-engraved-preamble "\\usepackage{fvextra}
+
+[FVEXTRA-SETUP]
+
+% Make line numbers smaller and grey.
+\\renewcommand\\theFancyVerbLine{\\footnotesize\\color{black!40!white}\\arabic{FancyVerbLine}}
+
+% In case engrave-faces-latex-gen-preamble has not been run.
+\\providecolor{EfD}{HTML}{f7f7f7}\n\\providecolor{EFD}{HTML}{28292e}
+
+% Define a Code environment to prettily wrap the fontified code.
+\\providecommand{\\codefont}{\\footnotesize}
+\\DeclareTColorBox[]{Code}{o}%
+{colback=EfD!98!EFD, colframe=EfD!95!EFD,
+  fontupper=\\setlength{\\fboxsep}{0pt}\\codefont,
+  colupper=EFD,\n  IfNoValueTF={#1}%
+  {boxsep=2pt, arc=2.5pt, outer arc=2.5pt,
+    boxrule=0.5pt, left=2pt}%
+  {boxsep=2.5pt, arc=0pt, outer arc=0pt,
+    boxrule=0pt, leftrule=1.5pt, left=0.5pt},
+  right=2pt, top=1pt, bottom=0.5pt,
+  breakable}
+
+[LISTINGS-SETUP]")
 
 (use-package! org-latex-preview
   :config

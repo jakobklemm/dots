@@ -4,7 +4,7 @@
 
 \documentclass[12pt]{article}
 
-\usepackage[english,german]{babel}
+% \usepackage[english,german]{babel}
 
 \usepackage{graphicx}
 \usepackage{hyperref}
@@ -13,6 +13,9 @@
 \usepackage{textcomp}
 \usepackage{gensymb}
 \usepackage{tikz}
+
+% \IfPackageLoadedTF{tcolorbox}{}{\usepackage[most]{tcolorbox}}
+
 \usepackage[most]{tcolorbox}
 
 \usepackage{pdfpages}
@@ -60,6 +63,9 @@
    \bigskip\par\noindent
   }
 
+\usepackage{titlesec}
+% \titleformat{\section}{\large\bfseries}{\thesection}{1em}{\hrule}
+
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \fancyhead{}
@@ -75,5 +81,9 @@
 
 % cause reasons
 \usepackage{kantlipsum}
+
+\usepackage[backend=bibtex,style=numeric]{biblatex}
+\addbibresource{~/Documents/docs.bib}
+\addbibresource{~/Documents/refs.bib}
 
 \input{~/.latex/commands.tex}

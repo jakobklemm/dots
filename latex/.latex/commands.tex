@@ -1,6 +1,9 @@
 % LaTeX commands included in both previews & exports
 
 \newcommand{\bb}{\mathbb}
+\newcommand{\xor}{\oplus}
+\newcommand{\dmid}{\mid\mid}
+\newcommand{\txt}{\text}
 
 % Usage: #+LATEX_HEADER: \secret[ABC]{}
 \newcommand{\secret}[1][TAB SECRET]{
@@ -14,3 +17,33 @@
 \DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
 \DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
 \DeclarePairedDelimiter{\round}{\lfloor}{\rceil}
+
+% \IfPackageLoadedTF{tcolorbox}{}{\usepackage[most]{tcolorbox}}
+\usepackage[most]{tcolorbox}
+
+\tcbset {
+  base/.style={
+    arc=0mm,
+    bottomtitle=0.5mm,
+    boxrule=0mm,
+    colbacktitle=black!10!white,
+    coltitle=black,
+    fonttitle=\bfseries,
+    left=2.5mm,
+    leftrule=1mm,
+    right=3.5mm,
+    title={#1},
+    toptitle=0.75mm,
+  }
+}
+
+\definecolor{brandblue}{rgb}{0.34, 0.7, 1}
+\newtcolorbox{mainbox}[1]{
+  colframe=brandblue,
+  base={#1}
+}
+
+\newtcolorbox{subbox}[1]{
+  colframe=black!30!white,
+  base={#1}
+}
