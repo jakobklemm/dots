@@ -142,11 +142,11 @@
   )
 
 (use-package! anki-editor
-  ;; :config
-  ;; (setq
-  ;;  anki-editor-org-tags-as-anki-tags nil
-  ;;  anki-editor-ignored-org-tags '("noexport")
-  ;;  )
+  :config
+  (setq
+   anki-editor-org-tags-as-anki-tags nil
+   anki-editor-ignored-org-tags '("noexport")
+   )
   )
 
 (use-package! org-roam
@@ -276,7 +276,7 @@ Source:
   :after org-roam
   :custom
   ((org-roam-ui-sync-theme t)
-   ;; (org-roam-ui-follow nil)
+   (org-roam-ui-follow nil)
    (org-roam-ui-update-on-save t)
    (org-roam-ui-open-on-start nil)
    ))
@@ -383,22 +383,22 @@ ${extracted}
 
 [LISTINGS-SETUP]")
 
-(use-package! org-latex-preview
-  :config
-  (plist-put org-latex-preview-appearance-options
-             :page-width 0.9)
+;; (use-package! org-latex-preview
+;;   :config
+;;   (plist-put org-latex-preview-appearance-options
+;;              :page-width 0.9)
 
-  (setq org-latex-preview-process-default 'dvisvgm)
-  (add-hook 'org-mode-hook 'org-latex-preview-auto-mode)
+;;   (setq org-latex-preview-process-default 'dvisvgm)
+;;   (add-hook 'org-mode-hook 'org-latex-preview-auto-mode)
 
-  (setq org-latex-preview-auto-ignored-commands
-        '(next-line previous-line mwheel-scroll
-          scroll-up-command scroll-down-command))
+;;   (setq org-latex-preview-auto-ignored-commands
+;;         '(next-line previous-line mwheel-scroll
+;;           scroll-up-command scroll-down-command))
 
-  (setq org-latex-preview-numbered t)
-  (setq org-latex-preview-live t)
-  (setq org-latex-preview-live-debounce 0.25)
-  )
+;;   (setq org-latex-preview-numbered t)
+;;   (setq org-latex-preview-live t)
+;;   (setq org-latex-preview-live-debounce 0.25)
+;;   )
 
 (setq org-latex-classes
 '(("article"

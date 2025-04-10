@@ -35,3 +35,5 @@
 	repo = /home/jeykey/Downloads/testcp
 [alias]
 	bb = !~/.git-branch
+[safe]
+	directory = /opt/apron

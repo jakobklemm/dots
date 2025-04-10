@@ -15,7 +15,7 @@ return {
             -- },
             bigfile = { enabled = true },
             dashboard = { enabled = false },
-            indent = { enabled = false },
+            indent = { enabled = true },
             input = { enabled = true, timeout = 3000 },
             notifier = { enabled = true },
             styles = {
