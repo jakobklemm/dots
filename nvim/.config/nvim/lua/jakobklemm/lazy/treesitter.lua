@@ -24,6 +24,7 @@ return {
 
             indent = {
                 enable = true,
+                disable = { "zig" },
             },
 
             highlight = {
