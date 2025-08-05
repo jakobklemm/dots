@@ -85,6 +85,7 @@
 (package! anki-editor
   :recipe (:host github :repo "anki-editor/anki-editor")
   )
+(package! org-ref)
 (package! popper)
 (package! org-ref)
 (package! org-ref-prettify)

@@ -27,16 +27,21 @@ ZSH_THEME="robbyrussell"
 zstyle ':omz:update' mode disabled  # disable automatic updates
 
 plugins=(
-	git	
+	git
 	zsh-autosuggestions
 )
 
 
 source $ZSH/oh-my-zsh.sh
-path+=('~/.local/bin/')
+path+=('/home/jeykey/.local/bin/')
+path+=('/home/jeykey/.cargo/bin/')
 export EDITOR="nvim"
 alias v="nvim"
 alias c="cargo"
+alias test="cargo nextest run"
+alias tets="cargo nextest run"
+alias tsts="cargo nextest run"
+alias tst="cargo nextest run"
 alias m="make"
 alias markdownlint="mdl"
 alias g="git"
@@ -83,7 +88,9 @@ eval "$(zellij setup --generate-auto-start zsh)"
 # }
 #
 # TODO: ZFS issues -> daemon maybe?
-. "$HOME/.atuin/bin/env"
+
 eval "$(atuin init zsh)"
+# . "$HOME/.atuin/bin/env"
 
 # [ -f "/home/jeykey/.ghcup/env" ] && . "/home/jeykey/.ghcup/env" # ghcup-env
+# eval "$(atuin init zsh)"

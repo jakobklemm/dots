@@ -265,7 +265,7 @@ Source:
                                     :immediate-finish t
                                     :unnarrowed t
                                     )
-                                   )
+                                )
       )
 
 (setq org-roam-dailies-capture-templates
@@ -287,6 +287,13 @@ Source:
   (setq org-roam-timestamps-minimum-gap 3600)
   (org-roam-timestamps-mode t)
   )
+
+(setq org-capture-templates
+      '(("e" "Exile" entry (file+headline "~/org/works/exile.org" "Capture")
+         "* %?\n  %i\n  %a")
+        )
+      )
+(add-hook 'org-capture-prepare-finalize-hook 'org-id-get-create)
 
 ;; TODO: BAD
 (org-roam-db-sync)

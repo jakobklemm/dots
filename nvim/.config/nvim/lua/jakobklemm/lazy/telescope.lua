@@ -33,11 +33,44 @@ return {
                         ["<C-k>"] = require("telescope.actions").move_selection_previous,
                     },
                 },
+                layout_strategy = "horizontal",
+                layout_config = {
+                    horizontal = {
+                        prompt_position = "bottom",
+                        preview_width = 0.55,
+                        results_width = 0.8,
+                    },
+                    preview_cutoff = 120,
+                },
+            },
+            pickers = {
+                diagnostics = {
+                    theme = "dropdown",
+                    layout_config = {
+                        width = 0.8,
+                        prompt_position = "bottom",
+                    },
+                    previewer = true,
+                },
+                find_files = {
+                    layout_config = {
+                        width = 0.8,
+                        prompt_position = "bottom",
+                        preview_width = 0.4,
+                    },
+                    previewer = true,
+                },
+                current_buffer_fuzzy_find = {
+                    layout_config = {
+                        height = 0.9,
+                        width = 0.8,
+                        prompt_position = "bottom",
+                        preview_width = 0.4,
+                    },
+                    previewer = true,
+                },
             },
             extensions = {
-                ["ui-select"] = {
-                    require("telescope.themes").get_dropdown(),
-                },
                 frecency = {
                     auto_validate = true,
                     show_scores = false,
@@ -53,14 +86,26 @@ return {
         vim.keymap.set("n", "<leader>s", "<cmd><CR>")
 
         local builtin = require("telescope.builtin")
+
         vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[S]earch [H]elp" })
         vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "[S]earch [K]eymaps" })
-        vim.keymap.set("n", "<leader>sd", require("telescope.builtin").diagnostics, { desc = "[S]earch [D]iagnostics" })
-        -- vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
+        vim.keymap.set("n", "<leader>sf", builtin.find_files, { desc = "[S]earch [F]iles" })
         vim.keymap.set("n", "<leader>sr", builtin.resume, { desc = "[S]earch [R]esume" })
         vim.keymap.set("n", "<leader>s.", builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
         vim.keymap.set("n", "<leader>sb", builtin.buffers, { desc = "[ ] Find existing buffers" })
         vim.keymap.set("n", "<leader>sf", builtin.live_grep, { desc = "[ ]earch by [f]rep" })
+
+        vim.keymap.set("n", "<leader>sg", builtin.live_grep, { desc = "[ ] Find [s] Git [g] grep" })
+
+        vim.keymap.set("n", "<leader>sD", builtin.diagnostics, { desc = "[S]earch [D]iagnostics" })
+        vim.keymap.set("n", "<leader>sd", function()
+            builtin.diagnostics({ bufnr = 0, severity = "ERROR" })
+        end, { desc = "[S]earch [D]iagnostics [E]rror" })
+
+        vim.keymap.set("n", "<leader>gb", builtin.git_bcommits, { desc = "[ ] Find [s] Git [b] commits" })
+        vim.keymap.set("n", "<leader>gs", builtin.git_status, { desc = "[ ] Find [s] Git [s] status" })
+        vim.keymap.set("n", "<leader>gf", builtin.git_files, { desc = "[ ] Find [s] Git [f] files" })
+        vim.keymap.set("n", "<leader>gc", builtin.git_commits, { desc = "[ ] Find [s] Git [C] commits" })
 
         vim.keymap.set("n", "<leader>sn", function()
             builtin.find_files({ cwd = vim.fn.stdpath("config") })
@@ -87,5 +132,8 @@ return {
         vim.keymap.set("n", "<leader>.", builtin.find_files, { desc = "[S]earch [F]iles" })
         vim.keymap.set("n", "<leader>,", ":Telescope frecency<CR>", { desc = '[S]earch Recent Files ("." for repeat)' })
         vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "[ ] Find existing buffers" })
+
+        local open_with_trouble = require("trouble.sources.telescope").open
+        vim.keymap.set("n", "<leader>ts", open_with_trouble, { desc = "[T]roubleShoot" })
     end,
 }

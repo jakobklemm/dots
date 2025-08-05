@@ -1,38 +1,83 @@
 return {
-    "hrsh7th/nvim-cmp",
-    depenencies = {
-        "hrsh7th/cmp-buffer",
-        "hrsh7th/cmp-path",
-        "hrsh7th/cmp-cmdline",
-        "hrsh7th/cmp-nvim-lsp",
-        "L3MON4D3/LuaSnip",
-        "saadparwaiz1/cmp_luasnip",
-    },
-    config = function()
-        local cmp = require("cmp")
+    {
+        {
+            "saghen/blink.compat",
+            -- use v2.* for blink.cmp v1.*
+            version = "2.*",
+            -- lazy.nvim will automatically load the plugin when it's required by blink.cmp
+            lazy = true,
+            -- make sure to set opts so that lazy.nvim calls blink.compat's setup
+            opts = {},
+        },
 
-        local cmp_select = { behavior = cmp.SelectBehavior.Select }
+        {
+            "saghen/blink.cmp",
+            dependencies = { "rafamadriz/friendly-snippets", "huijiro/blink-cmp-supermaven" },
 
-        cmp.setup({
-            snippet = {
-                expand = function(args)
-                    require("luasnip").lsp_expand(args.body) -- For `luasnip` users.
-                end,
+            version = "1.*",
+
+            opts = {
+                keymap = {
+                    preset = "none",
+
+                    ["<C-k>"] = { "select_prev" },
+                    ["<C-j>"] = { "select_next" },
+
+                    ["<C-y>"] = { "accept" },
+                    ["<C-l>"] = { "accept" },
+
+                    ["<C-e>"] = { "cancel" },
+                    ["<C-x>"] = { "show" },
+
+                    ["<C-s>"] = {
+                        function(cmp)
+                            cmp.show({ providers = { "snippets" } })
+                        end,
+                    },
+                },
+
+                appearance = {
+                    nerd_font_variant = "mono",
+                },
+
+                completion = {
+                    documentation = {
+                        auto_show = true,
+                        window = { border = "rounded" },
+                    },
+                    accept = {
+                        auto_brackets = {
+                            enabled = true,
+                        },
+                    },
+                    menu = {
+                        border = "rounded",
+                    },
+                },
+
+                sources = {
+                    default = { "lsp", "path", "snippets", "buffer", "supermaven" },
+                    providers = {
+                        supermaven = {
+                            name = "supermaven",
+                            module = "blink-cmp-supermaven",
+                            async = true,
+                        },
+                    },
+                },
+
+                fuzzy = { implementation = "prefer_rust_with_warning" },
             },
-            mapping = cmp.mapping.preset.insert({
-                ["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
-                ["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
-                -- ["<C-k>"] = cmp.mapping.select_prev_item(cmp_select),
-                -- ["<C-j>"] = cmp.mapping.select_next_item(cmp_select),
-                ["<C-y>"] = cmp.mapping.confirm({ select = true }),
-                ["<C-Space>"] = cmp.mapping.complete(),
-            }),
-            sources = cmp.config.sources({
-                { name = "nvim_lsp" },
-                { name = "luasnip" }, -- For luasnip users.
-            }, {
-                { name = "buffer" },
-            }),
-        })
-    end,
+            opts_extend = { "sources.default" },
+        },
+    },
+
+    {
+        "saghen/blink.indent",
+        opts = {
+            static = {
+                highlight = "BlinkIndentViolet",
+            },
+        },
+    },
 }

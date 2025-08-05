@@ -1,9 +1,22 @@
 return {
     "folke/trouble.nvim",
-    config = function()
-        require("trouble").setup({})
-        vim.keymap.set("n", "<leader>tt", function()
-            require("trouble").toggle()
-        end, { desc = "trouble toggle" })
-    end,
+    opts = {},
+    cmd = "Trouble",
+    keys = {
+        {
+            "<leader>xQ",
+            "<cmd>Trouble qflist toggle<cr>",
+            desc = "Quickfix List (Trouble)",
+        },
+        {
+            "<leader>tt",
+            "<cmd>Trouble toggle<cr>",
+            desc = "Trouble Toggle",
+        },
+        {
+            "<leader>tb",
+            "<cmd>Trouble diagnostics toggle focus=true filter.buf=0<CR> filter.severity=vim.diagnostic.severity.ERROR",
+            desc = "Buffer Diagnostics (Trouble)",
+        },
+    },
 }
