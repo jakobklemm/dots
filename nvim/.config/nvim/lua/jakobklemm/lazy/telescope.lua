@@ -19,11 +19,15 @@ return {
         },
         { "nvim-telescope/telescope-ui-select.nvim" },
 
+        "folke/trouble.nvim",
+
         -- Useful for getting pretty icons, but requires a Nerd Font.
         { "nvim-tree/nvim-web-devicons", enabled = vim.g.have_nerd_font },
         { "nvim-telescope/telescope-frecency.nvim" },
     },
     config = function()
+        local open_with_trouble = require("trouble.sources.telescope").open
+
         require("telescope").setup({
             defaults = {
                 mappings = {
@@ -31,6 +35,7 @@ return {
                         ["<c-enter>"] = "to_fuzzy_refine",
                         ["<C-j>"] = require("telescope.actions").move_selection_next,
                         ["<C-k>"] = require("telescope.actions").move_selection_previous,
+                        ["<c-t>"] = open_with_trouble,
                     },
                 },
                 layout_strategy = "horizontal",
@@ -83,7 +88,7 @@ return {
         pcall(require("telescope").load_extension, "fzf")
         pcall(require("telescope").load_extension, "ui-select")
 
-        vim.keymap.set("n", "<leader>s", "<cmd><CR>")
+        -- vim.keymap.set("n", "<leader>s", "<cmd><CR>")
 
         local builtin = require("telescope.builtin")
 

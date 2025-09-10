@@ -12,7 +12,10 @@ return {
 
         {
             "saghen/blink.cmp",
-            dependencies = { "rafamadriz/friendly-snippets", "huijiro/blink-cmp-supermaven" },
+            dependencies = {
+                "rafamadriz/friendly-snippets",
+                "huijiro/blink-cmp-supermaven",
+            },
 
             version = "1.*",
 
@@ -56,7 +59,13 @@ return {
                 },
 
                 sources = {
-                    default = { "lsp", "path", "snippets", "buffer", "supermaven" },
+                    default = {
+                        "lsp",
+                        "path",
+                        "snippets",
+                        "buffer",
+                        "supermaven",
+                    },
                     providers = {
                         supermaven = {
                             name = "supermaven",

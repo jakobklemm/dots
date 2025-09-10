@@ -1,13 +1,5 @@
 return {
     {
-        "rust-lang/rust.vim",
-        ft = "rust",
-        init = function()
-            vim.g.rustfmt_autosave = 1
-        end,
-    },
-
-    {
         "williamboman/mason.nvim",
         dependencies = {
             "williamboman/mason-lspconfig.nvim",
@@ -67,6 +59,13 @@ return {
                             vim.diagnostic.setloclist,
                             { desc = "Open diagnostic [Q]uickfix list" }
                         )
+
+                        vim.api.nvim_create_autocmd("BufWritePre", {
+                            pattern = "rust",
+                            callback = function()
+                                vim.cmd("RustFmt")
+                            end,
+                        })
                     end,
                     default_settings = {
                         ["rust-analyzer"] = {
