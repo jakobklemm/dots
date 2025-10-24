@@ -70,3 +70,5 @@
 (package! jinx)
 (package! good-scroll)
 (package! svg-tag-mode)
+(package! catppuccin-theme)
+(package! pandoc)

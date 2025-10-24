@@ -31,12 +31,15 @@ plugins=(
 	zsh-autosuggestions
 )
 
+export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+export PAHT="$HOME/.config/emacs/bin:$PATH"
 
 source $ZSH/oh-my-zsh.sh
-path+=('~/.local/bin/')
 export EDITOR="nvim"
 alias v="nvim"
 alias c="cargo"
+alias test="cargo nextest run"
 alias m="make"
 alias markdownlint="mdl"
 alias g="git"
@@ -83,7 +86,7 @@ eval "$(zellij setup --generate-auto-start zsh)"
 # }
 #
 # TODO: ZFS issues -> daemon maybe?
-. "$HOME/.atuin/bin/env"
+# . "$HOME/.atuin/bin/env"
 eval "$(atuin init zsh)"
 
 # [ -f "/home/jeykey/.ghcup/env" ] && . "/home/jeykey/.ghcup/env" # ghcup-env

@@ -1,4 +1,4 @@
-return {
+return {{
     "olimorris/codecompanion.nvim",
     dependencies = {
         "nvim-lua/plenary.nvim",
@@ -56,4 +56,11 @@ return {
         { "<leader>aa", "<cmd>CodeCompanionChat Add<cr>", mode = { "n", "v" }, desc = "Add visual to chat" },
         { "<leader>at", "<cmd>CodeCompanionChat Toggle<cr>" },
     },
+},
+ {
+      "supermaven-inc/supermaven-nvim",
+      config = function()
+        require("supermaven-nvim").setup({})
+      end,
+    }
 }

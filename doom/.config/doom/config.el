@@ -3,7 +3,10 @@
 (setq user-full-name "Jakob Klemm"
       user-mail-address "github@jeykey.net"
       doom-font "MonaspiceAr Nerd Font Mono"
-      doom-theme 'doom-henna
+      ;; doom-theme 'doom-rose-pine-moon
+      catppuccin-flavor 'frappe
+      doom-theme 'catppuccin
+      ;; doom-theme 'doom-henna
       display-line-numbers-type t
       display-line-numbers-type 'relative
       org-directory "~/org/"
@@ -46,6 +49,9 @@
       scroll-margin 12
       scroll-preserve-screen-position t
       doom-modeline-enable-word-count t
+      org-todo-keywords '((sequence "TODO(t)" "BLOCKED(b)" "GEN(g)"
+               "|"
+               "DONE(d/!)" "SEP(s@/!)"))
       )
 
 (display-time-mode 1)
@@ -55,6 +61,16 @@
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 
 (setq org-id-locations-file "~/.org-id-locations")
+
+(add-hook 'org-capture-mode-hook 'evil-insert-state)
+(setq org-capture-templates
+      `(
+            ("j" "Journal" plain (function buffer-file-name)
+             "*** %<%Y-%m-%d> %?"
+             :empty-lines 1
+             )
+        )
+      )
 
 (use-package! org-modern
   :hook (org-mode . org-modern-mode)
@@ -109,12 +125,19 @@
  )
 
 (use-package! jinx
+  :init
+  (setq jinx-languages "en_US de_CH")
   :config
+  (add-hook 'text-mode-hook #'jinx-mode)
+  (add-hook 'conf-mode-hook #'jinx-mode)
+  (add-hook 'prog-mode-hook #'jinx-mode)
+
   (map! :leader
-        :prefix "m"
-        "c" #'jinx-correct-nearest
+        :prefix "s"
+        :desc "Correct word at point" "c" #'jinx-correct
+        :desc "Correct nearest" "n" #'jinx-correct-nearest
+        :desc "Show corrections" "s" #'jinx-correct-all
         )
-  (add-hook 'emacs-startup-hook #'global-jinx-mode)
   )
 
 (use-package! svg-tag-mode
@@ -131,6 +154,7 @@
    org-download-heading-lvl 0
    org-download-abbreviate-filename-function 'concat
    org-download-screenshot-method "gnome-screenshot -a -f %s"
+   ;; org-download-screenshot-method "flameshot gui -p %s"
    org-download-timestamp "%Y-%m-%d_%H-%M-%S_"
    org-download-display-inline-images t
    )
@@ -259,7 +283,7 @@ Source:
                                     )
                                    ("l" "Link" plain
                                     "%?"
-                                    :if-new (file+head "quick/${slug}.org"
+                                    :if-new (file+head "links/%<%Y%m%d>-${slug}.org"
                                                        "#+TITLE: ${title}\n#+FILETAGS: :link:\n#+DATE: %<%Y-%m-%d %a>\n"
                                                        )
                                     :immediate-finish t
@@ -329,15 +353,18 @@ ${extracted}
           org-latex-pdf-process (list "latexmk -pdflatex='lualatex -shell-escape -interaction nonstopmode -synctex=1' -outdir=exports/ -bibtex -pdf -f %f")))
 
 (setq org-latex-precompile nil)
-(setq org-latex-preview-process-precompiled nil)
 
-(plist-put org-format-latex-options :scale 1.25)
-(plist-put org-format-latex-options :zoom 1.25)
+(plist-put org-format-latex-options :scale 1.2)
+(plist-put org-format-latex-options :zoom 1.2)
 
 (with-eval-after-load 'org
   (setq org-preview-latex-default-process 'dvisvgm)
   (setf (plist-get (cdr (assq 'dvisvgm org-preview-latex-process-alist)) :latex-compiler)
-        '("dvilualatex -interaction nonstopmode -output-directory %o %f")))
+        '("dvilualatex -interaction nonstopmode -output-directory %o %f"))
+
+  ;; Enable persistent preview caching in home directory
+  (setq org-preview-latex-image-directory "~/.ltximg/")
+  (plist-put org-format-latex-options :background "Transparent"))
 
 (defvar org-export-output-directory-prefix "exports/"
   "Prefix of directory used for org-mode export")
@@ -349,11 +376,15 @@ ${extracted}
     (when (not (file-directory-p pub-dir))
       (make-directory pub-dir))))
 
-(setq org-latex-preview-preamble
+(setq org-format-latex-header
       "\\documentclass{article}
+\\usepackage[margin=0pt]{geometry}
 \\input{~/.latex/preview.tex}
 [DEFAULT-PACKAGES]
 [PACKAGES]
+\\setlength{\\parindent}{0pt}
+\\setlength{\\parskip}{0pt}
+\\pagestyle{empty}
 "
       )
 
@@ -383,22 +414,45 @@ ${extracted}
 
 [LISTINGS-SETUP]")
 
-;; (use-package! org-latex-preview
-;;   :config
-;;   (plist-put org-latex-preview-appearance-options
-;;              :page-width 0.9)
+(use-package! org-fragtog
+  :after org
+  :config
+  (add-hook 'org-mode-hook 'org-fragtog-mode)
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (org-latex-preview '(16))))
 
-;;   (setq org-latex-preview-process-default 'dvisvgm)
-;;   (add-hook 'org-mode-hook 'org-latex-preview-auto-mode)
+  (defun my/org-generate-all-previews (directory)
+    "Generate LaTeX previews for all org files in DIRECTORY recursively."
+    (interactive "DGenerate previews for org files in directory: ")
+    (let* ((org-files (directory-files-recursively directory "\\.org$"))
+           (total (length org-files))
+           (current 0)
+           (successful 0)
+           (failed 0))
+      (if (= total 0)
+          (message "No org files found in %s" directory)
+        (message "Found %d org files. Starting preview generation..." total)
+        (dolist (file org-files)
+          (setq current (1+ current))
+          (message "[%d/%d] Processing: %s" current total (file-name-nondirectory file))
+          (condition-case err
+              (progn
+                (with-current-buffer (find-file-noselect file)
+                  (org-latex-preview '(16))
+                  (kill-buffer))
+                (setq successful (1+ successful))
+                (message "[%d/%d] ✓ Done: %s" current total (file-name-nondirectory file)))
+            (error
+             (setq failed (1+ failed))
+             (message "[%d/%d] ✗ Failed: %s - %s" current total (file-name-nondirectory file) err))))
+        (message "\n=== Summary ===\nSuccessfully processed: %d\nFailed: %d\nTotal: %d"
+                 successful failed total))))
 
-;;   (setq org-latex-preview-auto-ignored-commands
-;;         '(next-line previous-line mwheel-scroll
-;;           scroll-up-command scroll-down-command))
-
-;;   (setq org-latex-preview-numbered t)
-;;   (setq org-latex-preview-live t)
-;;   (setq org-latex-preview-live-debounce 0.25)
-;;   )
+  (map! :leader
+        :prefix "m"
+        :desc "Generate LaTeX previews for directory" "p" #'my/org-generate-all-previews)
+  )
 
 (setq org-latex-classes
 '(("article"
