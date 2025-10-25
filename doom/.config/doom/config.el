@@ -411,7 +411,7 @@
    org-appear-autoemphasis t
    org-appear-autolinks t
    org-appear-autosubmarkers t
-   org-appear-autoentities t
+   org-appear-autoentities nil  ; Disable to prevent conflicts with fragtog
    org-appear-autokeywords t
    )
   :config
@@ -451,23 +451,22 @@
 
   (setq svg-tag-tags
         '(
-          ("TODO" . ((lambda (tag) (svg-tag-make "TODO" :face 'org-todo :margin 0 :padding 1 :radius 5 :height 0.7))))
+          ;; Org-mode tags - avoid timestamp false positives by requiring
+          ;; colon to be preceded by space, start of line, or another colon (not a digit)
+          ("\\(?:^\\|[ \t]\\|:\\)\\(:[A-Za-z0-9_@#%]+:\\)" . ((lambda (tag)
+                                                                 (svg-tag-make tag :beg 1 :end -1 :face 'org-tag :margin 0 :padding 1 :radius 5 :height 0.7))))
+
+          ;; Task priority
+          ("\\[#[A-Z]\\]" . ((lambda (tag)
+                              (svg-tag-make tag :face 'org-priority
+                                            :beg 2 :end -1 :margin 0 :padding 1 :radius 5 :height 0.7))))
+
+          ;; TODO / DONE keywords
+          ("TODO" . ((lambda (tag) (svg-tag-make "TODO" :face 'org-todo :inverse t :margin 0 :padding 1 :radius 5 :height 0.7))))
           ("DONE" . ((lambda (tag) (svg-tag-make "DONE" :face 'org-done :margin 0 :padding 1 :radius 5 :height 0.7))))
           ("BLOCKED" . ((lambda (tag) (svg-tag-make "BLOCKED" :face 'error :margin 0 :padding 1 :radius 5 :height 0.7))))
           ("GEN" . ((lambda (tag) (svg-tag-make "GEN" :face 'warning :margin 0 :padding 1 :radius 5 :height 0.7))))
           ("SEP" . ((lambda (tag) (svg-tag-make "SEP" :face 'success :margin 0 :padding 1 :radius 5 :height 0.7))))
-
-          ("\\(:[A-Za-z0-9_@#%]+:\\)" . ((lambda (tag)
-                                           (svg-tag-make tag :beg 1 :end -1
-                                                         :face 'org-tag
-                                                         :margin 0
-                                                         :padding 1
-                                                         :radius 5
-                                                         :height 0.7
-                                                         )
-                                           )
-                                         )
-           )
           )
         )
 
@@ -494,7 +493,13 @@
         org-cycle-separator-lines 2  ; More breathing room
         org-fontify-whole-heading-line t  ; Better heading visibility
         org-fontify-done-headline t  ; Highlight done items
-        org-fontify-quote-and-verse-blocks t))  ; Better block styling
+        org-fontify-quote-and-verse-blocks t  ; Better block styling
+        org-pretty-entities nil  ; Disable entity prettification (conflicts with fragtog)
+        org-pretty-entities-include-sub-superscripts nil  ; Disable sub/superscript prettification
+        org-use-sub-superscripts '{})  ; Only recognize sub/superscripts with braces
+
+  ;; Force disable font-lock for sub/superscripts
+  (setq org-highlight-latex-and-related nil))  ; Disable LaTeX syntax highlighting
 
 ;; https://howardabrams.com/hamacs/ha-org-word-processor.html
 (defface org-checkbox-done-text
@@ -779,6 +784,21 @@ ${extracted}
   breakable}
 
 [LISTINGS-SETUP]")
+
+(add-to-list 'org-export-filter-timestamp-functions
+             #'endless/filter-timestamp)
+(defun endless/filter-timestamp (trans back _comm)
+  "Remove <> around time-stamps."
+  (pcase back
+    ((or `jekyll `html)
+     (replace-regexp-in-string "&[lg]t;" "" trans))
+    (`latex
+     (replace-regexp-in-string "[<>]" "" trans))))
+
+(setq-default org-display-custom-times t)
+;;; Before you ask: No, removing the <> here doesn't work.
+(setq org-time-stamp-custom-formats
+      '("<%d %b %Y>" . "<%d/%m/%y %a %H:%M>"))
 
 (use-package! org-fragtog
   :after org
