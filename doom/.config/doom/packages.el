@@ -74,4 +74,13 @@
 (package! pandoc)
 (package! modus-themes)
 
+(package! orderless)           ; Flexible completion style
+(package! marginalia)          ; Rich annotations in minibuffer
+;; (package! embark)              ; Contextual actions on completions
+(package! embark-consult)      ; Integration between Embark and Consult
+(package! corfu)               ; In-buffer completion popup
+(package! cape)                ; Completion at point extensions
+(package! vertico-prescient)   ; Prescient integration for Vertico
+(package! corfu-prescient)     ; Prescient integration for Corfu
+
 ;;

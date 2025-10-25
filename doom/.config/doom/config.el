@@ -27,7 +27,6 @@
       which-key-idld 0.5
       evil-vsplit-window-right t
       evil-split-window-below t
-      prescient-history-length 1000
       read-file-name-completion-ignore-case t
       read-buffer-completion-ignore-case t
       completion-ignore-case t
@@ -70,6 +69,279 @@
             (if writeroom-mode
                 (display-line-numbers-mode -1)
               (display-line-numbers-mode 1))))
+
+;; ============================================================================
+;; Completion Framework - Modern, Fast, and Intelligent
+;; ============================================================================
+
+;; Vertico - Performant vertical completion UI
+(use-package! vertico
+  :init
+  (vertico-mode)
+  :config
+  ;; Enable cycling for better navigation
+  (setq vertico-cycle t
+        vertico-resize nil
+        vertico-count 17)
+
+  ;; Enable vertico extensions
+  (require 'vertico-directory)
+  (require 'vertico-quick)
+  (require 'vertico-repeat)
+  (require 'vertico-buffer)
+
+  ;; Better directory navigation
+  (add-hook 'rfn-eshadow-update-overlay-hook #'vertico-directory-tidy)
+
+  ;; Keybindings for vertico-quick (jump to candidate by prefix)
+  (define-key vertico-map "\M-q" #'vertico-quick-insert)
+  (define-key vertico-map "\C-q" #'vertico-quick-exit)
+
+  ;; Better scrolling
+  (define-key vertico-map "\C-n" #'vertico-next)
+  (define-key vertico-map "\C-p" #'vertico-previous)
+
+  ;; Accept current input exactly as written (useful for creating new files)
+  (define-key vertico-map (kbd "C-<return>") #'vertico-exit-input)
+
+  ;; Save vertico history
+  (add-hook 'minibuffer-setup-hook #'vertico-repeat-save))
+
+;; Orderless - Flexible, powerful completion style
+(use-package! orderless
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-defaults nil)
+  ;; Enable partial-completion for file paths
+  (completion-category-overrides '((file (styles partial-completion orderless))
+                                   (buffer (styles orderless))
+                                   (project-file (styles orderless))))
+  :config
+  ;; Custom orderless matching styles
+  (setq orderless-matching-styles
+        '(orderless-literal
+          orderless-prefixes
+          orderless-initialism
+          orderless-regexp))
+
+  ;; Smart case sensitivity
+  (setq orderless-smart-case t)
+
+  ;; Define custom dispatchers for special matching
+  (defun orderless-fast-dispatch (word index total)
+    (cond
+     ;; Ensure $ works as suffix
+     ((string-suffix-p "$" word)
+      `(orderless-regexp . ,(concat (substring word 0 -1) "$")))
+     ;; Ensure ^ works as prefix
+     ((string-prefix-p "^" word)
+      `(orderless-regexp . ,(substring word 1)))
+     ;; ! for negation
+     ((string-prefix-p "!" word)
+      `(orderless-without-literal . ,(substring word 1)))
+     ;; = for literal matching
+     ((string-prefix-p "=" word)
+      `(orderless-literal . ,(substring word 1)))
+     ;; % for char-fold (e.g., a matches ä, à, etc.)
+     ((string-prefix-p "%" word)
+      `(orderless-char-fold-to-regexp . ,(substring word 1)))))
+
+  (setq orderless-style-dispatchers '(orderless-fast-dispatch)))
+
+;; Marginalia - Rich annotations in completion candidates
+(use-package! marginalia
+  :init
+  (marginalia-mode)
+  :config
+  (setq marginalia-align 'right
+        marginalia-align-offset -1)
+
+  ;; Cycle through annotation levels
+  (map! :map minibuffer-local-map
+        "M-A" #'marginalia-cycle))
+
+;; Consult - Practical commands using completing-read
+(use-package! consult
+  :config
+  ;; Better register preview
+  (setq register-preview-delay 0.5
+        register-preview-function #'consult-register-format)
+
+  ;; Improve register preview formatting
+  (advice-add #'register-preview :override #'consult-register-window)
+
+  ;; Consult customization
+  (setq consult-narrow-key "<"
+        consult-line-numbers-widen t
+        consult-async-min-input 2
+        consult-async-refresh-delay 0.15
+        consult-async-input-throttle 0.2
+        consult-async-input-debounce 0.1
+        consult-preview-key 'any)
+
+  ;; Configure preview for different commands
+  (consult-customize
+   consult-theme :preview-key '(:debounce 0.2 any)
+   consult-ripgrep consult-git-grep consult-grep
+   consult-bookmark consult-recent-file consult-xref
+   consult--source-bookmark consult--source-file-register
+   consult--source-recent-file consult--source-project-recent-file
+   :preview-key '(:debounce 0.4 any))
+
+  ;; Optionally configure the narrowing key
+  (setq consult-project-function (lambda (_) (projectile-project-root)))
+
+  ;; Enhanced keybindings
+  (map! :leader
+        :prefix "s"
+        :desc "Search line" "l" #'consult-line
+        :desc "Search line (multi)" "L" #'consult-line-multi
+        :desc "Search outline" "o" #'consult-outline
+        :desc "Search imenu" "i" #'consult-imenu
+        :desc "Search imenu (multi)" "I" #'consult-imenu-multi
+        :desc "Search mark" "m" #'consult-mark
+        :desc "Search global mark" "M" #'consult-global-mark
+        :desc "Search yank-pop" "y" #'consult-yank-pop)
+
+  (map! :leader
+        :prefix "b"
+        :desc "Switch buffer" "b" #'consult-buffer
+        :desc "Switch project buffer" "p" #'consult-project-buffer)
+
+  (map! :leader
+        :prefix "f"
+        :desc "Find file" "f" #'consult-find
+        :desc "Recent files" "r" #'consult-recent-file)
+
+  (map! :leader
+        :prefix "g"
+        :desc "Goto line" "l" #'consult-goto-line
+        :desc "Goto mark" "m" #'consult-mark
+        :desc "Goto global mark" "M" #'consult-global-mark))
+
+;; ;; Embark - Contextual actions on completion candidates
+;; (use-package! embark
+;;   :config
+;;   (setq embark-quit-after-action '((t . nil))
+;;         embark-indicators '(embark-minimal-indicator
+;;                            embark-highlight-indicator
+;;                            embark-isearch-highlight-indicator)
+;;         embark-prompter 'embark-completing-read-prompter)
+
+;;   ;; Keybindings
+;;   (map! :leader
+;;         :desc "Embark act" "." #'embark-act
+;;         :desc "Embark dwim" "," #'embark-dwim
+;;         :desc "Embark bindings" "?" #'embark-bindings)
+
+;;   (map! :map minibuffer-local-map
+;;         "C-." #'embark-act
+;;         "C-," #'embark-dwim
+;;         "C-h B" #'embark-bindings))
+
+;; Embark-Consult integration - Enhanced previews
+(use-package! embark-consult
+  :after (embark consult)
+  :hook
+  (embark-collect-mode . consult-preview-at-point-mode))
+
+;; Corfu - In-buffer completion popup
+(use-package! corfu
+  :custom
+  (corfu-cycle t)
+  (corfu-auto t)
+  (corfu-auto-delay 0.2)
+  (corfu-auto-prefix 2)
+  (corfu-quit-at-boundary 'separator)
+  (corfu-quit-no-match 'separator)
+  (corfu-preview-current nil)
+  (corfu-preselect 'prompt)
+  (corfu-scroll-margin 5)
+  :init
+  (global-corfu-mode)
+  :config
+  ;; Enable Corfu in the minibuffer (useful for eval expressions)
+  (defun corfu-enable-in-minibuffer ()
+    "Enable Corfu in the minibuffer if Vertico is not active."
+    (when (not (bound-and-true-p vertico--input))
+      (setq-local corfu-auto nil)
+      (corfu-mode 1)))
+  (add-hook 'minibuffer-setup-hook #'corfu-enable-in-minibuffer)
+
+  ;; Better navigation
+  (map! :map corfu-map
+        "TAB" #'corfu-next
+        [tab] #'corfu-next
+        "S-TAB" #'corfu-previous
+        [backtab] #'corfu-previous
+        "RET" #'corfu-insert
+        [return] #'corfu-insert))
+
+;; Cape - Completion At Point Extensions
+(use-package! cape
+  :config
+  ;; Add useful completion sources
+  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+  (add-to-list 'completion-at-point-functions #'cape-file)
+  (add-to-list 'completion-at-point-functions #'cape-keyword)
+
+  ;; Keybindings for manual completion
+  (map! :leader
+        :prefix "i"
+        :desc "Complete file" "f" #'cape-file
+        :desc "Complete dabbrev" "d" #'cape-dabbrev
+        :desc "Complete line" "l" #'cape-line
+        :desc "Complete keyword" "k" #'cape-keyword
+        :desc "Complete abbrev" "a" #'cape-abbrev))
+
+;; Enhanced history and saving
+(use-package! savehist
+  :init
+  (savehist-mode)
+  :config
+  (setq savehist-file "~/.doom.d/.savehist"
+        history-length 1000
+        history-delete-duplicates t
+        savehist-save-minibuffer-history t
+        savehist-additional-variables
+        '(kill-ring
+          search-ring
+          regexp-search-ring
+          last-kbd-macro
+          kmacro-ring
+          shell-command-history
+          register-alist)))
+
+;; Prescient - Intelligent sorting and filtering
+(use-package! prescient
+  :config
+  (setq prescient-history-length 1000
+        prescient-save-file "~/.doom.d/.prescient-save"
+        prescient-filter-method '(literal regexp initialism fuzzy)
+        prescient-sort-full-matches-first t)
+  (prescient-persist-mode +1))
+
+(use-package! vertico-prescient
+  :after vertico
+  :config
+  (setq vertico-prescient-enable-filtering t
+        vertico-prescient-enable-sorting t)
+  (vertico-prescient-mode +1))
+
+(use-package! corfu-prescient
+  :after corfu
+  :config
+  (corfu-prescient-mode +1))
+
+;; Which-key integration for better discoverability
+(after! which-key
+  (setq which-key-idle-delay 0.5
+        which-key-idle-secondary-delay 0.05
+        which-key-sort-order 'which-key-prefix-then-key-order))
+
+;; ============================================================================
+;; End of Completion Framework Configuration
+;; ============================================================================
 
 (setq org-id-locations-file "~/.org-id-locations")
 
@@ -122,18 +394,17 @@
   (add-hook 'org-mode-hook 'org-appear-mode)
   )
 
+;; Additional convenience keybindings
 (map!
  :leader
  "/" #'+default/search-buffer
- "SPC" #'+vertico/switch-workspace-buffer
- "r" #'consult-recent-file
- )
+ "SPC" #'consult-buffer  ; Use consult-buffer for better experience
+ "r" #'consult-recent-file)
 
 (map!
  :leader
- :prefix "f"
- "g" #'consult-ripgrep
- )
+ :prefix ("f" . "file")
+ "g" #'consult-ripgrep)
 
 (use-package! jinx
   :init
