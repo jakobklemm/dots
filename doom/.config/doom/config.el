@@ -68,12 +68,16 @@
   :config
   (setq olivetti-body-width 100)  ; Adjust width to your preference
 
-  ;; Disable line numbers in olivetti mode
+  ;; Disable line numbers and increase font size in olivetti mode
   (add-hook 'olivetti-mode-hook
             (lambda ()
               (if olivetti-mode
-                  (display-line-numbers-mode -1)
-                (display-line-numbers-mode 1))))
+                  (progn
+                    (display-line-numbers-mode -1)
+                    (text-scale-increase 2))
+                (progn
+                  (display-line-numbers-mode 1)
+                  (text-scale-increase 0)))))
 
   ;; Keybinding: Leader-T-Z
   (map! :leader
