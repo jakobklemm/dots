@@ -1,16 +1,9 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
-;; (load-theme 'modus-operandi)
-
 (setq user-full-name "Jakob Klemm"
       user-mail-address "github@jeykey.net"
       doom-font "MonaspiceAr Nerd Font Mono"
-      ;; doom-theme 'doom-rose-pine-moon
-      ;; catppuccin-flavor 'frappe
-      ;; catppuccin-flavor 'frappe
-      ;; doom-theme 'catppuccin
-      ;; doom-theme 'doom-henna
-      doom-theme 'doom-rose-pine-dawn
+
       display-line-numbers-type t
       display-line-numbers-type 'relative
       org-directory "~/org/"
@@ -59,6 +52,17 @@
 
 (display-time-mode 1)
 (global-subword-mode 1)
+
+(setq doom-theme 'modus-operandi
+      ;; doom-theme 'doom-rose-pine-moon
+      ;; catppuccin-flavor 'frappe
+      ;; catppuccin-flavor 'frappe
+      ;; doom-theme 'catppuccin
+      ;; doom-theme 'doom-henna
+      ;; doom-theme 'doom-rose-pine-dawn
+      )
+
+;; (load-theme 'modus-operandi)
 
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
@@ -473,19 +477,21 @@
   :hook (org-mode . svg-tag-mode)
   )
 
-;; Org heading sizes - create visual hierarchy
 (custom-set-faces!
-  '(org-level-1 :height 1.4 :weight bold)
-  '(org-level-2 :height 1.3 :weight semi-bold)
-  '(org-level-3 :height 1.2 :weight semi-bold)
-  '(org-level-4 :height 1.1 :weight normal)
-  '(org-level-5 :height 1.0 :weight normal)
-  '(org-level-6 :height 1.0 :weight normal)
-  '(org-level-7 :height 1.0 :weight normal)
-  '(org-level-8 :height 1.0 :weight normal)
-  '(org-document-title :height 1.6 :weight bold))
+  '(outline-1 :weight extra-bold :height 1.25)
+  '(outline-2 :weight bold :height 1.15)
+  '(outline-3 :weight bold :height 1.12)
+  '(outline-4 :weight semi-bold :height 1.09)
+  '(outline-5 :weight semi-bold :height 1.06)
+  '(outline-6 :weight semi-bold :height 1.03)
+  '(outline-8 :weight semi-bold)
+  '(outline-9 :weight semi-bold))
 
-;; Declutter org-mode UI
+(custom-set-faces!
+  '(org-document-title :height 1.2))
+
+(setq org-fontify-quote-and-verse-blocks t)
+
 (after! org
   (setq org-startup-indented t  ; Clean indentation
         org-adapt-indentation nil  ; Don't indent content
@@ -734,7 +740,7 @@ ${extracted}
         '("dvilualatex -interaction nonstopmode -output-directory %o %f"))
 
   ;; Enable persistent preview caching in home directory
-  (setq org-preview-latex-image-directory "~/.ltximg/")
+  (setq org-preview-latex-image-directory "~/files/latex/")
   (plist-put org-format-latex-options :background "Transparent"))
 
 (defvar org-export-output-directory-prefix "exports/"
@@ -858,3 +864,21 @@ ${extracted}
 (use-package! engrave-faces
   :init
   (setq org-latex-src-block-backend 'engraved))
+
+
+;; https://emacs.stackexchange.com/questions/12122/how-to-access-os-clipboard-using-emacs-evil
+(setq x-select-enable-clipboard nil)
+
+(defun paste-from-clipboard ()
+  (interactive)
+  (setq x-select-enable-clipboard t)
+  (yank)
+  (setq x-select-enable-clipboard nil)
+  )
+
+(defun copy-to-clipboard()
+  (interactive)
+  (setq x-select-enable-clipboard t)
+  (kill-ring-save (region-beginning) (region-end))
+  (setq x-select-enable-clipboard nil)
+  )
