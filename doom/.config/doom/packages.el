@@ -72,3 +72,6 @@
 (package! svg-tag-mode)
 (package! catppuccin-theme)
 (package! pandoc)
+(package! modus-themes)
+
+;;

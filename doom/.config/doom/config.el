@@ -1,12 +1,16 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
+;; (load-theme 'modus-operandi)
+
 (setq user-full-name "Jakob Klemm"
       user-mail-address "github@jeykey.net"
       doom-font "MonaspiceAr Nerd Font Mono"
       ;; doom-theme 'doom-rose-pine-moon
-      catppuccin-flavor 'frappe
-      doom-theme 'catppuccin
+      ;; catppuccin-flavor 'frappe
+      ;; catppuccin-flavor 'frappe
+      ;; doom-theme 'catppuccin
       ;; doom-theme 'doom-henna
+      doom-theme 'doom-rose-pine-dawn
       display-line-numbers-type t
       display-line-numbers-type 'relative
       org-directory "~/org/"
@@ -59,6 +63,13 @@
 
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
+
+;; Hide line numbers in zen-mode
+(add-hook 'writeroom-mode-hook
+          (lambda ()
+            (if writeroom-mode
+                (display-line-numbers-mode -1)
+              (display-line-numbers-mode 1))))
 
 (setq org-id-locations-file "~/.org-id-locations")
 
@@ -145,6 +156,17 @@
   (set-face-attribute 'svg-tag-default-face nil :family "CommitMono Nerd Font Bold")
   :hook (org-mode . svg-tag-mode)
   )
+
+;; https://howardabrams.com/hamacs/ha-org-word-processor.html
+(defface org-checkbox-done-text
+  '((t (:foreground "#71696A" :strike-through t)))
+  "Face for the text part of a checked org-mode checkbox.")
+
+(font-lock-add-keywords
+ 'org-mode
+ `(("^[ \t]*\\(?:[-+*]\\|[0-9]+[).]\\)[ \t]+\\(\\(?:\\[@\\(?:start:\\)?[0-9]+\\][ \t]*\\)?\\[\\(?:X\\|\\([0-9]+\\)/\\2\\)\\][^\n]*\n\\)"
+    1 'org-checkbox-done-text prepend))
+ 'append)
 
 (use-package! org-download
   :init
@@ -354,8 +376,8 @@ ${extracted}
 
 (setq org-latex-precompile nil)
 
-(plist-put org-format-latex-options :scale 1.2)
-(plist-put org-format-latex-options :zoom 1.2)
+(plist-put org-format-latex-options :scale 1.3)
+(plist-put org-format-latex-options :zoom 1.3)
 
 (with-eval-after-load 'org
   (setq org-preview-latex-default-process 'dvisvgm)
@@ -422,7 +444,7 @@ ${extracted}
             (lambda ()
               (org-latex-preview '(16))))
 
-  (defun my/org-generate-all-previews (directory)
+  (defun jk/org-generate-all-previews (directory)
     "Generate LaTeX previews for all org files in DIRECTORY recursively."
     (interactive "DGenerate previews for org files in directory: ")
     (let* ((org-files (directory-files-recursively directory "\\.org$"))
@@ -456,9 +478,9 @@ ${extracted}
 
 (setq org-latex-classes
 '(("article"
-"\\input{~/.latex/export.tex}
-[DEFAULT-PACKAGES]
-[PACKAGES]
+"[NO-DEFAULT-PACKAGES]
+[NO-PACKAGES]
+\\input{~/.latex/export.tex}
 [EXTRA]"
 ("\\section{%s}" . "\\section*{%s}")
 ("\\subsection{%s}" . "\\subsection*{%s}")
