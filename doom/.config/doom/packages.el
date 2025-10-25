@@ -82,5 +82,6 @@
 (package! corfu-prescient)     ; Prescient integration for Corfu
 
 (package! olivetti)
+(package! xenops)
 
 ;;

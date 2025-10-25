@@ -507,6 +507,10 @@
     1 'org-checkbox-done-text prepend))
  'append)
 
+(use-package! xenops
+  :config
+  )
+
 (use-package! org-download
   :init
   (setq
@@ -514,8 +518,9 @@
    org-download-method 'directory
    org-download-heading-lvl 0
    org-download-abbreviate-filename-function 'concat
-   org-download-screenshot-method "gnome-screenshot -a -f %s"
+   ;; org-download-screenshot-method "gnome-screenshot -a -f %s"
    ;; org-download-screenshot-method "flameshot gui -p %s"
+   org-download-screenshot-method "~/.local/bin/flameshot-wayland %s"
    org-download-timestamp "%Y-%m-%d_%H-%M-%S_"
    org-download-display-inline-images t
    )
