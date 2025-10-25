@@ -63,12 +63,22 @@
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 
-;; Hide line numbers in zen-mode
-(add-hook 'writeroom-mode-hook
-          (lambda ()
-            (if writeroom-mode
-                (display-line-numbers-mode -1)
-              (display-line-numbers-mode 1))))
+;; Olivetti mode for focused writing
+(use-package! olivetti
+  :config
+  (setq olivetti-body-width 100)  ; Adjust width to your preference
+
+  ;; Disable line numbers in olivetti mode
+  (add-hook 'olivetti-mode-hook
+            (lambda ()
+              (if olivetti-mode
+                  (display-line-numbers-mode -1)
+                (display-line-numbers-mode 1))))
+
+  ;; Keybinding: Leader-T-Z
+  (map! :leader
+        :prefix "t"
+        :desc "Toggle olivetti mode" "z" #'olivetti-mode))
 
 ;; ============================================================================
 ;; Completion Framework - Modern, Fast, and Intelligent
@@ -361,15 +371,15 @@
 (use-package! org-modern
   :hook (org-mode . org-modern-mode)
   :config
-  (setq org-modern-label-border nil)
-  (setq org-modern-star '("◉" "○" "✸" "✿" "✤" "✜" "◆" "▶")
+  (setq org-modern-label-border nil
+        org-modern-star '("◉" "○" "◈" "◇" "✳" "◆" "✦" "▶")
+        org-modern-hide-stars t  ; Clean up leading stars
         org-modern-table-vertical 1
         org-modern-table-horizontal 0.2
         org-modern-list '((43 . "➤")
                           (45 . "–")
                           (42 . "•"))
-        org-modern-footnote
-        (cons nil (cadr org-script-display))
+        org-modern-footnote (cons nil (cadr org-script-display))
         org-modern-block-fringe nil
         org-modern-block-name
         '((t . t)
@@ -380,6 +390,13 @@
         org-modern-progress nil
         org-modern-priority nil
         org-modern-horizontal-rule (make-string 36 ?─)
+        org-modern-todo t  ; Modern TODO styling
+        org-modern-tag nil  ; Cleaner tags
+        org-modern-timestamp t  ; Modern timestamps
+        org-modern-statistics t  ; Modern statistics cookies
+        org-modern-checkbox '((?X . "☑")
+                             (?- . "◫")
+                             (?\s . "☐"))
         )
   )
 
@@ -397,11 +414,10 @@
   (add-hook 'org-mode-hook 'org-appear-mode)
   )
 
-;; Additional convenience keybindings
 (map!
  :leader
  "/" #'+default/search-buffer
- "SPC" #'consult-buffer  ; Use consult-buffer for better experience
+ "SPC" #'consult-buffer
  "r" #'consult-recent-file)
 
 (map!
@@ -427,9 +443,54 @@
 
 (use-package! svg-tag-mode
   :config
-  (set-face-attribute 'svg-tag-default-face nil :family "CommitMono Nerd Font Bold")
+  (set-face-attribute 'svg-tag-default-face nil :family "MonaspiceAr Nerd Font Mono")
+
+  (setq svg-tag-tags
+        '(
+          ("TODO" . ((lambda (tag) (svg-tag-make "TODO" :face 'org-todo :margin 0 :padding 1 :radius 5 :height 0.7))))
+          ("DONE" . ((lambda (tag) (svg-tag-make "DONE" :face 'org-done :margin 0 :padding 1 :radius 5 :height 0.7))))
+          ("BLOCKED" . ((lambda (tag) (svg-tag-make "BLOCKED" :face 'error :margin 0 :padding 1 :radius 5 :height 0.7))))
+          ("GEN" . ((lambda (tag) (svg-tag-make "GEN" :face 'warning :margin 0 :padding 1 :radius 5 :height 0.7))))
+          ("SEP" . ((lambda (tag) (svg-tag-make "SEP" :face 'success :margin 0 :padding 1 :radius 5 :height 0.7))))
+
+          ("\\(:[A-Za-z0-9_@#%]+:\\)" . ((lambda (tag)
+                                           (svg-tag-make tag :beg 1 :end -1
+                                                         :face 'org-tag
+                                                         :margin 0
+                                                         :padding 1
+                                                         :radius 5
+                                                         :height 0.7
+                                                         )
+                                           )
+                                         )
+           )
+          )
+        )
+
   :hook (org-mode . svg-tag-mode)
   )
+
+;; Org heading sizes - create visual hierarchy
+(custom-set-faces!
+  '(org-level-1 :height 1.4 :weight bold)
+  '(org-level-2 :height 1.3 :weight semi-bold)
+  '(org-level-3 :height 1.2 :weight semi-bold)
+  '(org-level-4 :height 1.1 :weight normal)
+  '(org-level-5 :height 1.0 :weight normal)
+  '(org-level-6 :height 1.0 :weight normal)
+  '(org-level-7 :height 1.0 :weight normal)
+  '(org-level-8 :height 1.0 :weight normal)
+  '(org-document-title :height 1.6 :weight bold))
+
+;; Declutter org-mode UI
+(after! org
+  (setq org-startup-indented t  ; Clean indentation
+        org-adapt-indentation nil  ; Don't indent content
+        org-startup-folded 'content  ; Start with content folded
+        org-cycle-separator-lines 2  ; More breathing room
+        org-fontify-whole-heading-line t  ; Better heading visibility
+        org-fontify-done-headline t  ; Highlight done items
+        org-fontify-quote-and-verse-blocks t))  ; Better block styling
 
 ;; https://howardabrams.com/hamacs/ha-org-word-processor.html
 (defface org-checkbox-done-text

@@ -81,4 +81,6 @@
 (package! vertico-prescient)   ; Prescient integration for Vertico
 (package! corfu-prescient)     ; Prescient integration for Corfu
 
+(package! olivetti)
+
 ;;
