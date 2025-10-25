@@ -197,53 +197,13 @@
         :desc "Search line" "l" #'consult-line
         :desc "Search line (multi)" "L" #'consult-line-multi
         :desc "Search outline" "o" #'consult-outline
-        :desc "Search imenu" "i" #'consult-imenu
-        :desc "Search imenu (multi)" "I" #'consult-imenu-multi
-        :desc "Search mark" "m" #'consult-mark
-        :desc "Search global mark" "M" #'consult-global-mark
-        :desc "Search yank-pop" "y" #'consult-yank-pop)
+        )
 
   (map! :leader
         :prefix "b"
         :desc "Switch buffer" "b" #'consult-buffer
-        :desc "Switch project buffer" "p" #'consult-project-buffer)
-
-  (map! :leader
-        :prefix "f"
-        :desc "Find file" "f" #'consult-find
-        :desc "Recent files" "r" #'consult-recent-file)
-
-  (map! :leader
-        :prefix "g"
-        :desc "Goto line" "l" #'consult-goto-line
-        :desc "Goto mark" "m" #'consult-mark
-        :desc "Goto global mark" "M" #'consult-global-mark))
-
-;; ;; Embark - Contextual actions on completion candidates
-;; (use-package! embark
-;;   :config
-;;   (setq embark-quit-after-action '((t . nil))
-;;         embark-indicators '(embark-minimal-indicator
-;;                            embark-highlight-indicator
-;;                            embark-isearch-highlight-indicator)
-;;         embark-prompter 'embark-completing-read-prompter)
-
-;;   ;; Keybindings
-;;   (map! :leader
-;;         :desc "Embark act" "." #'embark-act
-;;         :desc "Embark dwim" "," #'embark-dwim
-;;         :desc "Embark bindings" "?" #'embark-bindings)
-
-;;   (map! :map minibuffer-local-map
-;;         "C-." #'embark-act
-;;         "C-," #'embark-dwim
-;;         "C-h B" #'embark-bindings))
-
-;; Embark-Consult integration - Enhanced previews
-(use-package! embark-consult
-  :after (embark consult)
-  :hook
-  (embark-collect-mode . consult-preview-at-point-mode))
+        )
+  )
 
 ;; Corfu - In-buffer completion popup
 (use-package! corfu
@@ -310,7 +270,12 @@
           last-kbd-macro
           kmacro-ring
           shell-command-history
-          register-alist)))
+          register-alist))
+
+  ;; Force UTF-8 encoding for savehist file to prevent encoding prompts
+  (add-hook 'savehist-save-hook
+            (lambda ()
+              (setq buffer-file-coding-system 'utf-8-unix))))
 
 ;; Prescient - Intelligent sorting and filtering
 (use-package! prescient
@@ -319,6 +284,14 @@
         prescient-save-file "~/.doom.d/.prescient-save"
         prescient-filter-method '(literal regexp initialism fuzzy)
         prescient-sort-full-matches-first t)
+
+  ;; Force UTF-8 encoding for prescient save file
+  (defun prescient--save-with-utf8 (orig-fun &rest args)
+    "Ensure prescient saves with UTF-8 encoding."
+    (let ((coding-system-for-write 'utf-8-unix))
+      (apply orig-fun args)))
+  (advice-add 'prescient--save :around #'prescient--save-with-utf8)
+
   (prescient-persist-mode +1))
 
 (use-package! vertico-prescient
@@ -339,9 +312,39 @@
         which-key-idle-secondary-delay 0.05
         which-key-sort-order 'which-key-prefix-then-key-order))
 
-;; ============================================================================
-;; End of Completion Framework Configuration
-;; ============================================================================
+(use-package! popper
+  :init
+  (setq popper-reference-buffers
+        '("\\*Messages\\*"
+          "Output\\*$"
+          "\\*Async Shell Command\\*"
+          "\\*Warnings\\*"
+          "\\*compilation\\*"
+          "\\*Completions\\*"
+          "\\*Backtrace\\*"
+          help-mode
+          compilation-mode
+          flycheck-error-list-mode
+          occur-mode))
+
+  :config
+  ;; Match the windows of below types as popups
+  (setq popper-display-control t)
+
+  ;; Customize popup display behavior
+  (setq popper-display-function #'popper-select-popup-at-bottom)
+
+  ;; Enable popper mode
+  (popper-mode +1)
+  (popper-echo-mode +1)
+
+  ;; Keybindings
+  (global-set-key (kbd "C-,") #'popper-toggle)
+  (global-set-key (kbd "C-.") #'popper-cycle))
+
+;; Prevent org-mode from overwriting C-, keybinding
+(after! org
+  (define-key org-mode-map (kbd "C-,") nil))
 
 (setq org-id-locations-file "~/.org-id-locations")
 
