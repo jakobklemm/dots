@@ -1,5 +1,5 @@
 #+EMAIL: contact@jeykey.net
 #+AUTHOR: Jakob Klemm
-#+OPTIONS: toc:nil date:t author:nil
+#+OPTIONS: toc:nil date:t
 #+BIBLIOGRAPHY: ~/files/biblio/auto.bib
 #+LANGUAGE: en
