@@ -216,6 +216,14 @@ require("lazy").setup({
                     "elixirls",
                 },
             })
+            vim.lsp.config("lua_ls", {
+                settings = {
+                    Lua = {
+                        diagnostics = {
+                            globals = { "vim" } }
+                    }
+                }
+            })
             autocmd("LspAttach", {
                 callback = function(ev)
                     local builtin = require('telescope.builtin')
