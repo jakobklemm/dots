@@ -53,7 +53,13 @@
 (display-time-mode 1)
 (global-subword-mode 1)
 
-(setq doom-theme 'modus-operandi
+;; (use-package! everforest
+;;   )
+
+(load-theme 'everforest-hard-dark t)
+
+(setq doom-theme 'everforest-hard-dark
+      ;; doom-theme 'modus-operandi
       ;; doom-theme 'doom-rose-pine-moon
       ;; catppuccin-flavor 'frappe
       ;; catppuccin-flavor 'frappe
