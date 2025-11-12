@@ -111,10 +111,11 @@ require("lazy").setup({
             "nvim-lua/plenary.nvim",
 
             "https://github.com/natecraddock/telescope-zf-native.nvim",
-            { "nvim-telescope/telescope-ui-select.nvim" },
+            "nvim-telescope/telescope-ui-select.nvim",
 
-            { "nvim-tree/nvim-web-devicons",            enabled = vim.g.have_nerd_font },
+            { "nvim-tree/nvim-web-devicons", enabled = vim.g.have_nerd_font },
             "nvim-telescope/telescope-frecency.nvim",
+            "https://github.com/LinArcX/telescope-env.nvim",
         },
         config = function()
             require("telescope").setup({
