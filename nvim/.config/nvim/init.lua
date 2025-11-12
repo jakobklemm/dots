@@ -30,11 +30,11 @@ vim.opt.hlsearch = true
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
-	vim.fn.system({
-		"git", "clone", "--filter=blob:none",
-		"https://github.com/folke/lazy.nvim.git",
-		"--branch=stable", lazypath,
-	})
+    vim.fn.system({
+        "git", "clone", "--filter=blob:none",
+        "https://github.com/folke/lazy.nvim.git",
+        "--branch=stable", lazypath,
+    })
 end
 vim.opt.rtp:prepend(lazypath)
 
@@ -46,10 +46,10 @@ map({ "n", "v" }, "<leader>p", "\"+p")
 map({ "n" }, "<leader>bk", ":bd<CR>")
 
 require("lazy").setup({
-	{ 
+    {
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
-        config = function() 
+        config = function()
             require("nvim-treesitter.configs").setup({
                 ensure_installed = {
                     "vimdoc",
@@ -73,15 +73,15 @@ require("lazy").setup({
             })
         end,
     },
-    { 
+    {
         "sainnhe/everforest",
-        config = function() 
+        config = function()
             vim.cmd.colorscheme("everforest")
         end,
     },
-    { 
+    {
         "folke/flash.nvim",
-        config = function() 
+        config = function()
             vim.keymap.set("n", "s", function() require("flash").jump() end)
             vim.keymap.set("n", "S", function() require("flash").treesitter_search() end)
         end,
@@ -94,7 +94,7 @@ require("lazy").setup({
                 ['<C-k>'] = { 'select_prev', 'fallback' },
                 ['<C-j>'] = { 'select_next', 'fallback' },
             },
-            fuzzy = { 
+            fuzzy = {
                 implementation = "prefer_rust",
                 prebuilt_binaries = {
                     force_version = 'v1.7.0',
@@ -113,8 +113,7 @@ require("lazy").setup({
             "https://github.com/natecraddock/telescope-zf-native.nvim",
             { "nvim-telescope/telescope-ui-select.nvim" },
 
-            { "nvim-tree/nvim-web-devicons", enabled = vim.g.have_nerd_font },
-
+            { "nvim-tree/nvim-web-devicons",            enabled = vim.g.have_nerd_font },
             "nvim-telescope/telescope-frecency.nvim",
         },
         config = function()
@@ -192,7 +191,8 @@ require("lazy").setup({
         "folke/todo-comments.nvim",
         config = function()
             require("todo-comments").setup({})
-            vim.keymap.set("n", "<leader>td", ":TodoTelescope layout_config={width=0.95,preview_width=0.3}<CR>", { desc = "Telescope TODO viewer" })
+            vim.keymap.set("n", "<leader>td", ":TodoTelescope layout_config={width=0.95,preview_width=0.3}<CR>",
+                { desc = "Telescope TODO viewer" })
             vim.keymap.set("n", "<leader>tf", ":TodoQuickFix<CR>", { desc = " Quickfix TODO viewer" })
         end,
     },
@@ -235,7 +235,8 @@ require("lazy").setup({
                     map({ "n" }, "gi", require("telescope.builtin").lsp_implementations)
 
                     map({ "n" }, "<leader>ss", builtin.lsp_document_symbols, { desc = "Search document symbols" })
-                    map({ "n" }, "<leader>sS", builtin.lsp_dynamic_workspace_symbols, { desc = "Search workspace symbols" })
+                    map({ "n" }, "<leader>sS", builtin.lsp_dynamic_workspace_symbols,
+                        { desc = "Search workspace symbols" })
 
                     map({ "n" }, "<leader>sr", builtin.lsp_references)
                     map({ "n" }, "<leader>si", builtin.lsp_implementations)
@@ -263,10 +264,10 @@ require("lazy").setup({
             fold_open = "",
             fold_closed = "",
             signs = {
-              error = "",
-              warning = "",
-              hint = "",
-              information = "",
+                error = "",
+                warning = "",
+                hint = "",
+                information = "",
             },
             focus = true,
         },
@@ -274,45 +275,59 @@ require("lazy").setup({
         keys = {
             -- Toggle trouble list with all project diagnostics
             {
-              "<leader>xx",
-              "<cmd>Trouble diagnostics toggle<cr>",
-              desc = "Diagnostics (Trouble)",
+                "<leader>xx",
+                "<cmd>Trouble diagnostics toggle<cr>",
+                desc = "Diagnostics (Trouble)",
             },
             -- Toggle trouble list with buffer diagnostics only
             {
-              "<leader>xb",
-              "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
-              desc = "Buffer Diagnostics (Trouble)",
+                "<leader>xb",
+                "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
+                desc = "Buffer Diagnostics (Trouble)",
             },
             -- Show only errors in the project
             {
-              "<leader>xe",
-              "<cmd>Trouble diagnostics toggle filter.severity=vim.diagnostic.severity.ERROR<cr>",
-              desc = "Errors (Trouble)",
+                "<leader>xe",
+                "<cmd>Trouble diagnostics toggle filter.severity=vim.diagnostic.severity.ERROR<cr>",
+                desc = "Errors (Trouble)",
             },
             -- Show errors and warnings in the project
             {
-              "<leader>xw",
-              "<cmd>Trouble diagnostics toggle filter.severity=vim.diagnostic.severity.WARN<cr>",
-              desc = "Errors & Warnings (Trouble)",
+                "<leader>xw",
+                "<cmd>Trouble diagnostics toggle filter.severity=vim.diagnostic.severity.WARN<cr>",
+                desc = "Errors & Warnings (Trouble)",
             },
             -- Jump to diagnostic at current line
             {
-              "<leader>xl",
-              "<cmd>Trouble diagnostics toggle focus=true filter.buf=0 filter={range={start={line=vim.fn.line('.')}}}<cr>",
-              desc = "Line Diagnostics (Trouble)",
+                "<leader>xl",
+                "<cmd>Trouble diagnostics toggle focus=true filter.buf=0 filter={range={start={line=vim.fn.line('.')}}}<cr>",
+                desc = "Line Diagnostics (Trouble)",
             },
             {
-              "<leader>xl",
-              vim.diagnostic.open_float,
-              desc = "Line Diagnostics (Hover)",
+                "<leader>xl",
+                vim.diagnostic.open_float,
+                desc = "Line Diagnostics (Hover)",
             },
             -- Close trouble list
             {
-              "<leader>xc",
-              "<cmd>Trouble close<cr>",
-              desc = "Close Trouble",
+                "<leader>xc",
+                "<cmd>Trouble close<cr>",
+                desc = "Close Trouble",
             },
         },
+    },
+    {
+        "NeogitOrg/neogit",
+        lazy = true,
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            "sindrets/diffview.nvim",
+
+            "nvim-telescope/telescope.nvim",
+        },
+        cmd = "Neogit",
+        keys = {
+            { "<leader>gg", "<cmd>Neogit<cr>", desc = "Show Neogit UI" }
+        }
     },
 })
