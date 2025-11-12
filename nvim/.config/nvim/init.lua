@@ -4,7 +4,6 @@ vim.opt.winborder = "rounded"
 
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
-vim.opt.showtabline = 4
 vim.o.expandtab = true
 
 vim.opt.signcolumn = "yes"
@@ -337,6 +336,38 @@ require("lazy").setup({
         cmd = "Neogit",
         keys = {
             { "<leader>gg", "<cmd>Neogit<cr>", desc = "Show Neogit UI" }
+        }
+    },
+    {
+        'nvim-lualine/lualine.nvim',
+        dependencies = { 'nvim-tree/nvim-web-devicons' },
+        opts = {
+            options = {
+                component_separators = '',
+                section_separators = { left = '', right = '' },
+            },
+            sections = {
+                lualine_a = { { 'mode', separator = { left = '' }, right_padding = 2 } },
+                lualine_b = { 'filename', 'branch', 'diff' },
+                lualine_c = {
+                    '%='
+                },
+                lualine_x = {},
+                lualine_y = { 'filetype', 'progress' },
+                lualine_z = {
+                    { 'location', separator = { right = '' }, left_padding = 2 },
+                },
+            },
+            inactive_sections = {
+                lualine_a = { 'filename' },
+                lualine_b = {},
+                lualine_c = {},
+                lualine_x = {},
+                lualine_y = {},
+                lualine_z = { 'location' },
+            },
+            tabline = {},
+            extensions = {},
         }
     },
 })
