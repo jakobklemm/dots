@@ -28,30 +28,6 @@ vim.g.maplocalleader = " "
 
 vim.opt.hlsearch = true
 
-vim.pack.add({
-    -- { src = "https://github.com/sainnhe/everforest" },
-    -- { src = "https://github.com/folke/flash.nvim" },
-    { src = "https://github.com/folke/todo-comments.nvim" },
-
-    { src = "https://github.com/nvim-telescope/telescope.nvim",          version = "0.1.8" },
-    { src = "https://github.com/nvim-telescope/telescope-ui-select.nvim" },
-    { src = "https://github.com/nvim-lua/plenary.nvim" },
-    { src = "https://github.com/natecraddock/telescope-zf-native.nvim" },
-
-    { src = "https://github.com/nvim-tree/nvim-web-devicons" },
-    { src = "https://github.com/aznhe21/actions-preview.nvim" },
-    -- { src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "v0.10.0", type = "start" },
-
-    { src = "https://github.com/saghen/blink.cmp" },
-    { src = "https://github.com/windwp/nvim-autopairs" },
-
-    { src = "https://github.com/neovim/nvim-lspconfig" },
-    { src = "https://github.com/mason-org/mason.nvim" },
-    { src = "https://github.com/L3MON4D3/LuaSnip" },
-    { src = "https://github.com/LinArcX/telescope-env.nvim" },
-    { src = "https://github.com/j-hui/fidget.nvim" },
-})
-
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
 	vim.fn.system({
@@ -62,24 +38,40 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+local autocmd = vim.api.nvim_create_autocmd
+local map = vim.keymap.set
+
+map({ "n", "v" }, "<leader>y", "\"+y")
+map({ "n", "v" }, "<leader>p", "\"+p")
+map({ "n" }, "<leader>bk", ":bd<CR>")
+
 require("lazy").setup({
 	{ 
-        	"nvim-treesitter/nvim-treesitter",
-        	build = ":TSUpdate",
-        	config = function() 
-		    require("nvim-treesitter.configs").setup({
-			ensure_installed = {
-			    "vimdoc",
-			    "javascript",
-			    "typescript",
-			    "c",
-			    "lua",
-			    "rust",
-			    "jsdoc",
-			    "bash",
-			},
-		    })
-		end,
+        "nvim-treesitter/nvim-treesitter",
+        build = ":TSUpdate",
+        config = function() 
+            require("nvim-treesitter.configs").setup({
+                ensure_installed = {
+                    "vimdoc",
+                    "javascript",
+                    "typescript",
+                    "c",
+                    "lua",
+                    "rust",
+                    "jsdoc",
+                    "bash",
+                    "elixir",
+                },
+                auto_install = true,
+                indent = {
+                    enable = true,
+                },
+
+                highlight = {
+                    enable = true,
+                }
+            })
+        end,
     },
     { 
         "sainnhe/everforest",
@@ -88,182 +80,239 @@ require("lazy").setup({
         end,
     },
     { 
-        "folke/flash.nvim"
+        "folke/flash.nvim",
         config = function() 
             vim.keymap.set("n", "s", function() require("flash").jump() end)
             vim.keymap.set("n", "S", function() require("flash").treesitter_search() end)
         end,
     },
     {
-        "blink.nvim"
-    }, 
-    {
-        "
-    },
-})
-
-local autocmd = vim.api.nvim_create_autocmd
-local map = vim.keymap.set
-
-local parser_installed = {
-    "python",
-    "go",
-    "c",
-    "lua",
-    "vim",
-    "vimdoc",
-    "query",
-    "markdown_inline",
-    "markdown",
-    "elixir",
-    "rust",
-}
-
-vim.defer_fn(function() require("nvim-treesitter").install(parser_installed) end, 1000)
-
-local configs = require("nvim-treesitter.configs")
-
-vim.api.nvim_create_autocmd("FileType", {
-    desc = "User: enable treesitter highlighting",
-    callback = function(ctx)
-        local hasStarted = pcall(vim.treesitter.start) -- errors for filetypes with no parser
-
-        local noIndent = {}
-        if hasStarted and not vim.list_contains(noIndent, ctx.match) then
-            vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-        end
-    end,
-})
-
-require("blink.cmp").setup({
-    fuzzy = { 
-        implementation = "prefer_rust",
-        prebuilt_binaries = {
-            force_version = 'v1.7.0',
-            download = true,
-        },
-    },
-    keymap = {
-        preset = 'default',
-        ['<C-k>'] = { 'select_prev', 'fallback' },
-        ['<C-j>'] = { 'select_next', 'fallback' },
-    }
-})
-
-require("fidget").setup()
-require("mason").setup()
-require("nvim-autopairs").setup()
-
-vim.lsp.enable({
-    "lua_ls", "rust_analyzer",
-})
-
-autocmd("LspAttach", {
-    callback = function(ev)
-        local bufopts = { noremap = true, silent = true, buffer = ev.buf }
-        vim.keymap.set("n", "<leader>sd", function()
-            require("telescope.builtin").diagnostics({
-                layout_config = {
-                    width = 0.95,  
-                    preview_width = 0.25, 
-                }
-            })
-        end, { desc = "[S]earch [D]iagnostics" })
-
-        local builtin = require('telescope.builtin')
-
-        map({ "n" }, "<leader>si", builtin.lsp_implementations)
-        map({ "n" }, "<leader>st", builtin.lsp_type_definitions)
-
-        map({ "n" }, "<leader>w", function()
-            vim.lsp.buf.format()
-            vim.cmd('write')
-        end)
-    end,
-
-})
-
-require("flash").setup({})
-
-require("todo-comments").setup({})
-vim.keymap.set("n", "<leader>td", ":TodoTelescope layout_config={width=0.95,preview_width=0.3}<CR>", { desc = "Telescope TODO viewer" })
-vim.keymap.set("n", "<leader>tf", ":TodoQuickFix<CR>", { desc = " Quickfix TODO viewer" })
-
-require("telescope").setup({
-    defaults = {
-        mappings = {
-            i = {
-                ["<c-enter>"] = "to_fuzzy_refine",
-                ["<C-j>"] = require("telescope.actions").move_selection_next,
-                ["<C-k>"] = require("telescope.actions").move_selection_previous,
+        "saghen/blink.cmp",
+        opts = {
+            keymap = {
+                preset = 'default',
+                ['<C-k>'] = { 'select_prev', 'fallback' },
+                ['<C-j>'] = { 'select_next', 'fallback' },
+            },
+            fuzzy = { 
+                implementation = "prefer_rust",
+                prebuilt_binaries = {
+                    force_version = 'v1.7.0',
+                    download = true,
+                },
             },
         },
-        preview = {
-            treesitter = false,
-        },
-        buffer_previewer_maker = require("telescope.previewers").buffer_previewer_maker,
-        color_devicons = true,
-        sorting_strategy = "ascending",
-        path_displays = { "smart" },
-        layout_config = {
-            height = 50,
-            width = 200,
-            preview_width = 0.4,
-            prompt_position = "top",
-            preview_cutoff = 40,
-        }
     },
-    extensions = {
-        ["ui-select"] = {
-            require("telescope.themes").get_dropdown(),
+    {
+        "nvim-telescope/telescope.nvim",
+        event = "VimEnter",
+        branch = "0.1.x",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+
+            "https://github.com/natecraddock/telescope-zf-native.nvim",
+            { "nvim-telescope/telescope-ui-select.nvim" },
+
+            { "nvim-tree/nvim-web-devicons", enabled = vim.g.have_nerd_font },
+
+            "nvim-telescope/telescope-frecency.nvim",
         },
-        ["zf-native"] = {}
+        config = function()
+            require("telescope").setup({
+                defaults = {
+                    mappings = {
+                        i = {
+                            ["<C-j>"] = require("telescope.actions").move_selection_next,
+                            ["<C-k>"] = require("telescope.actions").move_selection_previous,
+                        },
+                    },
+                    color_devicons = true,
+                    sorting_strategy = "ascending",
+                    path_displays = { "smart" },
+                    layout_config = {
+                        height = 50,
+                        width = 200,
+                        preview_width = 0.4,
+                        prompt_position = "top",
+                        preview_cutoff = 40,
+                    }
+                },
+                extensions = {
+                    ["ui-select"] = {
+                        require("telescope.themes").get_dropdown(),
+                    },
+                    ["zf-native"] = {},
+                    frecency = {
+                        auto_validate = true,
+                        show_scores = false,
+                        matcher = "fuzzy",
+                    },
+                },
+            })
+
+            require("telescope").load_extension("zf-native")
+            require("telescope").load_extension("frecency")
+
+            local map = vim.keymap.set
+            local builtin = require("telescope.builtin")
+
+            map(
+                "n",
+                "<leader>/",
+                builtin.current_buffer_fuzzy_find,
+                { desc = "[/] Fuzzily search in current buffer" }
+            )
+
+            map("n", "<leader>.", builtin.find_files, { desc = "[S]earch [F]iles" })
+            map("n", "<leader>,", ":Telescope frecency<CR>", { desc = '[S]earch Recent Files ("." for repeat)' })
+            map("n", "<leader><leader>", builtin.buffers, { desc = "[ ] Find existing buffers" })
+
+            map({ "n" }, "<leader>g", builtin.live_grep)
+            map({ "n" }, "<leader>sb", builtin.buffers)
+
+            map({ "n" }, "<leader>so", builtin.oldfiles)
+
+            map({ "n" }, "<leader>sh", builtin.help_tags)
+            map({ "n" }, "<leader>sm", builtin.man_pages)
+
+            map("n", "<leader>sgb", builtin.git_bcommits)
+            map("n", "<leader>sgg", builtin.git_files)
+            map("n", "<leader>sgc", builtin.git_commits)
+            map("n", "<leader>sgs", builtin.git_status)
+
+
+            map({ "n" }, "<leader>se", "<cmd>Telescope env<cr>")
+        end
+    },
+    {
+        "https://github.com/windwp/nvim-autopairs",
+        opts = {},
+    },
+    {
+        "folke/todo-comments.nvim",
+        config = function()
+            require("todo-comments").setup({})
+            vim.keymap.set("n", "<leader>td", ":TodoTelescope layout_config={width=0.95,preview_width=0.3}<CR>", { desc = "Telescope TODO viewer" })
+            vim.keymap.set("n", "<leader>tf", ":TodoQuickFix<CR>", { desc = " Quickfix TODO viewer" })
+        end,
+    },
+    {
+        "neovim/nvim-lspconfig",
+        dependencies = {
+            "williamboman/mason.nvim",
+            "williamboman/mason-lspconfig.nvim",
+            "L3MON4D3/LuaSnip",
+            "j-hui/fidget.nvim",
+            "chrisgrieser/nvim-lsp-endhints",
+        },
+        config = function()
+            require("lsp-endhints").setup({})
+            require("fidget").setup({})
+            require("mason").setup()
+            require("mason-lspconfig").setup({
+                ensure_installed = {
+                    "lua_ls",
+                    "rust_analyzer",
+                    "elixirls",
+                },
+            })
+            autocmd("LspAttach", {
+                callback = function(ev)
+                    local builtin = require('telescope.builtin')
+
+                    map({ "n" }, "<leader>sd", function()
+                        builtin.diagnostics({
+                            layout_config = {
+                                width = 0.95,
+                                preview_width = 0.25,
+                            }
+                        })
+                    end, { desc = "[S]earch [D]iagnostics" })
+
+                    map({ "n" }, "gd", require("telescope.builtin").lsp_definitions)
+                    map({ "n" }, "gD", vim.lsp.buf.declaration)
+                    map({ "n" }, "gr", require("telescope.builtin").lsp_references)
+                    map({ "n" }, "gi", require("telescope.builtin").lsp_implementations)
+
+                    map({ "n" }, "<leader>ss", builtin.lsp_document_symbols, { desc = "Search document symbols" })
+                    map({ "n" }, "<leader>sS", builtin.lsp_dynamic_workspace_symbols, { desc = "Search workspace symbols" })
+
+                    map({ "n" }, "<leader>sr", builtin.lsp_references)
+                    map({ "n" }, "<leader>si", builtin.lsp_implementations)
+                    map({ "n" }, "<leader>st", builtin.lsp_type_definitions)
+
+                    map({ "n" }, "<leader>ca", vim.lsp.buf.code_action)
+                    map({ "n" }, "<leader>cr", vim.lsp.buf.rename)
+
+                    map({ "n" }, "<leader>w", function()
+                        vim.lsp.buf.format()
+                        vim.cmd('write')
+                    end)
+                end,
+
+            })
+        end,
+    },
+    {
+        "folke/trouble.nvim",
+        dependencies = { "nvim-tree/nvim-web-devicons" },
+        opts = {
+            position = "bottom",
+            height = 10,
+            mode = "workspace_diagnostics",
+            fold_open = "",
+            fold_closed = "",
+            signs = {
+              error = "",
+              warning = "",
+              hint = "",
+              information = "",
+            },
+            focus = true,
+        },
+        cmd = "Trouble",
+        keys = {
+            -- Toggle trouble list with all project diagnostics
+            {
+              "<leader>xx",
+              "<cmd>Trouble diagnostics toggle<cr>",
+              desc = "Diagnostics (Trouble)",
+            },
+            -- Toggle trouble list with buffer diagnostics only
+            {
+              "<leader>xb",
+              "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
+              desc = "Buffer Diagnostics (Trouble)",
+            },
+            -- Show only errors in the project
+            {
+              "<leader>xe",
+              "<cmd>Trouble diagnostics toggle filter.severity=vim.diagnostic.severity.ERROR<cr>",
+              desc = "Errors (Trouble)",
+            },
+            -- Show errors and warnings in the project
+            {
+              "<leader>xw",
+              "<cmd>Trouble diagnostics toggle filter.severity=vim.diagnostic.severity.WARN<cr>",
+              desc = "Errors & Warnings (Trouble)",
+            },
+            -- Jump to diagnostic at current line
+            {
+              "<leader>xl",
+              "<cmd>Trouble diagnostics toggle focus=true filter.buf=0 filter={range={start={line=vim.fn.line('.')}}}<cr>",
+              desc = "Line Diagnostics (Trouble)",
+            },
+            {
+              "<leader>xl",
+              vim.diagnostic.open_float,
+              desc = "Line Diagnostics (Hover)",
+            },
+            -- Close trouble list
+            {
+              "<leader>xc",
+              "<cmd>Trouble close<cr>",
+              desc = "Close Trouble",
+            },
+        },
     },
 })
-
-require("telescope").load_extension("zf-native")
-
-local builtin = require("telescope.builtin")
-
-map({ "n", "v" }, "<leader>y", "\"+y")
-map({ "n", "v" }, "<leader>p", "\"+p")
-map({ "n" }, "<leader>bk", ":bd<CR>")
-
-vim.keymap.set(
-    "n",
-    "<leader>/",
-    builtin.current_buffer_fuzzy_find,
-    { desc = "[/] Fuzzily search in current buffer" }
-)
-vim.keymap.set("n", "<leader>.", builtin.find_files, { desc = "[S]earch [F]iles" })
-vim.keymap.set("n", "<leader>,", ":Telescope frecency<CR>", { desc = '[S]earch Recent Files ("." for repeat)' })
-vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "[ ] Find existing buffers" })
-
-map({ "n" }, "<leader>g", builtin.live_grep)
-map({ "n" }, "<leader>sg", builtin.git_files)
-map({ "n" }, "<leader>sb", builtin.buffers)
-
-map({ "n" }, "<leader>so", builtin.oldfiles)
-
-map({ "n" }, "<leader>sh", builtin.help_tags)
-map({ "n" }, "<leader>sm", builtin.man_pages)
-
-map({ "n" }, "<leader>sr", builtin.lsp_references)
-
-
-
-map({ "n" }, "<leader>sc", builtin.git_bcommits)
-
-map({ "n" }, "<leader>se", "<cmd>Telescope env<cr>")
-map({ "n" }, "<leader>sa", require("actions-preview").code_actions)
-
-map({ "n" }, "<M-n>", "<cmd>resize +2<CR>")
-map({ "n" }, "<M-e>", "<cmd>resize -2<CR>")
-map({ "n" }, "<M-i>", "<cmd>vertical resize +5<CR>")
-map({ "n" }, "<M-m>", "<cmd>vertical resize -5<CR>")
-
-map({ "n" }, "<leader>w", "<Cmd>update<CR>", { desc = "Write the current buffer." })
-map({ "n" }, "<leader>q", "<Cmd>:quit<CR>", { desc = "Quit the current buffer." })
-map({ "n" }, "<leader>Q", "<Cmd>:wqa<CR>", { desc = "Quit all buffers and write." })
-
-map({ "n" }, "<C-f>", "<Cmd>Open .<CR>", { desc = "Open current directory in Finder." })
