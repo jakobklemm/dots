@@ -13,6 +13,9 @@ vim.opt.cursorcolumn = false
 vim.opt.ignorecase = true
 vim.opt.smartindent = true
 
+vim.opt.splitright = true
+vim.opt.splitbelow = true
+
 vim.opt.termguicolors = true
 vim.opt.undofile = true
 
@@ -26,8 +29,8 @@ vim.g.maplocalleader = " "
 vim.opt.hlsearch = true
 
 vim.pack.add({
-    { src = "https://github.com/sainnhe/everforest" },
-    { src = "https://github.com/folke/flash.nvim" },
+    -- { src = "https://github.com/sainnhe/everforest" },
+    -- { src = "https://github.com/folke/flash.nvim" },
     { src = "https://github.com/folke/todo-comments.nvim" },
 
     { src = "https://github.com/nvim-telescope/telescope.nvim",          version = "0.1.8" },
@@ -37,7 +40,7 @@ vim.pack.add({
 
     { src = "https://github.com/nvim-tree/nvim-web-devicons" },
     { src = "https://github.com/aznhe21/actions-preview.nvim" },
-    { src = "https://github.com/nvim-treesitter/nvim-treesitter",        version = "main" },
+    -- { src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "v0.10.0", type = "start" },
 
     { src = "https://github.com/saghen/blink.cmp" },
     { src = "https://github.com/windwp/nvim-autopairs" },
@@ -49,15 +52,94 @@ vim.pack.add({
     { src = "https://github.com/j-hui/fidget.nvim" },
 })
 
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+	vim.fn.system({
+		"git", "clone", "--filter=blob:none",
+		"https://github.com/folke/lazy.nvim.git",
+		"--branch=stable", lazypath,
+	})
+end
+vim.opt.rtp:prepend(lazypath)
+
+require("lazy").setup({
+	{ 
+        	"nvim-treesitter/nvim-treesitter",
+        	build = ":TSUpdate",
+        	config = function() 
+		    require("nvim-treesitter.configs").setup({
+			ensure_installed = {
+			    "vimdoc",
+			    "javascript",
+			    "typescript",
+			    "c",
+			    "lua",
+			    "rust",
+			    "jsdoc",
+			    "bash",
+			},
+		    })
+		end,
+    },
+    { 
+        "sainnhe/everforest",
+        config = function() 
+            vim.cmd.colorscheme("everforest")
+        end,
+    },
+    { 
+        "folke/flash.nvim"
+        config = function() 
+            vim.keymap.set("n", "s", function() require("flash").jump() end)
+            vim.keymap.set("n", "S", function() require("flash").treesitter_search() end)
+        end,
+    },
+    {
+        "blink.nvim"
+    }, 
+    {
+        "
+    },
+})
+
 local autocmd = vim.api.nvim_create_autocmd
 local map = vim.keymap.set
 
-vim.cmd.colorscheme("everforest")
+local parser_installed = {
+    "python",
+    "go",
+    "c",
+    "lua",
+    "vim",
+    "vimdoc",
+    "query",
+    "markdown_inline",
+    "markdown",
+    "elixir",
+    "rust",
+}
+
+vim.defer_fn(function() require("nvim-treesitter").install(parser_installed) end, 1000)
+
+local configs = require("nvim-treesitter.configs")
+
+vim.api.nvim_create_autocmd("FileType", {
+    desc = "User: enable treesitter highlighting",
+    callback = function(ctx)
+        local hasStarted = pcall(vim.treesitter.start) -- errors for filetypes with no parser
+
+        local noIndent = {}
+        if hasStarted and not vim.list_contains(noIndent, ctx.match) then
+            vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end
+    end,
+})
 
 require("blink.cmp").setup({
     fuzzy = { 
         implementation = "prefer_rust",
         prebuilt_binaries = {
+            force_version = 'v1.7.0',
             download = true,
         },
     },
@@ -75,7 +157,6 @@ require("nvim-autopairs").setup()
 vim.lsp.enable({
     "lua_ls", "rust_analyzer",
 })
-
 
 autocmd("LspAttach", {
     callback = function(ev)
@@ -103,8 +184,6 @@ autocmd("LspAttach", {
 })
 
 require("flash").setup({})
-vim.keymap.set("n", "s", function() require("flash").jump() end)
-vim.keymap.set("n", "S", function() require("flash").treesitter_search() end)
 
 require("todo-comments").setup({})
 vim.keymap.set("n", "<leader>td", ":TodoTelescope layout_config={width=0.95,preview_width=0.3}<CR>", { desc = "Telescope TODO viewer" })
@@ -122,6 +201,7 @@ require("telescope").setup({
         preview = {
             treesitter = false,
         },
+        buffer_previewer_maker = require("telescope.previewers").buffer_previewer_maker,
         color_devicons = true,
         sorting_strategy = "ascending",
         path_displays = { "smart" },
