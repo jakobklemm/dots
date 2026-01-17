@@ -31,7 +31,7 @@ config.skip_close_confirmation_for_processes_named = {
 
 config.window_background_opacity = 0.99
 
-config.color_scheme = "Catppuccin Mocha"
+-- config.color_scheme = "Catppuccin Mocha"
 
 config.keys = {
 	{
@@ -40,6 +40,9 @@ config.keys = {
 		action = act.SendKey({ key = "w", mods = "CTRL" }),
 	},
 }
+
+config.color_scheme_dirs = { "~/.config/wezterm/colors" }
+config.color_scheme = "Everforest Dark (Medium)"
 
 -- and finally, return the configuration to wezterm
 return config
