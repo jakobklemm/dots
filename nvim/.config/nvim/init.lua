@@ -114,6 +114,60 @@ require("lazy").setup({
 		end,
 	},
 	{
+		"olimorris/codecompanion.nvim",
+		version = "^18.0.0",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"nvim-treesitter/nvim-treesitter",
+		},
+		opts = {
+			adapters = {
+				http = {
+					ollama = function()
+						return require("codecompanion.adapters").extend("ollama", {
+							env = {
+								url = "http://172.16.110.32:11434",
+							},
+							headers = {
+								["Content-Type"] = "application/json",
+							},
+							parameters = {
+								sync = true,
+							},
+							schema = {
+								model = {
+									default = "qwen2.5-coder:7b",
+								},
+							},
+						})
+					end,
+				},
+			},
+			interactions = {
+				chat = {
+					adapter = "ollama",
+					-- model = "qwen3:4b",
+					keymaps = {
+						send = {
+							modes = { n = "<C-l>", i = "<C-s>" },
+							opts = {},
+						},
+						close = {
+							modes = { n = "<C-c>", i = "<C-c>" },
+							opts = {},
+						},
+					},
+				},
+				inline = {
+					adapter = "ollama",
+				},
+			},
+			opts = {
+				log_level = "DEBUG",
+			},
+		},
+	},
+	{
 		"milanglacier/minuet-ai.nvim",
 		opts = {
 			provider = "openai_fim_compatible",
@@ -124,21 +178,25 @@ require("lazy").setup({
 					api_key = "TERM",
 					name = "Ollama",
 					end_point = "http://172.16.110.32:11434/v1/completions",
-					-- model = "qwen2.5-coder:3b",
-					model = "hf.co/lmstudio-community/zeta-GGUF:Q3_K_L",
+					model = "qwen2.5-coder:1.5b",
+					-- model = "hf.co/lmstudio-community/zeta-GGUF:Q3_K_L",
 					optional = {
-						max_tokens = 42,
-						top_p = 0.9,
+						max_tokens = 48,
+						top_p = 0.8,
 					},
 				},
 			},
 			virtualtext = {
-				auto_trigger_ft = { "rust" },
+				auto_trigger_ft = { "rust", "toml" },
 				keymap = {
 					accept = "<A-l>",
 					accept_line = "<A-ö>",
 					dismiss = "<A-k>",
 				},
+			},
+			request_timeout = 10,
+			blink = {
+				enable_auto_complete = true,
 			},
 		},
 	},
