@@ -455,6 +455,20 @@
         )
   )
 
+(use-package! langtool
+  :config
+  (setq langtool-language-tool-server-jar "/home/jeykey/langtool/languagetool-server.jar"
+        langtool-server-user-arguments '("-p" "8082")
+        langtool-default-language "en-US")
+  (map! :leader
+        (:prefix ("l" . "langtool")
+         :desc "Check buffer"       "c" #'langtool-check
+         :desc "Done checking"      "d" #'langtool-check-done
+         :desc "Correct buffer"     "r" #'langtool-correct-buffer
+         :desc "Show message"       "m" #'langtool-show-message-at-point
+         :desc "Switch language"    "l" #'langtool-switch-default-language))
+  )
+
 (use-package! svg-tag-mode
   :config
   (set-face-attribute 'svg-tag-default-face nil :family "MonaspiceAr Nerd Font Mono")
@@ -735,6 +749,11 @@ ${extracted}
     (setq org-latex-compiler "lualatex"
           org-latex-pdf-process (list "latexmk -pdflatex='lualatex -shell-escape -interaction nonstopmode -synctex=1' -outdir=exports/ -bibtex -pdf -f %f")))
 
+;; (with-eval-after-load 'ox-latex
+;;     (setq org-latex-compiler "lualatex"
+;;           org-latex-pdf-process (list "latexmk -pdflatex='lualatex -shell-escape -interaction nonstopmode -synctex=1' -bibtex -pdf -f %f")))
+
+
 (setq org-latex-precompile nil)
 
 (plist-put org-format-latex-options :scale 1.3)
@@ -763,15 +782,37 @@ ${extracted}
       "\\documentclass{article}
 \\usepackage[margin=0pt]{geometry}
 \\input{~/.latex/preview.tex}
+\\providecommand{\\covernum}[1]{}
+\\providecommand{\\covertitle}[1]{}
+\\providecommand{\\coverauthor}[1]{}
+\\providecommand{\\coversupervisedby}[1]{}
+\\providecommand{\\coverdate}[1]{}
 [DEFAULT-PACKAGES]
 [PACKAGES]
 \\setlength{\\parindent}{0pt}
 \\setlength{\\parskip}{0pt}
 \\pagestyle{empty}
-"
-      )
+")
+
+(with-eval-after-load 'ox-latex
+  (add-to-list 'org-latex-packages-alist '("" "svg" t))
+  (setq org-latex-packages-alist
+        (append org-latex-packages-alist '(("inkscapelatex=false" "svg" t)))))
 
 (setq org-latex-default-packages-alist nil)
+
+(setq org-latex-preview-preamble
+      "\\documentclass{article}
+\\usepackage{luacolor}
+\\input{~/.latex/preview.tex}
+\\providecommand{\\covernum}[1]{}
+\\providecommand{\\covertitle}[1]{}
+\\providecommand{\\coverauthor}[1]{}
+\\providecommand{\\coversupervisedby}[1]{}
+\\providecommand{\\coverdate}[1]{}
+[DEFAULT-PACKAGES]
+[PACKAGES]")
+
 (setq org-latex-engraved-preamble "\\usepackage{fvextra}
 
 [FVEXTRA-SETUP]
@@ -854,23 +895,80 @@ ${extracted}
 
 (setq org-latex-classes
 '(("article"
-"[NO-DEFAULT-PACKAGES]
+   "[NO-DEFAULT-PACKAGES]
 [NO-PACKAGES]
 \\input{~/.latex/export.tex}
 [EXTRA]"
-("\\section{%s}" . "\\section*{%s}")
-("\\subsection{%s}" . "\\subsection*{%s}")
-("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-("\\paragraph{%s}" . "\\paragraph*{%s}")
-("\\subparagraph{%s}" . "\\subparagraph*{%s}")
-)
-)
-)
+   ("\\section{%s}" . "\\section*{%s}")
+   ("\\subsection{%s}" . "\\subsection*{%s}")
+   ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+   ("\\paragraph{%s}" . "\\paragraph*{%s}")
+   ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+
+(add-to-list 'org-latex-classes
+  '("systems-thesis"
+    "[NO-DEFAULT-PACKAGES]
+[NO-PACKAGES]
+\\documentclass{report}
+\\usepackage[a4paper, total={6in, 8in}]{geometry}
+\\usepackage{graphicx}
+\\usepackage{parskip}
+\\usepackage[luatex]{xcolor}
+\\usepackage{colortbl}
+\\usepackage{array}
+\\usepackage{hyperref}
+\\usepackage{listings}
+\\usepackage[numbers]{natbib}
+\\usepackage{luacolor}
+\\usepackage{minted}
+\\usepackage[minted]{tcolorbox}
+\\usepackage{caption}
+\\usepackage{newfloat}
+\\usepackage{pdfpages}
+\\usepackage[inkscapelatex=false]{svg}
+\\usepackage[bachelorthesis]{systems-cover}
+\\tcbuselibrary{minted,skins,breakable}
+\\definecolor{backgroundColor}{gray}{0.85}
+\\definecolor{TblHeader}{HTML}{2C3E50}
+\\definecolor{TblAlt}{HTML}{EBF5FB}
+\\definecolor{TblBorder}{HTML}{85929E}
+\\arrayrulecolor{TblBorder}
+\\setlength{\\arrayrulewidth}{0.5pt}
+\\renewcommand{\\arraystretch}{1.35}
+\\newtcbox{\\mintedinline}[1][]{on line,colback=backgroundColor,colframe=backgroundColor,boxrule=0pt,arc=3pt,left=2pt,right=2pt,top=2.5pt,bottom=2.5pt,boxsep=0pt}
+[EXTRA]"
+    ("\\chapter{%s}"       . "\\chapter*{%s}")
+    ("\\section{%s}"       . "\\section*{%s}")
+    ("\\subsection{%s}"    . "\\subsection*{%s}")
+    ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))
+
+(with-eval-after-load 'ox-latex
+  (setq org-latex-src-block-backend 'minted)
+
+  (setq org-latex-minted-options
+        '(("fontsize"    "\\small")
+          ("breaklines"  "true")
+          ("linenos"     "true")
+          ("numbersep"   "8pt")
+          ("xleftmargin" "8pt")))
+
+  (advice-remove 'org-latex-src-block #'jk/wrap-src-block-tcolorbox)
+
+  (defun jk/wrap-src-block-tcolorbox (orig-fn src-block contents info)
+    (format "\\begin{center}
+\\begin{tcolorbox}[enhanced,colback=blue!3,colframe=black,boxrule=0.5pt,boxsep=0pt,left=4pt,right=4pt,top=2pt,bottom=2pt]
+%s
+\\end{tcolorbox}
+\\end{center}"
+            (funcall orig-fn src-block contents info)))
+
+  (advice-add 'org-latex-src-block :around #'jk/wrap-src-block-tcolorbox))
 
 (use-package! engrave-faces
   :init
   (setq org-latex-src-block-backend 'engraved))
 
+(setq org-latex-caption-above nil)
 
 ;; https://emacs.stackexchange.com/questions/12122/how-to-access-os-clipboard-using-emacs-evil
 (setq x-select-enable-clipboard nil)
