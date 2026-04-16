@@ -603,7 +603,7 @@ require("lazy").setup({
 					default_settings = {
 						["rust-analyzer"] = {
 							cargo = {
-								allFeatures = true,
+								allFeatures = false,
 								loadOutDirsFromCheck = true,
 								buildScripts = {
 									enable = true,
