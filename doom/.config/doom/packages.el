@@ -83,6 +83,7 @@
 
 (package! olivetti)
 (package! xenops)
+(package! notdeft)
 
 ;;
 (package! everforest
